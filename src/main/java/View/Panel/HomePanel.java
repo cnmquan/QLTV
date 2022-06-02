@@ -204,7 +204,7 @@ public class HomePanel extends javax.swing.JPanel {
                             .addComponent(jLabelDefautlerListTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanelDefautlerList, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanelPieChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,8 +230,7 @@ public class HomePanel extends javax.swing.JPanel {
                         .addGap(28, 28, 28))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(147, 147, 147)
-                        .addComponent(jLabelBookDetailsTitle)
-                        .addGap(0, 0, 0))))
+                        .addComponent(jLabelBookDetailsTitle))))
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -5,10 +5,13 @@
 package View.Frame;
 
 import Adapter.PanelButtonMouseAdapter;
-import View.Panel.AuthorListPanel;
 import View.Panel.HomePanel;
+import View.Panel.ManageBinPanel;
 import View.Panel.ManageBooksPanel;
+import View.Panel.ManagePublisherPanel;
 import View.Panel.ManageReaderPanel;
+import constant.GeneralStringConstant;
+import constant.TitleStringConstant;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,6 +30,7 @@ public class HomeForm extends javax.swing.JFrame {
         myInitComponents();
         addPanelToHomePage();
         this.setLocationRelativeTo(null);
+       
     }
 
     /**
@@ -47,20 +51,18 @@ public class HomeForm extends javax.swing.JFrame {
         jLabelManageBook = new javax.swing.JLabel();
         jPanelManageReader = new javax.swing.JPanel();
         jLabelManageReader = new javax.swing.JLabel();
-        jPanelManageReader1 = new javax.swing.JPanel();
-        jLabelManageReader1 = new javax.swing.JLabel();
         jPanelIsueBook = new javax.swing.JPanel();
         jLabelIsueBook = new javax.swing.JLabel();
         jPanelReturnBook = new javax.swing.JPanel();
         jLabelReturnBook = new javax.swing.JLabel();
         jPanelViewRecord = new javax.swing.JPanel();
         jLabelViewRecord = new javax.swing.JLabel();
+        jPanelPublisherList = new javax.swing.JPanel();
+        jLabelPublisherList = new javax.swing.JLabel();
+        jPanelBin = new javax.swing.JPanel();
+        jLabelBin = new javax.swing.JLabel();
         jPanelViewIssuedBook = new javax.swing.JPanel();
         jLabelViewIssuedBook = new javax.swing.JLabel();
-        jPanelAuthorList = new javax.swing.JPanel();
-        jLabelAuthorList = new javax.swing.JLabel();
-        jPanelDefauledList = new javax.swing.JPanel();
-        jLabelDefauledList = new javax.swing.JLabel();
         jPanelTitle = new javax.swing.JPanel();
         jLabelMenu = new javax.swing.JLabel();
         jPanelIndication = new javax.swing.JPanel();
@@ -105,92 +107,83 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelManageBook.setBackground(new java.awt.Color(51, 51, 51));
         jPanelManageBook.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelManageBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabelManageBook.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabelManageBook.setForeground(new java.awt.Color(153, 153, 153));
-        jLabelManageBook.setText("   Manage Books");
-        jPanelManageBook.add(jLabelManageBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 200, 60));
+        jLabelManageBook.setText("Danh sách sách");
+        jLabelManageBook.setToolTipText("");
+        jPanelManageBook.add(jLabelManageBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 40));
 
         jPanelMenuBar.add(jPanelManageBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 260, 60));
 
         jPanelManageReader.setBackground(new java.awt.Color(51, 51, 51));
         jPanelManageReader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelManageReader.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabelManageReader.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabelManageReader.setForeground(new java.awt.Color(153, 153, 153));
         jLabelManageReader.setText("   Manage Reader");
         jPanelManageReader.add(jLabelManageReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 210, 60));
 
-        jPanelManageReader1.setBackground(new java.awt.Color(51, 51, 51));
-        jPanelManageReader1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelManageReader1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        jLabelManageReader1.setForeground(new java.awt.Color(153, 153, 153));
-        jLabelManageReader1.setText("   Manage Reader");
-        jPanelManageReader1.add(jLabelManageReader1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 210, 60));
-
-        jPanelManageReader.add(jPanelManageReader1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 250, 60));
-
-        jPanelMenuBar.add(jPanelManageReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 260, 60));
+        jPanelMenuBar.add(jPanelManageReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 260, 60));
 
         jPanelIsueBook.setBackground(new java.awt.Color(51, 51, 51));
         jPanelIsueBook.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelIsueBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabelIsueBook.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabelIsueBook.setForeground(new java.awt.Color(153, 153, 153));
         jLabelIsueBook.setText("   Issue Book");
         jPanelIsueBook.add(jLabelIsueBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 210, 60));
 
-        jPanelMenuBar.add(jPanelIsueBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 260, 60));
+        jPanelMenuBar.add(jPanelIsueBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 260, 60));
 
         jPanelReturnBook.setBackground(new java.awt.Color(51, 51, 51));
         jPanelReturnBook.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelReturnBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabelReturnBook.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabelReturnBook.setForeground(new java.awt.Color(153, 153, 153));
         jLabelReturnBook.setText("   Return book");
         jPanelReturnBook.add(jLabelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 210, 60));
 
-        jPanelMenuBar.add(jPanelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 260, 60));
+        jPanelMenuBar.add(jPanelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 260, 60));
 
         jPanelViewRecord.setBackground(new java.awt.Color(51, 51, 51));
         jPanelViewRecord.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelViewRecord.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabelViewRecord.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabelViewRecord.setForeground(new java.awt.Color(153, 153, 153));
         jLabelViewRecord.setText("   View Records");
         jPanelViewRecord.add(jLabelViewRecord, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 210, 60));
 
-        jPanelMenuBar.add(jPanelViewRecord, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 260, 60));
+        jPanelMenuBar.add(jPanelViewRecord, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 260, 60));
+
+        jPanelPublisherList.setBackground(new java.awt.Color(51, 51, 51));
+        jPanelPublisherList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelPublisherList.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
+        jLabelPublisherList.setForeground(new java.awt.Color(153, 153, 153));
+        jLabelPublisherList.setText("Danh sách nhà xuất bản");
+        jPanelPublisherList.add(jLabelPublisherList, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 60));
+
+        jPanelMenuBar.add(jPanelPublisherList, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 260, 60));
+
+        jPanelBin.setBackground(new java.awt.Color(51, 51, 51));
+        jPanelBin.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelBin.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
+        jLabelBin.setForeground(new java.awt.Color(153, 153, 153));
+        jLabelBin.setText("Thùng rác");
+        jPanelBin.add(jLabelBin, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 60));
+
+        jPanelMenuBar.add(jPanelBin, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 260, 60));
 
         jPanelViewIssuedBook.setBackground(new java.awt.Color(51, 51, 51));
         jPanelViewIssuedBook.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelViewIssuedBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabelViewIssuedBook.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabelViewIssuedBook.setForeground(new java.awt.Color(153, 153, 153));
         jLabelViewIssuedBook.setText("   View Issued Books ");
         jPanelViewIssuedBook.add(jLabelViewIssuedBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 60));
 
-        jPanelMenuBar.add(jPanelViewIssuedBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 260, 60));
-
-        jPanelAuthorList.setBackground(new java.awt.Color(51, 51, 51));
-        jPanelAuthorList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelAuthorList.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        jLabelAuthorList.setForeground(new java.awt.Color(153, 153, 153));
-        jLabelAuthorList.setText("   Author list");
-        jPanelAuthorList.add(jLabelAuthorList, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 60));
-
-        jPanelMenuBar.add(jPanelAuthorList, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 260, 60));
-
-        jPanelDefauledList.setBackground(new java.awt.Color(51, 51, 51));
-        jPanelDefauledList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelDefauledList.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        jLabelDefauledList.setForeground(new java.awt.Color(153, 153, 153));
-        jLabelDefauledList.setText("   Defaulter list");
-        jPanelDefauledList.add(jLabelDefauledList, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 220, 60));
-
-        jPanelMenuBar.add(jPanelDefauledList, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 260, 60));
+        jPanelMenuBar.add(jPanelViewIssuedBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 260, 60));
 
         jPanelTitle.setBackground(new java.awt.Color(102, 102, 255));
         jPanelTitle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 20)); // NOI18N
@@ -257,11 +250,11 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelMainContent.setLayout(jPanelMainContentLayout);
         jPanelMainContentLayout.setHorizontalGroup(
             jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1170, Short.MAX_VALUE)
+            .addGap(0, 1177, Short.MAX_VALUE)
         );
         jPanelMainContentLayout.setVerticalGroup(
             jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 630, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -270,23 +263,26 @@ public class HomeForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanelTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 1430, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanelMenuBar, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanelMainContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanelMainContent, javax.swing.GroupLayout.PREFERRED_SIZE, 1177, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanelMainContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelMenuBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 1, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanelMenuBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanelMainContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -324,12 +320,19 @@ public class HomeForm extends javax.swing.JFrame {
             new HomeForm().setVisible(true);
         });
     }
+    
+    private void setNavigationTitle(){
+        jLabelManageBook.setText(TitleStringConstant.MANAGE_BOOK);
+        jLabelPublisherList.setText(TitleStringConstant.MANAGE_PUBLISHER);
+    }
 
     private void myInitComponents() {
+        setNavigationTitle();
+        
         jPanelExit.addMouseListener(new PanelButtonMouseAdapter(jPanelExit, -1) {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (JOptionPane.showConfirmDialog(null, "Are you want to close this application?", "Confirmation", JOptionPane.YES_NO_OPTION) == 0) {
+                if (JOptionPane.showConfirmDialog(null, GeneralStringConstant.GENERAL_EXIT, GeneralStringConstant.GENERAL_CONFIRMATION, JOptionPane.YES_NO_OPTION) == 0) {
                     HomeForm.this.dispose();
                 }
             }
@@ -346,6 +349,7 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelManageBook.addMouseListener(new PanelButtonMouseAdapter(jPanelManageBook, 0) {
             @Override
             public void mouseClicked(MouseEvent e) {
+                panelManageBooks.resetData();
                 clickedMenu(panelManageBooks);
             }
         });
@@ -354,6 +358,14 @@ public class HomeForm extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 clickedMenu(panelManageReader);
+            }
+        });
+        
+        jPanelPublisherList.addMouseListener(new PanelButtonMouseAdapter(jPanelPublisherList, 0) {
+             @Override
+            public void mouseClicked(MouseEvent e) {
+                panelManagePublishers.resetData();
+                clickedMenu(panelManagePublishers);
             }
         });
 
@@ -365,14 +377,14 @@ public class HomeForm extends javax.swing.JFrame {
 
         jPanelViewIssuedBook.addMouseListener(new PanelButtonMouseAdapter(jPanelViewIssuedBook, 0));
 
-        jPanelDefauledList.addMouseListener(new PanelButtonMouseAdapter(jPanelDefauledList, 0));
-
-        jPanelAuthorList.addMouseListener(new PanelButtonMouseAdapter(jPanelAuthorList, 0) {
+        jPanelBin.addMouseListener(new PanelButtonMouseAdapter(jPanelBin, 0) {
             @Override
             public void mouseClicked(MouseEvent e) {
-                clickedMenu(panelAuthorList);
+                panelManageBin.myInitUI();
+                clickedMenu(panelManageBin);
             }
         });
+
 
         jPanelLogout.addMouseListener(new PanelButtonMouseAdapter(jPanelLogout, -1));
 
@@ -382,13 +394,15 @@ public class HomeForm extends javax.swing.JFrame {
 
         panelHome = new HomePanel();
         panelManageBooks = new ManageBooksPanel();
+        panelManagePublishers = new ManagePublisherPanel();
         panelManageReader = new ManageReaderPanel();
-        panelAuthorList = new AuthorListPanel();
+        panelManageBin = new ManageBinPanel();
 
         jPanelMainContent.add(panelHome);
         jPanelMainContent.add(panelManageBooks);
+        jPanelMainContent.add(panelManagePublishers);
         jPanelMainContent.add(panelManageReader);
-        jPanelMainContent.add(panelAuthorList);
+        jPanelMainContent.add(panelManageBin);
 
         clickedMenu(panelHome);
     }
@@ -396,15 +410,15 @@ public class HomeForm extends javax.swing.JFrame {
     private void clickedMenu(JPanel panel) {
         panelHome.setVisible(false);
         panelManageBooks.setVisible(false);
+        panelManagePublishers.setVisible(false);
         panelManageReader.setVisible(false);
-        panelAuthorList.setVisible(false);
+        panelManageBin.setVisible(false);
 
         panel.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabelAuthorList;
-    private javax.swing.JLabel jLabelDefauledList;
+    private javax.swing.JLabel jLabelBin;
     private javax.swing.JLabel jLabelExit;
     private javax.swing.JLabel jLabelGreeting;
     private javax.swing.JLabel jLabelIsueBook;
@@ -412,14 +426,13 @@ public class HomeForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelLogOut;
     private javax.swing.JLabel jLabelManageBook;
     private javax.swing.JLabel jLabelManageReader;
-    private javax.swing.JLabel jLabelManageReader1;
     private javax.swing.JLabel jLabelMenu;
     private javax.swing.JLabel jLabelProjectName;
+    private javax.swing.JLabel jLabelPublisherList;
     private javax.swing.JLabel jLabelReturnBook;
     private javax.swing.JLabel jLabelViewIssuedBook;
     private javax.swing.JLabel jLabelViewRecord;
-    private javax.swing.JPanel jPanelAuthorList;
-    private javax.swing.JPanel jPanelDefauledList;
+    private javax.swing.JPanel jPanelBin;
     private javax.swing.JPanel jPanelExit;
     private javax.swing.JPanel jPanelIndication;
     private javax.swing.JPanel jPanelIsueBook;
@@ -428,8 +441,8 @@ public class HomeForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelMainContent;
     private javax.swing.JPanel jPanelManageBook;
     private javax.swing.JPanel jPanelManageReader;
-    private javax.swing.JPanel jPanelManageReader1;
     private javax.swing.JPanel jPanelMenuBar;
+    private javax.swing.JPanel jPanelPublisherList;
     private javax.swing.JPanel jPanelReturnBook;
     private javax.swing.JPanel jPanelTitle;
     private javax.swing.JPanel jPanelViewIssuedBook;
@@ -438,6 +451,7 @@ public class HomeForm extends javax.swing.JFrame {
 
     private HomePanel panelHome;
     private ManageBooksPanel panelManageBooks;
+    private ManagePublisherPanel panelManagePublishers;
     private ManageReaderPanel panelManageReader;
-    private AuthorListPanel panelAuthorList;
+    private ManageBinPanel panelManageBin;
 }

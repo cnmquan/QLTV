@@ -1,6 +1,16 @@
+D:\Code\Java\QLTV\src\main\java\DAO\BookDAO.java
+D:\Code\Java\QLTV\src\main\java\DTO\Publisher.java
 D:\Code\Java\QLTV\src\main\java\View\Panel\ManageBooksPanel.java
 D:\Code\Java\QLTV\src\main\java\View\Frame\HomeForm.java
 D:\Code\Java\QLTV\src\main\java\Adapter\PanelButtonMouseAdapter.java
-D:\Code\Java\QLTV\src\main\java\View\Panel\AuthorListPanel.java
+D:\Code\Java\QLTV\src\main\java\DAO\PublisherDAO.java
+D:\Code\Java\QLTV\src\main\java\DAO\ICRUD.java
+D:\Code\Java\QLTV\src\main\java\DTO\Book.java
+D:\Code\Java\QLTV\src\main\java\View\Panel\ManagePublisherPanel.java
+D:\Code\Java\QLTV\src\main\java\Adapter\DatabaseConnection.java
+D:\Code\Java\QLTV\src\main\java\DTO\TypeFunctionEnum.java
+D:\Code\Java\QLTV\src\main\java\DAO\IValidation.java
+D:\Code\Java\QLTV\src\main\java\Adapter\SupportFunction.java
+D:\Code\Java\QLTV\src\main\java\DAO\IGET.java
 D:\Code\Java\QLTV\src\main\java\View\Panel\HomePanel.java
 D:\Code\Java\QLTV\src\main\java\View\Panel\ManageReaderPanel.java
