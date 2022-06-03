@@ -21,6 +21,7 @@ public interface BaseDAO<T> {
     public T findByID(String id) throws SQLException;
     public int update(T t) throws SQLException;
     public int delete(T t) throws SQLException;
+    public int delete(String id) throws SQLException;
         
 //    public final Connection connection=DataProvider.getInstance().getConnection();
 //    default void closeConnection() throws SQLException{

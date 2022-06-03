@@ -46,6 +46,9 @@ public class DataProvider {
         DataProvider.instance = instance;
     }
 
+    public void  getConnection() throws SQLException{
+        connection = DriverManager.getConnection(url, unameDB, passDB);
+    }
     public void closeConnection() {
         try {
             if (connection != null) {

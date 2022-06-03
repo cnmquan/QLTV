@@ -212,7 +212,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         });
         jScrollPanelTable.setViewportView(jTableDelete);
 
-        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 1170, 310));
+        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 1190, 260));
 
         jPanelDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 

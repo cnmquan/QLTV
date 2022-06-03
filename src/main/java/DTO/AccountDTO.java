@@ -97,4 +97,24 @@ public class AccountDTO {
         this.email = email;
         this.contact = contact;
     } 
+
+    /**
+     * Constructor of account with full field
+     * @param name name of librarian
+     * @param username username of librarian
+     * @param password password of librarian
+     * @param email email of librarian
+     * @param contact telephone of librarian
+     * @param id id of account
+     */
+    public AccountDTO( String id,String name, String username, String password, String email, String contact) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.contact = contact;
+        this.id = id;
+    }
+    
+    
 }
