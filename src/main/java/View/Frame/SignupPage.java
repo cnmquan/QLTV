@@ -6,12 +6,14 @@ package View.Frame;
 
 import Base.DIContainer;
 import DTO.AccountDTO;
+import Validate.OnlyNum;
 import Validate.Validator;
 import constant.AccountStringConstant;
 import constant.AuthenStringConstant;
 import constant.GeneralStringConstant;
-import java.sql.SQLException;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -24,25 +26,36 @@ public class SignupPage extends javax.swing.JFrame {
      */
     public SignupPage() {
         initComponents();
-    initUI();
+        initUI();
     }
 
     private void initUI() {
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
-        txtPassword.setText(AccountStringConstant.ACCOUNT_INPUT_PWD);
-        txtContact.setText(AccountStringConstant.ACCOUNT_INPUT_CONTACT);
         txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
         txtName.setText(AccountStringConstant.ACCOUNT_INPUT_NAME);
-        
+        txtAnswer.setText(AccountStringConstant.ACCOUNT_INPUT_ANSWER);
+
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblPassword.setText(AccountStringConstant.ACCOUNT_PWD);
         lblName.setText(AccountStringConstant.ACCOUNT_NAME);
         lblContact.setText(AccountStringConstant.ACCOUNT_CONTACT);
         lblEmail.setText(AccountStringConstant.ACCOUNT_EMAIL);
         lblSignUp.setText(AuthenStringConstant.SIGN_UP);
-        
+
         btnSignIn.setText(AuthenStringConstant.SIGN_IN);
         btnSignUp.setText(AuthenStringConstant.SIGN_UP);
+
+        btnShowPass.setVisible(true);
+        btnHidePass.setVisible(false);
+        btnShowRePass.setVisible(true);
+        btnHideRePass.setVisible(false);
+        
+        txtRePassword.setEchoChar('*');
+        txtPassword.setEchoChar('*');
+        
+        PlainDocument doc = (PlainDocument) txtContact.getDocument();
+        doc.setDocumentFilter(new OnlyNum());
+        cmbQuestion.setModel(new DefaultComboBoxModel(AuthenStringConstant.QUESTIONS));
     }
 
     /**
@@ -51,11 +64,15 @@ public class SignupPage extends javax.swing.JFrame {
     public void signUp() {
         String name = txtName.getText();
         String username = txtUsername.getText();
-        String pwd = txtPassword.getText();
+        String pwd = new String(txtRePassword.getPassword());
         String email = txtEmail.getText();
         String contact = txtContact.getText();
+        String question=(String) cmbQuestion.getSelectedItem();
+        String answer=txtAnswer.getText();
 
-        AccountDTO account = new AccountDTO(name, username, pwd, email, contact);
+        String hassPass = DIContainer.getAccountDAO().hashPassword(pwd);
+
+        AccountDTO account = new AccountDTO(name, username, hassPass, email, contact,question,answer);
         int result = DIContainer.getAccountDAO().create(account);
         if (result > 0) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_UP_SUCCESS);
@@ -75,15 +92,21 @@ public class SignupPage extends javax.swing.JFrame {
     public boolean validateInput() {
         String name = txtName.getText();
         String username = txtUsername.getText();
-        String pwd = txtPassword.getText();
+        String pwd = new String(txtPassword.getPassword());
+        String repwd = new String(txtRePassword.getPassword());
         String email = txtEmail.getText();
         String contact = txtContact.getText();
-
-        if (Validator.inputString("[a-zA-Z]+([ '-][a-zA-Z]+)*", name)) {
+        String answer=txtAnswer.getText();
+        int idxQuestion=cmbQuestion.getSelectedIndex();
+        
+        String question=(String) cmbQuestion.getSelectedItem();
+System.out.println(question);
+System.out.println(answer);
+        if (Validator.inputString("[a-zA-Z]+([ '-][a-zA-Z]+)*", name)||name.equals(AccountStringConstant.ACCOUNT_INPUT_NAME)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_NAME);
             return false;
         }
-        if (Validator.inputString("[a-zA-Z0-9!@#$%^&*\\.]+", username)) {
+        if (Validator.inputString("[a-zA-Z0-9!@#$%^&*\\.]+", username)||username.equals(AccountStringConstant.ACCOUNT_INPUT_USERNAME)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_USERNAME);
             return false;
         }
@@ -91,7 +114,11 @@ public class SignupPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_PWD);
             return false;
         }
-        if (Validator.inputString("^.+@.+\\..+$", email)) {
+        if(!pwd.equals(repwd)){
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_NOT_MATCH);
+            return false;
+        }
+        if (Validator.inputString("^[a-zA-Z0-9\\.]+@.+\\..+$", email)||email.equals(AccountStringConstant.ACCOUNT_INPUT_EMAIL)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_EMAIL);
             return false;
         }
@@ -99,28 +126,23 @@ public class SignupPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_CONTACT);
             return false;
         }
+        if(idxQuestion<0){
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_QUESTION);
+            return false;
+        }
+        if(answer.equals("")||answer.equals(AccountStringConstant.ACCOUNT_INPUT_ANSWER)){
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_ANSWER);
+            return false;
+        }
         return true;
     }
 
     public boolean checkExistUsername() {
         String username = txtUsername.getText();
-        boolean isExist = false;
+        boolean isExist;
 
         if (!username.equals("") && DIContainer.getAccountDAO().isExistUsername(username)) {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_USERNAME            );
-            isExist = true;
-        } else {
-            isExist = false;
-        }
-        return isExist;
-    }
-
-    public boolean checkExistEmail() {
-        String email = txtEmail.getText();
-        boolean isExist = false;
-
-        if (!email.equals("") && DIContainer.getAccountDAO().isExistEmail(email)) {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_EMAIL);
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_USERNAME);
             isExist = true;
         } else {
             isExist = false;
@@ -139,29 +161,40 @@ public class SignupPage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         btnExit = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        lblUsername = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        lblPassword = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        lblEmail = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        lblContact = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        lblContact = new javax.swing.JLabel();
+        lblRePassword = new javax.swing.JLabel();
+        lblQuestionSecurity = new javax.swing.JLabel();
         lblName = new javax.swing.JLabel();
+        lblAnswer = new javax.swing.JLabel();
         lblSignUp = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JTextField();
         txtName = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         txtContact = new javax.swing.JTextField();
+        txtAnswer = new javax.swing.JTextField();
+        cmbQuestion = new javax.swing.JComboBox<>();
+        txtPassword = new javax.swing.JPasswordField();
+        txtRePassword = new javax.swing.JPasswordField();
+        btnHidePass = new javax.swing.JLabel();
+        btnShowPass = new javax.swing.JLabel();
+        btnShowRePass = new javax.swing.JLabel();
+        btnHideRePass = new javax.swing.JLabel();
         btnSignUp = new javax.swing.JButton();
         btnSignIn = new javax.swing.JButton();
 
@@ -175,35 +208,20 @@ public class SignupPage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 255));
         jLabel2.setText("Advance Library");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(102, 102, 255));
-        jLabel3.setText("Developer");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel4.setText("UNIQUE");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/signup-library-icon.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 840, 620));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 51, 51));
         jLabel6.setText("Chào mừng ");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, 830));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/signup-library-icon.png"))); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 730, 580));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 770, 750));
 
         jPanel2.setBackground(new java.awt.Color(102, 102, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Account_50px.png"))); // NOI18N
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 50, 50));
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -213,62 +231,97 @@ public class SignupPage extends javax.swing.JFrame {
                 btnExitMouseClicked(evt);
             }
         });
-        jPanel2.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 0, -1, -1));
+        jPanel2.add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 0, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Account_50px.png"))); // NOI18N
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 50, 50));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Tạo tài khoản mới");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, -1, -1));
-
-        lblUsername.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        lblUsername.setForeground(new java.awt.Color(255, 255, 255));
-        lblUsername.setText("Tài khoản:");
-        jPanel2.add(lblUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, -1, -1));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Secure_50px.png"))); // NOI18N
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 50, 50));
-
-        lblPassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        lblPassword.setForeground(new java.awt.Color(255, 255, 255));
-        lblPassword.setText("Mật khẩu");
-        jPanel2.add(lblPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, -1, -1));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 50, 50));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Secured_Letter_50px.png"))); // NOI18N
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 50, 50));
-
-        lblEmail.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        lblEmail.setForeground(new java.awt.Color(255, 255, 255));
-        lblEmail.setText("Email");
-        jPanel2.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 410, -1, -1));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 50, 50));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Google_Mobile_50px.png"))); // NOI18N
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 530, 50, 50));
-
-        lblContact.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        lblContact.setForeground(new java.awt.Color(255, 255, 255));
-        lblContact.setText("Số điện thoại");
-        jPanel2.add(lblContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 510, -1, -1));
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 50, 50));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Account_50px.png"))); // NOI18N
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 50, 50));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 130, 50, 50));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Secure_50px.png"))); // NOI18N
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 230, 50, 50));
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Secure_50px.png"))); // NOI18N
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 450, 50, 50));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8_Secure_50px.png"))); // NOI18N
+        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 560, 50, 50));
+
+        lblUsername.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        lblUsername.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsername.setText("Tài khoản:");
+        jPanel2.add(lblUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, -1, -1));
+
+        lblPassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        lblPassword.setForeground(new java.awt.Color(255, 255, 255));
+        lblPassword.setText("Mật khẩu");
+        jPanel2.add(lblPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, -1, -1));
+
+        lblEmail.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        lblEmail.setForeground(new java.awt.Color(255, 255, 255));
+        lblEmail.setText("Email");
+        jPanel2.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, -1, -1));
+
+        lblContact.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        lblContact.setForeground(new java.awt.Color(255, 255, 255));
+        lblContact.setText("Số điện thoại");
+        jPanel2.add(lblContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 320, -1, -1));
+
+        lblRePassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        lblRePassword.setForeground(new java.awt.Color(255, 255, 255));
+        lblRePassword.setText("Mật khẩu");
+        jPanel2.add(lblRePassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 210, -1, -1));
+
+        lblQuestionSecurity.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        lblQuestionSecurity.setForeground(new java.awt.Color(255, 255, 255));
+        lblQuestionSecurity.setText("Câu hỏi bảo mật");
+        jPanel2.add(lblQuestionSecurity, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 430, -1, -1));
 
         lblName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         lblName.setForeground(new java.awt.Color(255, 255, 255));
         lblName.setText("Chủ tài khoản");
-        jPanel2.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, -1, -1));
+        jPanel2.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 110, -1, -1));
+
+        lblAnswer.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        lblAnswer.setForeground(new java.awt.Color(255, 255, 255));
+        lblAnswer.setText("Đáp án");
+        jPanel2.add(lblAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 540, -1, -1));
 
         lblSignUp.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
         lblSignUp.setForeground(new java.awt.Color(255, 255, 255));
         lblSignUp.setText("Đăng ký");
-        jPanel2.add(lblSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, -1, -1));
+        jPanel2.add(lblSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
 
         txtUsername.setBackground(new java.awt.Color(102, 102, 255));
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
@@ -282,21 +335,7 @@ public class SignupPage extends javax.swing.JFrame {
                 txtUsernameFocusLost(evt);
             }
         });
-        jPanel2.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 350, 40));
-
-        txtPassword.setBackground(new java.awt.Color(102, 102, 255));
-        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        txtPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtPassword.setMargin(new java.awt.Insets(3, 6, 3, 6));
-        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtPasswordFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtPasswordFocusLost(evt);
-            }
-        });
-        jPanel2.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, 350, 40));
+        jPanel2.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, 230, 40));
 
         txtName.setBackground(new java.awt.Color(102, 102, 255));
         txtName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
@@ -310,7 +349,7 @@ public class SignupPage extends javax.swing.JFrame {
                 txtNameFocusLost(evt);
             }
         });
-        jPanel2.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 350, 40));
+        jPanel2.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, 230, 40));
 
         txtEmail.setBackground(new java.awt.Color(102, 102, 255));
         txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
@@ -324,7 +363,7 @@ public class SignupPage extends javax.swing.JFrame {
                 txtEmailFocusLost(evt);
             }
         });
-        jPanel2.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 440, 350, 40));
+        jPanel2.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 350, 230, 40));
 
         txtContact.setBackground(new java.awt.Color(102, 102, 255));
         txtContact.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
@@ -338,7 +377,68 @@ public class SignupPage extends javax.swing.JFrame {
                 txtContactFocusLost(evt);
             }
         });
-        jPanel2.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 540, 350, 40));
+        jPanel2.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 350, 230, 40));
+
+        txtAnswer.setBackground(new java.awt.Color(102, 102, 255));
+        txtAnswer.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txtAnswer.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
+        txtAnswer.setMargin(new java.awt.Insets(3, 6, 3, 6));
+        txtAnswer.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAnswerFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAnswerFocusLost(evt);
+            }
+        });
+        jPanel2.add(txtAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 570, 590, 40));
+
+        cmbQuestion.setBackground(new java.awt.Color(102, 102, 255));
+        cmbQuestion.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        cmbQuestion.setBorder(null);
+        jPanel2.add(cmbQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 460, 590, 40));
+
+        txtPassword.setBackground(new java.awt.Color(102, 102, 255));
+        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txtPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
+        jPanel2.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 230, 40));
+
+        txtRePassword.setBackground(new java.awt.Color(102, 102, 255));
+        txtRePassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txtRePassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
+        jPanel2.add(txtRePassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 230, 40));
+
+        btnHidePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-closed-eye-32.png"))); // NOI18N
+        btnHidePass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHidePassMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnHidePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 280, -1, -1));
+
+        btnShowPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-eye-32.png"))); // NOI18N
+        btnShowPass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnShowPassMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnShowPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, -1, -1));
+
+        btnShowRePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-eye-32.png"))); // NOI18N
+        btnShowRePass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnShowRePassMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnShowRePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 240, -1, -1));
+
+        btnHideRePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-closed-eye-32.png"))); // NOI18N
+        btnHideRePass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHideRePassMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnHideRePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 270, -1, -1));
 
         btnSignUp.setBackground(new java.awt.Color(255, 51, 51));
         btnSignUp.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -351,7 +451,7 @@ public class SignupPage extends javax.swing.JFrame {
                 btnSignUpActionPerformed(evt);
             }
         });
-        jPanel2.add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 620, 320, 70));
+        jPanel2.add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 660, 320, 70));
 
         btnSignIn.setBackground(new java.awt.Color(0, 0, 204));
         btnSignIn.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -364,11 +464,11 @@ public class SignupPage extends javax.swing.JFrame {
                 btnSignInActionPerformed(evt);
             }
         });
-        jPanel2.add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 730, 320, 70));
+        jPanel2.add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 660, 320, 70));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 0, 530, 830));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 0, 750, 750));
 
-        setSize(new java.awt.Dimension(1523, 828));
+        setSize(new java.awt.Dimension(1523, 751));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -390,24 +490,8 @@ public class SignupPage extends javax.swing.JFrame {
         if (username.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         }
-         checkExistUsername();
+        checkExistUsername();
     }//GEN-LAST:event_txtUsernameFocusLost
-
-    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
-        // TODO add your handling code here:
-        String password = txtPassword.getText();
-        if (password.equals(AccountStringConstant.ACCOUNT_INPUT_PWD)) {
-            txtPassword.setText(GeneralStringConstant.GENERAL_EMPTY);
-        }
-    }//GEN-LAST:event_txtPasswordFocusGained
-
-    private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
-        // TODO add your handling code here:
-        String password = txtPassword.getText();
-        if (password.equals(GeneralStringConstant.GENERAL_EMPTY)) {
-            txtPassword.setText(AccountStringConstant.ACCOUNT_INPUT_PWD);
-        }
-    }//GEN-LAST:event_txtPasswordFocusLost
 
     private void txtNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusGained
         // TODO add your handling code here:
@@ -435,19 +519,18 @@ public class SignupPage extends javax.swing.JFrame {
 
     private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
         // TODO add your handling code here:
-        String email = txtEmail.getText();
-        if (email.equals(GeneralStringConstant.GENERAL_EMPTY)) {
-            txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
-        }
-        checkExistEmail();
+//        String email = txtEmail.getText();
+//        if (email.equals(GeneralStringConstant.GENERAL_EMPTY)) {
+//            txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
+//        }
     }//GEN-LAST:event_txtEmailFocusLost
 
     private void txtContactFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContactFocusGained
         // TODO add your handling code here:
-        String contact = txtContact.getText();
-        if (contact.equals(AccountStringConstant.ACCOUNT_INPUT_CONTACT)) {
-            txtContact.setText(GeneralStringConstant.GENERAL_EMPTY);
-        }
+//        String contact = txtContact.getText();
+//        if (contact.equals(AccountStringConstant.ACCOUNT_INPUT_CONTACT)) {
+//            txtContact.setText(GeneralStringConstant.GENERAL_EMPTY);
+//        }
     }//GEN-LAST:event_txtContactFocusGained
 
     private void txtContactFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContactFocusLost
@@ -460,7 +543,7 @@ public class SignupPage extends javax.swing.JFrame {
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
         // TODO add your handling code here:
-        if (validateInput() && !checkExistUsername() && !checkExistEmail())
+        if (validateInput() && !checkExistUsername() )
             signUp();
     }//GEN-LAST:event_btnSignUpActionPerformed
 
@@ -470,6 +553,51 @@ public class SignupPage extends javax.swing.JFrame {
         signIn.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnSignInActionPerformed
+
+    private void txtAnswerFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAnswerFocusGained
+        String answer = txtAnswer.getText();
+        if (answer.equals(AccountStringConstant.ACCOUNT_INPUT_ANSWER)) {
+            txtAnswer.setText(GeneralStringConstant.GENERAL_EMPTY);
+        }
+    }//GEN-LAST:event_txtAnswerFocusGained
+
+    private void txtAnswerFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAnswerFocusLost
+        String answer = txtAnswer.getText();
+        if (answer.equals(GeneralStringConstant.GENERAL_EMPTY)) {
+            txtAnswer.setText(AccountStringConstant.ACCOUNT_INPUT_ANSWER);
+        }
+    }//GEN-LAST:event_txtAnswerFocusLost
+
+    private void btnShowPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowPassMouseClicked
+        // TODO add your handling code here:
+        btnShowPass.setVisible(false);
+        btnHidePass.setVisible(true);
+        
+        txtPassword.setEchoChar((char)0);
+    }//GEN-LAST:event_btnShowPassMouseClicked
+
+    private void btnHidePassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHidePassMouseClicked
+        btnShowPass.setVisible(true);
+        btnHidePass.setVisible(false);
+        
+        txtPassword.setEchoChar('*');
+    }//GEN-LAST:event_btnHidePassMouseClicked
+
+    private void btnShowRePassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowRePassMouseClicked
+        // TODO add your handling code here:
+        btnShowRePass.setVisible(false);
+        btnHideRePass.setVisible(true);
+        
+        txtRePassword.setEchoChar((char)0);
+    }//GEN-LAST:event_btnShowRePassMouseClicked
+
+    private void btnHideRePassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHideRePassMouseClicked
+        // TODO add your handling code here:
+        btnShowRePass.setVisible(true);
+        btnHideRePass.setVisible(false);
+        
+        txtRePassword.setEchoChar('*');
+    }//GEN-LAST:event_btnHideRePassMouseClicked
 
     /**
      * @param args the command line arguments
@@ -509,31 +637,42 @@ public class SignupPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnExit;
+    private javax.swing.JLabel btnHidePass;
+    private javax.swing.JLabel btnHideRePass;
+    private javax.swing.JLabel btnShowPass;
+    private javax.swing.JLabel btnShowRePass;
     private javax.swing.JButton btnSignIn;
     private javax.swing.JButton btnSignUp;
+    private javax.swing.JComboBox<String> cmbQuestion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblAnswer;
     private javax.swing.JLabel lblContact;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblQuestionSecurity;
+    private javax.swing.JLabel lblRePassword;
     private javax.swing.JLabel lblSignUp;
     private javax.swing.JLabel lblUsername;
+    private javax.swing.JTextField txtAnswer;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JPasswordField txtRePassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

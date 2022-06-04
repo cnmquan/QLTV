@@ -6,21 +6,22 @@ package View.Panel;
 
 import Base.DIContainer;
 import DTO.AccountDTO;
+import Validate.OnlyNum;
 import Validate.Validator;
-import View.Frame.SigninPage;
 import constant.AccountStringConstant;
 import constant.AuthenStringConstant;
 import constant.GeneralStringConstant;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.awt.Font;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -56,25 +57,20 @@ public class ManageAccount extends javax.swing.JPanel {
         lblName.setText(AccountStringConstant.ACCOUNT_NAME);
         lblContact.setText(AccountStringConstant.ACCOUNT_CONTACT);
         lblEmail.setText(AccountStringConstant.ACCOUNT_EMAIL);
+        
+        cmbQuestion.setModel(new DefaultComboBoxModel(AuthenStringConstant.QUESTIONS));
+        cmbRole.setModel(new DefaultComboBoxModel(AuthenStringConstant.ROLES));        
+        
+        PlainDocument doc = (PlainDocument) txtContact.getDocument();
+        doc.setDocumentFilter(new OnlyNum());
+        jButtonInsert.setVisible(false);
     }
 
     /**
      * method to insert values into account table
      */
     public void insertAccount() {
-        String name = txtName.getText();
-        String username = txtUsername.getText();
-        String email = txtEmail.getText();
-        String contact = txtContact.getText();
-
-        AccountDTO newAccount = new AccountDTO(name, username, "123456", email, contact);
-        int result = DIContainer.getAccountDAO().create(newAccount);
-        if (result > 0) {
-            JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_UP_SUCCESS + "\nMật khẩu mặc định là: 123456");
-            setAccountDetailToTable();
-        } else {
-            JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_UP_FAIL);
-        }
+        
     }
 
     /**
@@ -120,19 +116,6 @@ public class ManageAccount extends javax.swing.JPanel {
         return isExist;
     }
 
-    public boolean checkExistEmail() {
-        String email = txtEmail.getText();
-        boolean isExist ;
-
-        if (!email.equals("") && DIContainer.getAccountDAO().isExistEmail(email)) {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_EMAIL);
-            isExist = true;
-        } else {
-            isExist = false;
-        }
-        return isExist;
-    }
-
     private void setDefaultTable() {
         tblAccountDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
@@ -148,15 +131,11 @@ public class ManageAccount extends javax.swing.JPanel {
         //Add column header
         DefaultTableModel model = (DefaultTableModel) tblAccountDetail.getModel();
         String[] titles
-                = {AccountStringConstant.ACCOUNT_ID, AccountStringConstant.ACCOUNT_NAME, AccountStringConstant.ACCOUNT_USERNAME, AccountStringConstant.ACCOUNT_EMAIL, AccountStringConstant.ACCOUNT_CONTACT};
+                = {AccountStringConstant.ACCOUNT_ID, AccountStringConstant.ACCOUNT_NAME, AccountStringConstant.ACCOUNT_USERNAME, AccountStringConstant.ACCOUNT_EMAIL, AccountStringConstant.ACCOUNT_CONTACT,AccountStringConstant.ACCOUNT_ROLE};
         for (String title : titles) {
             model.addColumn(title);
         }
         model.setColumnCount(titles.length);
-
-        //Add sorter
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(model);
-        tblAccountDetail.setRowSorter(sorter);
     }
 
     /**
@@ -169,9 +148,67 @@ public class ManageAccount extends javax.swing.JPanel {
         model.setRowCount(0);
         lAccounts = DIContainer.getAccountDAO().findAll();
         lAccounts.forEach((AccountDTO account) -> {
-            Object[] object = {account.getId(), account.getName(), account.getUsername(), account.getEmail(), account.getContact()};
+            Object[] object = {account.getId(), account.getName(), account.getUsername(), account.getEmail(), account.getContact(),account.getRole()};
             model.addRow(object);
         });
+    }
+    
+    private void setDataToField(String id){
+        AccountDTO currentAcc=DIContainer.getAccountDAO().findByID(id);
+        
+        txtID.setText(currentAcc.getId());
+        txtName.setText(currentAcc.getName());
+        txtUsername.setText(currentAcc.getUsername());
+        txtEmail.setText(currentAcc.getEmail());
+        txtContact.setText(currentAcc.getContact());
+        txtAnswer.setText(currentAcc.getAnswer());
+        
+        cmbRole.setSelectedItem(currentAcc.getRole());
+        cmbQuestion.setSelectedItem(currentAcc.getQuestion());
+    }
+    
+    private void showField(){
+        if (!account.getRole().equals("ADMIN")) {
+            jButtonDelete.setVisible(false);
+            jButtonRecover.setVisible(false);
+            jButtonUpdate.setVisible(false);
+            
+            lblQuestion.setVisible(false);
+            lblAnswer.setVisible(false);
+            cmbQuestion.setVisible(false);
+            txtAnswer.setVisible(false);
+            
+            cmbRole.setEnabled(false);
+            if (account.getId().equals(txtID.getText())) {
+                jButtonUpdate.setVisible(true);
+                
+                lblQuestion.setVisible(true);
+            lblAnswer.setVisible(true);
+            cmbQuestion.setVisible(true);
+            txtAnswer.setVisible(true);
+            }
+        }
+    }
+    
+    private void updateAccount(){
+        String id = txtID.getText();
+        String name = txtName.getText();
+        String username = txtUsername.getText();
+        String email = txtEmail.getText();
+        String contact = txtContact.getText();
+        String question=(String) cmbQuestion.getSelectedItem();
+        String answer=txtAnswer.getText();
+        String role=(String) cmbRole.getSelectedItem();
+        
+        AccountDTO oldAccount = DIContainer.getAccountDAO().findByID(id);
+        AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact,question,answer,role);
+        int result = DIContainer.getAccountDAO().update(newAccount);
+        if (result > 0) {
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_SUCCESS);
+            setAccountDetailToTable();
+        } else {
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_FAIL);
+        }
     }
 
     /**
@@ -188,15 +225,21 @@ public class ManageAccount extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         txtUsername = new javax.swing.JTextField();
-        lblUsername = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
-        lblName = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
-        lblID = new javax.swing.JLabel();
-        lblEmail = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        lblContact = new javax.swing.JLabel();
         txtContact = new javax.swing.JTextField();
+        txtAnswer = new javax.swing.JTextField();
+        lblUsername = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
+        lblContact = new javax.swing.JLabel();
+        lblAnswer = new javax.swing.JLabel();
+        lblQuestion = new javax.swing.JLabel();
+        lblRole = new javax.swing.JLabel();
+        cmbRole = new javax.swing.JComboBox<>();
+        cmbQuestion = new javax.swing.JComboBox<>();
         jButtonInsert = new javax.swing.JButton();
         jButtonUpdate = new javax.swing.JButton();
         jButtonRecover = new javax.swing.JButton();
@@ -226,23 +269,12 @@ public class ManageAccount extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        txtUsername.setEditable(false);
+        txtUsername.setBackground(new java.awt.Color(255, 255, 255));
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         txtUsername.setMargin(new java.awt.Insets(3, 6, 3, 6));
-        txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtUsernameFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtUsernameFocusLost(evt);
-            }
-        });
-        jPanel1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 350, 40));
-
-        lblUsername.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblUsername.setForeground(new java.awt.Color(51, 51, 51));
-        lblUsername.setText("Tài khoản:");
-        jPanel1.add(lblUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
+        jPanel1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 300, 40));
 
         txtName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
@@ -255,12 +287,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtNameFocusLost(evt);
             }
         });
-        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 350, 40));
-
-        lblName.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblName.setForeground(new java.awt.Color(51, 51, 51));
-        lblName.setText("Chủ tài khoản");
-        jPanel1.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
+        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 300, 40));
 
         txtID.setEditable(false);
         txtID.setBackground(new java.awt.Color(255, 255, 255));
@@ -275,17 +302,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtIDFocusLost(evt);
             }
         });
-        jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 350, 40));
-
-        lblID.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblID.setForeground(new java.awt.Color(51, 51, 51));
-        lblID.setText("ID");
-        jPanel1.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
-
-        lblEmail.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblEmail.setForeground(new java.awt.Color(51, 51, 51));
-        lblEmail.setText("Email");
-        jPanel1.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
+        jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 300, 40));
 
         txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
@@ -298,12 +315,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtEmailFocusLost(evt);
             }
         });
-        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 140, 350, 40));
-
-        lblContact.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblContact.setForeground(new java.awt.Color(51, 51, 51));
-        lblContact.setText("Số điện thoại");
-        jPanel1.add(lblContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 210, -1, -1));
+        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, 300, 40));
 
         txtContact.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtContact.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
@@ -316,7 +328,68 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtContactFocusLost(evt);
             }
         });
-        jPanel1.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 240, 350, 40));
+        jPanel1.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 150, 300, 40));
+
+        txtAnswer.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txtAnswer.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
+        txtAnswer.setMargin(new java.awt.Insets(3, 6, 3, 6));
+        txtAnswer.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAnswerFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAnswerFocusLost(evt);
+            }
+        });
+        jPanel1.add(txtAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 760, 40));
+
+        lblUsername.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblUsername.setForeground(new java.awt.Color(51, 51, 51));
+        lblUsername.setText("Tài khoản:");
+        jPanel1.add(lblUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+
+        lblName.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblName.setForeground(new java.awt.Color(51, 51, 51));
+        lblName.setText("Chủ tài khoản");
+        jPanel1.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+
+        lblEmail.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblEmail.setForeground(new java.awt.Color(51, 51, 51));
+        lblEmail.setText("Email");
+        jPanel1.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, -1, -1));
+
+        lblID.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblID.setForeground(new java.awt.Color(51, 51, 51));
+        lblID.setText("ID");
+        jPanel1.add(lblID, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        lblContact.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblContact.setForeground(new java.awt.Color(51, 51, 51));
+        lblContact.setText("Số điện thoại");
+        jPanel1.add(lblContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, -1, -1));
+
+        lblAnswer.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblAnswer.setForeground(new java.awt.Color(51, 51, 51));
+        lblAnswer.setText("Đáp án");
+        jPanel1.add(lblAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, -1, -1));
+
+        lblQuestion.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblQuestion.setForeground(new java.awt.Color(51, 51, 51));
+        lblQuestion.setText("Câu hỏi bảo mật");
+        jPanel1.add(lblQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+
+        lblRole.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        lblRole.setForeground(new java.awt.Color(51, 51, 51));
+        lblRole.setText("Vị trí");
+        jPanel1.add(lblRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, -1, -1));
+
+        cmbRole.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        cmbRole.setBorder(null);
+        jPanel1.add(cmbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 300, 40));
+
+        cmbQuestion.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        cmbQuestion.setBorder(null);
+        jPanel1.add(cmbQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 880, 40));
 
         jButtonInsert.setBackground(new java.awt.Color(102, 102, 255));
         jButtonInsert.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -328,7 +401,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonInsertActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 50, 150, 50));
+        jPanel1.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 10, 150, 50));
 
         jButtonUpdate.setBackground(new java.awt.Color(204, 204, 0));
         jButtonUpdate.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -340,7 +413,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonUpdateActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 110, 150, 50));
+        jPanel1.add(jButtonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 70, 150, 50));
 
         jButtonRecover.setBackground(new java.awt.Color(255, 102, 51));
         jButtonRecover.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -352,7 +425,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonRecoverActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonRecover, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 230, 150, 50));
+        jPanel1.add(jButtonRecover, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 190, 150, 50));
 
         jButtonDelete.setBackground(new java.awt.Color(255, 0, 51));
         jButtonDelete.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -364,9 +437,9 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonDeleteActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 170, 150, 50));
+        jPanel1.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 130, 150, 50));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 1080, 300));
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1170, 360));
 
         tblAccountDetail.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tblAccountDetail.setModel(new javax.swing.table.DefaultTableModel(
@@ -390,9 +463,9 @@ public class ManageAccount extends javax.swing.JPanel {
 
         jScrollPanelTable.setViewportView(jScrollPane2);
 
-        jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 1120, 320));
+        jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 1120, 310));
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 730));
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 780));
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusGained
@@ -410,23 +483,6 @@ public class ManageAccount extends javax.swing.JPanel {
             txtName.setText(AccountStringConstant.ACCOUNT_INPUT_NAME);
         }
     }//GEN-LAST:event_txtNameFocusLost
-
-    private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
-        // TODO add your handling code here:
-        String username = txtUsername.getText();
-        if (username.equals(AccountStringConstant.ACCOUNT_INPUT_USERNAME)) {
-            txtUsername.setText(GeneralStringConstant.GENERAL_EMPTY);
-        }
-    }//GEN-LAST:event_txtUsernameFocusGained
-
-    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
-        // TODO add your handling code here:
-        String username = txtUsername.getText();
-        if (username.equals(GeneralStringConstant.GENERAL_EMPTY)) {
-            txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
-        }
-        checkExistUsername();
-    }//GEN-LAST:event_txtUsernameFocusLost
 
     private void txtIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDFocusGained
         // TODO add your handling code here:
@@ -458,7 +514,6 @@ public class ManageAccount extends javax.swing.JPanel {
         if (email.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
         }
-        checkExistEmail();
     }//GEN-LAST:event_txtEmailFocusLost
 
     private void txtContactFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContactFocusGained
@@ -479,40 +534,14 @@ public class ManageAccount extends javax.swing.JPanel {
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
         // TODO add your handling code here:
-        if (validateInput() && !checkExistUsername() && !checkExistEmail())
+        if (validateInput() && !checkExistUsername() )
             insertAccount();
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
-        // TODO add your handling code here:        
-        String id = txtID.getText();
-        String name = txtName.getText();
-        String username = txtUsername.getText();
-        String email = txtEmail.getText();
-        String contact = txtContact.getText();
-        AccountDTO oldAccount = DIContainer.getAccountDAO().findByID(id);
-
-        //Validate
-        if (!validateInput()) {
-            return;
-        }
-        if (!username.equals(oldAccount.getUsername())) {
-            JOptionPane.showMessageDialog(this, "Bạn không thể cập nhật tên đăng nhập");
-            return;
-        }
-        if (!email.equals(oldAccount.getEmail())) {
-            if (checkExistEmail()) {
-                return;
-            }
-        }
-
-        AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact);
-        int result = DIContainer.getAccountDAO().update(newAccount);
-        if (result > 0) {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_SUCCESS);
-            setAccountDetailToTable();
-        } else {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_FAIL);
+        // TODO add your handling code here:     
+        if (validateInput()) {
+            updateAccount();
         }
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
@@ -542,25 +571,24 @@ public class ManageAccount extends javax.swing.JPanel {
         // TODO add your handling code here:
         int rowNo = tblAccountDetail.getSelectedRow();
         TableModel model = tblAccountDetail.getModel();
-
-        txtID.setText(model.getValueAt(rowNo, 0).toString());
-        txtName.setText(model.getValueAt(rowNo, 1).toString());
-        txtUsername.setText(model.getValueAt(rowNo, 2).toString());
-        txtEmail.setText(model.getValueAt(rowNo, 3).toString());
-        txtContact.setText(model.getValueAt(rowNo, 4).toString());
-
-        if (!account.getUsername().equals("admin")) {
-            jButtonDelete.setVisible(false);
-            jButtonRecover.setVisible(false);
-            jButtonUpdate.setVisible(false);
-            if (account.getId().equals(txtID.getText())) {
-                jButtonUpdate.setVisible(true);
-            }
-        }
+        String id=model.getValueAt(rowNo, 0).toString();
+        
+        setDataToField(id);  
+        showField();
     }//GEN-LAST:event_tblAccountDetailMouseClicked
+
+    private void txtAnswerFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAnswerFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAnswerFocusGained
+
+    private void txtAnswerFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAnswerFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAnswerFocusLost
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbQuestion;
+    private javax.swing.JComboBox<String> cmbRole;
     private javax.swing.JButton jButtonDelete;
     private javax.swing.JButton jButtonInsert;
     private javax.swing.JButton jButtonRecover;
@@ -571,12 +599,16 @@ public class ManageAccount extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPanelTable;
+    private javax.swing.JLabel lblAnswer;
     private javax.swing.JLabel lblContact;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblQuestion;
+    private javax.swing.JLabel lblRole;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JTable tblAccountDetail;
+    private javax.swing.JTextField txtAnswer;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtID;

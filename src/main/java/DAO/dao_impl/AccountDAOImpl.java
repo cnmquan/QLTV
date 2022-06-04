@@ -27,12 +27,23 @@ public class AccountDAOImpl implements AccountDAO {
                 + "username, "
                 + "password, "
                 + "email, "
-                + "contact) "
+                + "contact,"
+                + "question,"
+                + "answer,"
+                + "role) "
                 + "VALUES "
-                + "(?,?,?,?,?);";
+                + "(?,?,?,?,?,?,?,?);";
 
         //Call function to execute insert query
-        int result = DataProvider.getInstance().ExecuteNonQuery(query, new Object[]{account.getName(), account.getUsername(), account.getPassword(), account.getEmail(), account.getContact()});
+        int result = DataProvider.getInstance().ExecuteNonQuery(query, new Object[]{
+            account.getName(), 
+            account.getUsername(), 
+            account.getPassword(), 
+            account.getEmail(), 
+            account.getContact(),
+            account.getQuestion(),
+            account.getAnswer(),
+            "LIBRARIAN"});
         if (result > 0) {
             System.out.println("Insert successful");
         } else {
@@ -44,7 +55,7 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public ArrayList<AccountDTO> findAll() {
         //Declare variables
-        String query = "select * from \"public\".account;";
+        String query = "select * from \"public\".account order by id;";
         ArrayList<AccountDTO> lAccounts = new ArrayList<>();
 
         //Call function to execute select query
@@ -87,7 +98,10 @@ public class AccountDAOImpl implements AccountDAO {
                 + "username=?, "
                 + "password=?, "
                 + "email=?, "
-                + "contact=? "
+                + "contact=?, "
+                + "question=?, "
+                + "answer=?, "
+                + "role=? "
                 + "WHERE id = ?";
 
         //Call function to execute update query
@@ -97,6 +111,9 @@ public class AccountDAOImpl implements AccountDAO {
             account.getPassword(),
             account.getEmail(),
             account.getContact(),
+            account.getQuestion(),
+            account.getAnswer(),
+            account.getRole(),
             Integer.parseInt(account.getId())};
         int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         if (result > 0) {

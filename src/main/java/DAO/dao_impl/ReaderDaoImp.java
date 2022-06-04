@@ -1,6 +1,7 @@
-package db;
+package DAO.dao_impl;
 
 import Adapter.DatabaseConnection;
+import DAO.dao.ReaderDao;
 import constant.ReaderStringConstant;
 import model.Publisher;
 import model.Reader;
@@ -22,23 +23,23 @@ public class ReaderDaoImp implements ReaderDao {
         String sql = "SELECT * FROM readers "
                 + " WHERE reader_is_deleted = false"
                 + " ORDER BY reader_id";
-        try {
-            c = DatabaseConnection.getConnection();
-            Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery(sql);
-
-            while (rs.next()) {
-                Reader reader = new Reader();
-                reader.setId(rs.getString("reader_id"));
-                reader.setName(rs.getString("reader_name"));
-                reader.setPhoneNumber(rs.getString("reader_phone_number"));
-                list.add(reader);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            DatabaseConnection.close(c);
-        }
+//        try {
+//            c = DatabaseConnection.getConnection();
+//            Statement s = c.createStatement();
+//            ResultSet rs = s.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                Reader reader = new Reader();
+//                reader.setId(rs.getString("reader_id"));
+//                reader.setName(rs.getString("reader_name"));
+//                reader.setPhoneNumber(rs.getString("reader_phone_number"));
+//                list.add(reader);
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        } finally {
+//            DatabaseConnection.close(c);
+//        }
         return list;
     }
 

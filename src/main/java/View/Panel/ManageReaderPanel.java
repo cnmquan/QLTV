@@ -4,11 +4,11 @@
  */
 package View.Panel;
 
+import DAO.dao_impl.ReaderDaoImp;
 import constant.GeneralStringConstant;
 import constant.PublisherStringConstant;
 import constant.ReaderStringConstant;
 import constant.TitleStringConstant;
-import db.ReaderDaoImp;
 import model.Publisher;
 import model.Reader;
 import model.TypeFunctionEnum;

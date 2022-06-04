@@ -1,6 +1,8 @@
+C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DAO\dao_impl\ReaderDaoImp.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\constant\BinStringConstant.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Base\iDeleteHandler.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\model\Publisher.java
+C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Validate\OnlyNum.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\constant\TitleStringConstant.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\View\Panel\HomePanel.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Adapter\PanelButtonMouseAdapter.java
@@ -22,12 +24,14 @@ C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Base\DataProvider.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\model\Book.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\constant\AuthenStringConstant.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\View\Frame\SigninPage.java
+C:\Users\Asus\Downloads\Git\QLTV\src\main\java\model\Reader.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DAO\dao_impl\AccountDAOImpl.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DTO\AccountDTO.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Adapter\SupportFunction.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\model\TypeFunctionEnum.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DAO\dao\AccountDAO.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Base\iGetTitle.java
+C:\Users\Asus\Downloads\Git\QLTV\src\main\java\constant\ReaderStringConstant.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\View\Panel\ManageBinPanel.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DAO\dao\BookDao.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Validate\Validator.java
@@ -35,6 +39,7 @@ C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Base\BaseDAO.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Adapter\DatabaseConnection.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DAO\dao_impl\PublisherDaoImp.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\Base\iValidation.java
+C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DAO\dao\ReaderDao.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\DAO\dao_impl\BinDaoImp.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\View\Frame\HomeForm.java
 C:\Users\Asus\Downloads\Git\QLTV\src\main\java\constant\GeneralStringConstant.java
