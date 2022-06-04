@@ -167,7 +167,7 @@ public class ManageAccount extends javax.swing.JPanel {
         cmbQuestion.setSelectedItem(currentAcc.getQuestion());
     }
     
-    private void showField(){
+    private void showField(){        
         if (!account.getRole().equals("ADMIN")) {
             jButtonDelete.setVisible(false);
             jButtonRecover.setVisible(false);
@@ -202,13 +202,13 @@ public class ManageAccount extends javax.swing.JPanel {
         
         AccountDTO oldAccount = DIContainer.getAccountDAO().findByID(id);
         AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact,question,answer,role);
-        int result = DIContainer.getAccountDAO().update(newAccount);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().update(newAccount);
+        if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_SUCCESS);
             setAccountDetailToTable();
         } else {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_FAIL);
-        }
+        }      
     }
 
     /**
@@ -451,8 +451,6 @@ public class ManageAccount extends javax.swing.JPanel {
             }
         ));
         tblAccountDetail.setRowHeight(40);
-        tblAccountDetail.setShowHorizontalLines(true);
-        tblAccountDetail.setShowVerticalLines(true);
         tblAccountDetail.getTableHeader().setReorderingAllowed(false);
         tblAccountDetail.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -463,9 +461,9 @@ public class ManageAccount extends javax.swing.JPanel {
 
         jScrollPanelTable.setViewportView(jScrollPane2);
 
-        jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 1120, 310));
+        jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 1120, 270));
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 780));
+        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 740));
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusGained
@@ -548,8 +546,8 @@ public class ManageAccount extends javax.swing.JPanel {
     private void jButtonRecoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRecoverActionPerformed
         // TODO add your handling code here:
         String id = txtID.getText();
-        int result = DIContainer.getAccountDAO().recoverAccount(id);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().recoverAccount(id);
+        if (result ) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_RECOVER_SUCCESS);
         } else {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_RECOVER_FAIL);
@@ -558,8 +556,8 @@ public class ManageAccount extends javax.swing.JPanel {
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         String id = txtID.getText();
-        int result = DIContainer.getAccountDAO().delete(id);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().delete(id);
+        if (result ) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_SUCCESS);
             setAccountDetailToTable();
         } else {
@@ -573,6 +571,8 @@ public class ManageAccount extends javax.swing.JPanel {
         TableModel model = tblAccountDetail.getModel();
         String id=model.getValueAt(rowNo, 0).toString();
         
+        if (account.getId().equals(id))
+            cmbRole.setEnabled(false);
         setDataToField(id);  
         showField();
     }//GEN-LAST:event_tblAccountDetailMouseClicked

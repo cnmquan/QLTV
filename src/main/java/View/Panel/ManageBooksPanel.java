@@ -5,6 +5,7 @@
 package View.Panel;
 
 import Adapter.SupportFunction;
+import Base.DIContainer;
 import constant.BookStringConstant;
 import constant.GeneralStringConstant;
 import constant.TitleStringConstant;
@@ -12,9 +13,10 @@ import DAO.dao_impl.BookDaoImp;
 import DAO.dao_impl.PublisherDaoImp;
 import java.awt.Color;
 import java.awt.Font;
-import model.Book;
-import model.Publisher;
-import model.TypeFunctionEnum;
+import DTO.Book;
+import DTO.Publisher;
+import DTO.TypeFunctionEnum;
+import constant.DatabaseStringConstant;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -23,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JPanel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -33,22 +36,23 @@ public class ManageBooksPanel extends JPanel {
     /**
      * Creates new form ManageBooksPanel
      */
-    private BookDaoImp bookDaoImp;
-    private PublisherDaoImp publisherDaoImp;
+    private final BookDaoImp bookDaoImp;
+    private final PublisherDaoImp publisherDaoImp;
     private ArrayList<Publisher> publisherList;
     private ArrayList<Book> listBook;
     private Vector vctHeader;
     private Vector vctData;
 
     public ManageBooksPanel() {
-        initComponents();
-        this.bookDaoImp = BookDaoImp.getInstance();
-        resetData();
+        this.bookDaoImp = DIContainer.getBookDao();
+        this.publisherDaoImp = DIContainer.getPublisherDao();
+        initComponents();        
+        myInitComponents();
 
-        setBounds(0, 0, 1170, 630);
+        setBounds(0, 0, 1160, 740);
     }
 
-    public void resetData() {
+    public void myInitComponents() {
         setDefaultText();
         setDefaultTable();
         getVectorData();
@@ -57,7 +61,7 @@ public class ManageBooksPanel extends JPanel {
         clearInfo();
     }
 
-    public void getVectorData() {
+    private void getVectorData() {
         this.listBook = bookDaoImp.getAll();
         this.vctData = new Vector();
         for (int i = 0; i < this.listBook.size(); i++) {
@@ -108,10 +112,9 @@ public class ManageBooksPanel extends JPanel {
         jTableBook.setBackground(Color.WHITE);
         jTableBook.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableBook.setFillsViewportHeight(true);
-
     }
 
-    public void showTableData(Vector vctData) {
+    private void showTableData(Vector vctData) {
         this.vctHeader = this.bookDaoImp.getTitleColumn();
 
         jTableBook.setModel(new DefaultTableModel(vctData, vctHeader) {
@@ -122,10 +125,14 @@ public class ManageBooksPanel extends JPanel {
             }
         });
 
+        DefaultTableModel model = (DefaultTableModel) jTableBook.getModel();
+        //Add sorter
+        var sorter = new TableRowSorter<DefaultTableModel>(model);
+        jTableBook.setRowSorter(sorter);      
+
     }
 
     private void getListPublisherName() {
-        this.publisherDaoImp = PublisherDaoImp.getInstance();
         this.publisherList = publisherDaoImp.getAll();
         for (int i = 0; i < publisherList.size(); i++) {
             jComboBoxPublisher.addItem(publisherList.get(i).getPublisherName());
@@ -154,6 +161,19 @@ public class ManageBooksPanel extends JPanel {
         jTextFieldPublishYear.setText(publishYear);
         jTextFieldQuantity.setText(quantity);
         jComboBoxPublisher.setSelectedItem(publisherName);
+
+        for (int i = 0; i < jComboBoxPublisher.getItemCount() + 1; i++) {
+            if (i == jComboBoxPublisher.getItemCount()) {
+                jComboBoxPublisher.addItem(publisherName);
+                jComboBoxPublisher.setSelectedItem(publisherName);
+                break;
+            } else if (jComboBoxPublisher.getItemAt(i).equals(publisherName)) {
+                jComboBoxPublisher.setSelectedIndex(i);
+                break;
+            } else {
+
+            }
+        }
     }
 
     private void clearInfo() {
@@ -177,7 +197,7 @@ public class ManageBooksPanel extends JPanel {
             errorList = errorList + BookStringConstant.BOOK_ID_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         } else if (bookDaoImp.isExist(this.listBook, id) && typeFunction == TypeFunctionEnum.Insert) {
             errorList = errorList + BookStringConstant.BOOK_ID_INSERT_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        }else if (bookDaoImp.isExistDeleteList(id) && typeFunction == TypeFunctionEnum.Insert) {
+        } else if (bookDaoImp.isExistDeleteList(id) && typeFunction == TypeFunctionEnum.Insert) {
             errorList = errorList + BookStringConstant.BOOK_ID_DELETED_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         } else if (!bookDaoImp.isExist(this.listBook, id) && (typeFunction == TypeFunctionEnum.Update || typeFunction == TypeFunctionEnum.Delete)) {
             errorList = errorList + BookStringConstant.BOOK_ID_UPDATE_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
@@ -226,7 +246,7 @@ public class ManageBooksPanel extends JPanel {
     private void setTableBySearch(String text) {
         this.vctData.clear();
         for (Book book : this.listBook) {
-            if (book.getPublisherID().toLowerCase().contains(text.toLowerCase())
+            if (book.getBookID().toLowerCase().contains(text.toLowerCase())
                     || book.getBookName().toLowerCase().contains(text.toLowerCase())
                     || book.getBookCategory().toLowerCase().contains(text.toLowerCase())
                     || book.getBookAuthor().toLowerCase().contains(text.toLowerCase())
@@ -248,12 +268,22 @@ public class ManageBooksPanel extends JPanel {
     private void initComponents() {
 
         jPanelDetail = new javax.swing.JPanel();
+        jPanelButton = new javax.swing.JPanel();
+        jButtonInsert = new javax.swing.JButton();
+        jButtonDelete = new javax.swing.JButton();
+        jButtonUpdate = new javax.swing.JButton();
+        jButtonClear = new javax.swing.JButton();
+        jPanelSearch = new javax.swing.JPanel();
+        jLabelSearch = new javax.swing.JLabel();
+        jTextFieldSearch = new javax.swing.JTextField();
+        jSeparatorTitle = new javax.swing.JSeparator();
+        jPanelMainDetail = new javax.swing.JPanel();
         jPanelID = new javax.swing.JPanel();
         jLabelID = new javax.swing.JLabel();
         jTextFieldID = new javax.swing.JTextField();
         jPanelName = new javax.swing.JPanel();
         jLabelName = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPaneTextFieldName = new javax.swing.JScrollPane();
         jTextFieldName = new javax.swing.JTextArea();
         jPanelQuantity = new javax.swing.JPanel();
         jLabelQuantity = new javax.swing.JLabel();
@@ -270,26 +300,17 @@ public class ManageBooksPanel extends JPanel {
         jPanelPublishYear = new javax.swing.JPanel();
         jLabelPublishYear = new javax.swing.JLabel();
         jTextFieldPublishYear = new javax.swing.JTextField();
-        jPanelButton = new javax.swing.JPanel();
-        jButtonInsert = new javax.swing.JButton();
-        jButtonDelete = new javax.swing.JButton();
-        jButtonUpdate = new javax.swing.JButton();
-        jButtonClear = new javax.swing.JButton();
-        jPanelSearch = new javax.swing.JPanel();
-        jLabelSearch = new javax.swing.JLabel();
-        jTextFieldSearch = new javax.swing.JTextField();
         jPanelPageNum = new javax.swing.JPanel();
         jLabelPageNum = new javax.swing.JLabel();
         jTextFieldPageNum = new javax.swing.JTextField();
         jPanelCategory = new javax.swing.JPanel();
         jLabelCategory = new javax.swing.JLabel();
         jTextFieldCategory = new javax.swing.JTextField();
-        jSeparatorTitle = new javax.swing.JSeparator();
-        jPanelTextField = new javax.swing.JPanel();
-        jScrollPanelTable = new javax.swing.JScrollPane();
-        jTableBook = new javax.swing.JTable();
         jPanelTitle = new javax.swing.JPanel();
         jLabelTitle = new javax.swing.JLabel();
+        jScrollPaneMain = new javax.swing.JScrollPane();
+        jScrollPanelTable = new javax.swing.JScrollPane();
+        jTableBook = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setToolTipText("");
@@ -299,207 +320,11 @@ public class ManageBooksPanel extends JPanel {
         setRequestFocusEnabled(false);
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanelDetail.setBackground(new java.awt.Color(255, 255, 255));
         jPanelDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanelID.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelID.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
-        jLabelID.setText("ID Sách");
-        jPanelID.add(jLabelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, 40));
-
-        jTextFieldID.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextFieldID.setText("ID");
-        jTextFieldID.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextFieldIDFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldIDFocusLost(evt);
-            }
-        });
-        jTextFieldID.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTextFieldIDMousePressed(evt);
-            }
-        });
-        jPanelID.add(jTextFieldID, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 190, 40));
-
-        jPanelDetail.add(jPanelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 330, 60));
-
-        jPanelName.setPreferredSize(new java.awt.Dimension(300, 40));
-        jPanelName.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelName.setBackground(new java.awt.Color(255, 255, 204));
-        jLabelName.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
-        jLabelName.setText("Tiêu đề");
-        jPanelName.add(jLabelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, -1, 50));
-
-        jTextFieldName.setColumns(20);
-        jTextFieldName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextFieldName.setLineWrap(true);
-        jTextFieldName.setRows(3);
-        jTextFieldName.setText("Tiêu đề");
-        jTextFieldName.setWrapStyleWord(true);
-        jTextFieldName.setAlignmentX(1.0F);
-        jTextFieldName.setAlignmentY(1.0F);
-        jTextFieldName.setAutoscrolls(false);
-        jTextFieldName.setName(""); // NOI18N
-        jTextFieldName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextFieldNameFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldNameFocusLost(evt);
-            }
-        });
-        jTextFieldName.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTextFieldNameMousePressed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTextFieldName);
-
-        jPanelName.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 540, 90));
-
-        jPanelDetail.add(jPanelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 690, 110));
-
-        jPanelQuantity.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelQuantity.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
-        jLabelQuantity.setText("Số lượng");
-        jPanelQuantity.add(jLabelQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 70, 40));
-
-        jTextFieldQuantity.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextFieldQuantity.setText("Số lượng");
-        jTextFieldQuantity.setPreferredSize(new java.awt.Dimension(40, 22));
-        jTextFieldQuantity.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextFieldQuantityFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldQuantityFocusLost(evt);
-            }
-        });
-        jTextFieldQuantity.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTextFieldQuantityMousePressed(evt);
-            }
-        });
-        jTextFieldQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldQuantityKeyPressed(evt);
-            }
-        });
-        jPanelQuantity.add(jTextFieldQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 190, 40));
-
-        jPanelDetail.add(jPanelQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, 290, 60));
-
-        jPanelPrice.setAutoscrolls(true);
-        jPanelPrice.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelPrice.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
-        jLabelPrice.setText("Giá tiền");
-        jPanelPrice.add(jLabelPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, 40));
-
-        jTextFieldPrice.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextFieldPrice.setText("Giá");
-        jTextFieldPrice.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextFieldPriceFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldPriceFocusLost(evt);
-            }
-        });
-        jTextFieldPrice.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTextFieldPriceMousePressed(evt);
-            }
-        });
-        jTextFieldPrice.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldPriceKeyPressed(evt);
-            }
-        });
-        jPanelPrice.add(jTextFieldPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 190, 40));
-
-        jPanelDetail.add(jPanelPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 170, 290, 60));
-
-        jPanelPublisher.setVerifyInputWhenFocusTarget(false);
-        jPanelPublisher.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelPublisher.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
-        jLabelPublisher.setText("Nhà xuất bản");
-        jPanelPublisher.add(jLabelPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, -1, 40));
-
-        jComboBoxPublisher.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jComboBoxPublisher.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Publisher" }));
-        jComboBoxPublisher.setMinimumSize(new java.awt.Dimension(45, 22));
-        jComboBoxPublisher.setPreferredSize(new java.awt.Dimension(45, 22));
-        jPanelPublisher.add(jComboBoxPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 540, 40));
-
-        jPanelDetail.add(jPanelPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 680, 60));
-
-        jPanelAuthor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jTextFieldAuthor.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextFieldAuthor.setText("Tác giả");
-        jTextFieldAuthor.setPreferredSize(new java.awt.Dimension(40, 22));
-        jTextFieldAuthor.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextFieldAuthorFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldAuthorFocusLost(evt);
-            }
-        });
-        jTextFieldAuthor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTextFieldAuthorMousePressed(evt);
-            }
-        });
-        jPanelAuthor.add(jTextFieldAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 540, 40));
-
-        jLabelAuthor.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
-        jLabelAuthor.setText("Tác giả");
-        jPanelAuthor.add(jLabelAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 60, 40));
-
-        jPanelDetail.add(jPanelAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 680, 60));
-
-        jPanelPublishYear.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelPublishYear.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
-        jLabelPublishYear.setText("Năm xuất bản");
-        jPanelPublishYear.add(jLabelPublishYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 120, 40));
-
-        jTextFieldPublishYear.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextFieldPublishYear.setText("Năm xuất bản");
-        jTextFieldPublishYear.setPreferredSize(new java.awt.Dimension(40, 22));
-        jTextFieldPublishYear.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextFieldPublishYearFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldPublishYearFocusLost(evt);
-            }
-        });
-        jTextFieldPublishYear.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTextFieldPublishYearMousePressed(evt);
-            }
-        });
-        jTextFieldPublishYear.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldPublishYearKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextFieldPublishYearKeyReleased(evt);
-            }
-        });
-        jPanelPublishYear.add(jTextFieldPublishYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 150, 40));
-
-        jPanelDetail.add(jPanelPublishYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 290, 60));
-
+        jPanelButton.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelButton.setAutoscrolls(true);
         jPanelButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButtonInsert.setBackground(new java.awt.Color(102, 102, 255));
@@ -552,6 +377,7 @@ public class ManageBooksPanel extends JPanel {
 
         jPanelDetail.add(jPanelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 180, 260));
 
+        jPanelSearch.setBackground(new java.awt.Color(255, 255, 255));
         jPanelSearch.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelSearch.setFont(new java.awt.Font("Segoe UI", 2, 16)); // NOI18N
@@ -560,6 +386,7 @@ public class ManageBooksPanel extends JPanel {
 
         jTextFieldSearch.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTextFieldSearch.setText("Tìm kiếm");
+        jTextFieldSearch.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldSearchFocusGained(evt);
@@ -582,6 +409,236 @@ public class ManageBooksPanel extends JPanel {
 
         jPanelDetail.add(jPanelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, 840, 50));
 
+        jSeparatorTitle.setForeground(new java.awt.Color(255, 51, 51));
+        jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 4, true));
+        jPanelDetail.add(jSeparatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 400, 4));
+
+        jPanelMainDetail.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelMainDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanelID.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelID.setAutoscrolls(true);
+        jPanelID.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelID.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
+        jLabelID.setText("ID Sách");
+        jPanelID.add(jLabelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, 40));
+
+        jTextFieldID.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jTextFieldID.setText("ID");
+        jTextFieldID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
+        jTextFieldID.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldIDFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldIDFocusLost(evt);
+            }
+        });
+        jTextFieldID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldIDMousePressed(evt);
+            }
+        });
+        jPanelID.add(jTextFieldID, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 190, 40));
+
+        jPanelMainDetail.add(jPanelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 330, 60));
+
+        jPanelName.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelName.setAutoscrolls(true);
+        jPanelName.setPreferredSize(new java.awt.Dimension(300, 40));
+        jPanelName.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelName.setBackground(new java.awt.Color(255, 255, 204));
+        jLabelName.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
+        jLabelName.setText("Tiêu đề");
+        jPanelName.add(jLabelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, -1, 50));
+
+        jScrollPaneTextFieldName.setBackground(new java.awt.Color(255, 255, 255));
+
+        jTextFieldName.setColumns(20);
+        jTextFieldName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jTextFieldName.setLineWrap(true);
+        jTextFieldName.setRows(3);
+        jTextFieldName.setText("Tiêu đề");
+        jTextFieldName.setWrapStyleWord(true);
+        jTextFieldName.setAlignmentX(1.0F);
+        jTextFieldName.setAlignmentY(1.0F);
+        jTextFieldName.setAutoscrolls(false);
+        jTextFieldName.setBorder(null);
+        jTextFieldName.setName(""); // NOI18N
+        jTextFieldName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldNameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldNameFocusLost(evt);
+            }
+        });
+        jTextFieldName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldNameMousePressed(evt);
+            }
+        });
+        jScrollPaneTextFieldName.setViewportView(jTextFieldName);
+
+        jPanelName.add(jScrollPaneTextFieldName, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 540, 90));
+
+        jPanelMainDetail.add(jPanelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 690, 110));
+
+        jPanelQuantity.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelQuantity.setAutoscrolls(true);
+        jPanelQuantity.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelQuantity.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
+        jLabelQuantity.setText("Số lượng");
+        jPanelQuantity.add(jLabelQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 70, 40));
+
+        jTextFieldQuantity.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jTextFieldQuantity.setText("Số lượng");
+        jTextFieldQuantity.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
+        jTextFieldQuantity.setPreferredSize(new java.awt.Dimension(40, 22));
+        jTextFieldQuantity.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldQuantityFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldQuantityFocusLost(evt);
+            }
+        });
+        jTextFieldQuantity.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldQuantityMousePressed(evt);
+            }
+        });
+        jTextFieldQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldQuantityKeyPressed(evt);
+            }
+        });
+        jPanelQuantity.add(jTextFieldQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 190, 40));
+
+        jPanelMainDetail.add(jPanelQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, 290, 60));
+
+        jPanelPrice.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelPrice.setAutoscrolls(true);
+        jPanelPrice.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelPrice.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
+        jLabelPrice.setText("Giá tiền");
+        jPanelPrice.add(jLabelPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, 40));
+
+        jTextFieldPrice.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jTextFieldPrice.setText("Giá");
+        jTextFieldPrice.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
+        jTextFieldPrice.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldPriceFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldPriceFocusLost(evt);
+            }
+        });
+        jTextFieldPrice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldPriceMousePressed(evt);
+            }
+        });
+        jTextFieldPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldPriceKeyPressed(evt);
+            }
+        });
+        jPanelPrice.add(jTextFieldPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 190, 40));
+
+        jPanelMainDetail.add(jPanelPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 170, 290, 60));
+
+        jPanelPublisher.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelPublisher.setAutoscrolls(true);
+        jPanelPublisher.setVerifyInputWhenFocusTarget(false);
+        jPanelPublisher.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelPublisher.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
+        jLabelPublisher.setText("Nhà xuất bản");
+        jPanelPublisher.add(jLabelPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, -1, 40));
+
+        jComboBoxPublisher.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jComboBoxPublisher.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Publisher" }));
+        jComboBoxPublisher.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jComboBoxPublisher.setMinimumSize(new java.awt.Dimension(45, 22));
+        jComboBoxPublisher.setPreferredSize(new java.awt.Dimension(45, 22));
+        jPanelPublisher.add(jComboBoxPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 540, 40));
+
+        jPanelMainDetail.add(jPanelPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 680, 60));
+
+        jPanelAuthor.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelAuthor.setAutoscrolls(true);
+        jPanelAuthor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextFieldAuthor.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jTextFieldAuthor.setText("Tác giả");
+        jTextFieldAuthor.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
+        jTextFieldAuthor.setPreferredSize(new java.awt.Dimension(40, 22));
+        jTextFieldAuthor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldAuthorFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAuthorFocusLost(evt);
+            }
+        });
+        jTextFieldAuthor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldAuthorMousePressed(evt);
+            }
+        });
+        jPanelAuthor.add(jTextFieldAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 540, 40));
+
+        jLabelAuthor.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
+        jLabelAuthor.setText("Tác giả");
+        jPanelAuthor.add(jLabelAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 60, 40));
+
+        jPanelMainDetail.add(jPanelAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 680, 60));
+
+        jPanelPublishYear.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelPublishYear.setAutoscrolls(true);
+        jPanelPublishYear.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelPublishYear.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
+        jLabelPublishYear.setText("Năm xuất bản");
+        jPanelPublishYear.add(jLabelPublishYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 120, 40));
+
+        jTextFieldPublishYear.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jTextFieldPublishYear.setText("Năm xuất bản");
+        jTextFieldPublishYear.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
+        jTextFieldPublishYear.setPreferredSize(new java.awt.Dimension(40, 22));
+        jTextFieldPublishYear.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldPublishYearFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldPublishYearFocusLost(evt);
+            }
+        });
+        jTextFieldPublishYear.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldPublishYearMousePressed(evt);
+            }
+        });
+        jTextFieldPublishYear.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldPublishYearKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldPublishYearKeyReleased(evt);
+            }
+        });
+        jPanelPublishYear.add(jTextFieldPublishYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 150, 40));
+
+        jPanelMainDetail.add(jPanelPublishYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 290, 60));
+
+        jPanelPageNum.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelPageNum.setAutoscrolls(true);
         jPanelPageNum.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelPageNum.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
@@ -591,6 +648,7 @@ public class ManageBooksPanel extends JPanel {
 
         jTextFieldPageNum.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldPageNum.setText("Số trang");
+        jTextFieldPageNum.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldPageNum.setPreferredSize(new java.awt.Dimension(40, 22));
         jTextFieldPageNum.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -612,8 +670,10 @@ public class ManageBooksPanel extends JPanel {
         });
         jPanelPageNum.add(jTextFieldPageNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 190, 40));
 
-        jPanelDetail.add(jPanelPageNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 60, 290, 60));
+        jPanelMainDetail.add(jPanelPageNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 60, 290, 60));
 
+        jPanelCategory.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelCategory.setAutoscrolls(true);
         jPanelCategory.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelCategory.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
@@ -622,6 +682,7 @@ public class ManageBooksPanel extends JPanel {
 
         jTextFieldCategory.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldCategory.setText("Thể loại");
+        jTextFieldCategory.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldCategory.setPreferredSize(new java.awt.Dimension(40, 22));
         jTextFieldCategory.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -638,31 +699,44 @@ public class ManageBooksPanel extends JPanel {
         });
         jPanelCategory.add(jTextFieldCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 190, 40));
 
-        jPanelDetail.add(jPanelCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 10, 290, 60));
+        jPanelMainDetail.add(jPanelCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 10, 290, 60));
 
-        jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
-        jPanelDetail.add(jSeparatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 400, 4));
-
-        jPanelTextField.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanelDetail.add(jPanelTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 960, 300));
+        jPanelDetail.add(jPanelMainDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 280));
 
         add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1170, 360));
 
-        jScrollPanelTable.setBackground(new java.awt.Color(204, 255, 255));
+        jPanelTitle.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelTitle.setPreferredSize(new java.awt.Dimension(1170, 50));
+        jPanelTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTableBook.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabelTitle.setForeground(new java.awt.Color(255, 51, 51));
+        jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTitle.setText("Quản lý danh sách sách");
+        jLabelTitle.setRequestFocusEnabled(false);
+        jPanelTitle.add(jLabelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 380, 40));
+
+        add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 40));
+
+        jScrollPanelTable.setBorder(null);
+        jScrollPanelTable.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPanelTable.setAutoscrolls(true);
+
+        jTableBook.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTableBook.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
             }
         ));
-        jTableBook.setRowHeight(24);
+        jTableBook.setMaximumSize(new java.awt.Dimension(2147483647, 120));
+        jTableBook.setMinimumSize(new java.awt.Dimension(60, 120));
+        jTableBook.setPreferredSize(new java.awt.Dimension(60, 120));
+        jTableBook.setRowHeight(40);
+        jTableBook.setShowGrid(true);
+        jTableBook.getTableHeader().setResizingAllowed(false);
         jTableBook.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTableBookMousePressed(evt);
@@ -674,19 +748,13 @@ public class ManageBooksPanel extends JPanel {
             }
         });
         jScrollPanelTable.setViewportView(jTableBook);
+        if (jTableBook.getColumnModel().getColumnCount() > 0) {
+            jTableBook.getColumnModel().getColumn(0).setResizable(false);
+        }
 
-        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 1170, 210));
+        jScrollPaneMain.setViewportView(jScrollPanelTable);
 
-        jPanelTitle.setPreferredSize(new java.awt.Dimension(1170, 50));
-        jPanelTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitle.setText("Quản lý danh sách sách");
-        jLabelTitle.setRequestFocusEnabled(false);
-        jPanelTitle.add(jLabelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(446, 0, 266, 40));
-
-        add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 40));
+        add(jScrollPaneMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 1130, 320));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTableBookKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableBookKeyReleased
@@ -708,7 +776,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         // TODO add your handling code here:
-        resetData();
+        myInitComponents();
     }//GEN-LAST:event_jButtonClearActionPerformed
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
@@ -724,17 +792,16 @@ public class ManageBooksPanel extends JPanel {
         String publishYear = jTextFieldPublishYear.getText();
 
         if (validateBookData(id, name, category, author, quantity, pageNumber, price, publisherName, publishYear, TypeFunctionEnum.Insert)) {
-            String publisherID = this.publisherDaoImp.getIDByName(this.publisherList, publisherName);
             int iQuantity = Integer.valueOf(quantity);
             int iPageNumber = Integer.valueOf(pageNumber);
             int iYear = Integer.valueOf(publishYear);
             double dPrice = Double.valueOf(price);
 
-            Book book = new Book(id, name, author, category, iQuantity, iPageNumber, iYear, dPrice, publisherID, publisherName);
+            Book book = new Book(id, name, author, category, iQuantity, iPageNumber, iYear, dPrice, publisherName);
             boolean insertCheck = bookDaoImp.insert(book);
             if (insertCheck) {
                 JOptionPane.showMessageDialog(null, BookStringConstant.BOOK_INSERT_SUCCESS);
-                resetData();
+                myInitComponents();
             } else {
                 JOptionPane.showMessageDialog(null, BookStringConstant.BOOK_INSERT_ERROR);
             }
@@ -865,17 +932,16 @@ public class ManageBooksPanel extends JPanel {
         String publisherName = jComboBoxPublisher.getSelectedItem().toString();
         String publishYear = jTextFieldPublishYear.getText();
         if (validateBookData(id, name, category, author, quantity, pageNumber, price, publisherName, publishYear, TypeFunctionEnum.Update)) {
-            String publisherID = this.publisherDaoImp.getIDByName(this.publisherList, publisherName);
             int iQuantity = Integer.valueOf(quantity);
             int iPageNumber = Integer.valueOf(pageNumber);
             int iYear = Integer.valueOf(publishYear);
             double dPrice = Double.valueOf(price);
 
-            Book book = new Book(id, name, author, category, iQuantity, iPageNumber, iYear, dPrice, publisherID, publisherName);
+            Book book = new Book(id, name, author, category, iQuantity, iPageNumber, iYear, dPrice, publisherName);
             boolean updateCheck = bookDaoImp.update(book);
             if (updateCheck) {
                 JOptionPane.showMessageDialog(null, BookStringConstant.BOOK_UPDATE_SUCCESS);
-                resetData();
+                myInitComponents();
             } else {
                 JOptionPane.showMessageDialog(null, BookStringConstant.BOOK_UPDATE_ERROR);
             }
@@ -894,13 +960,12 @@ public class ManageBooksPanel extends JPanel {
         String publisherName = jComboBoxPublisher.getSelectedItem().toString();
         String publishYear = jTextFieldPublishYear.getText();
         if (validateBookData(id, name, category, author, quantity, pageNumber, price, publisherName, publishYear, TypeFunctionEnum.Delete)) {
-            String publisherID = this.publisherDaoImp.getIDByName(this.publisherList, publisherName);
             int iQuantity = Integer.valueOf(quantity);
             int iPageNumber = Integer.valueOf(pageNumber);
             int iYear = Integer.valueOf(publishYear);
             double dPrice = Double.valueOf(price);
 
-            Book book = new Book(id, name, author, category, iQuantity, iPageNumber, iYear, dPrice, publisherID, publisherName);
+            Book book = new Book(id, name, author, category, iQuantity, iPageNumber, iYear, dPrice, publisherName);
 
             int answer = JOptionPane.showConfirmDialog(null,
                     BookStringConstant.BOOK_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
@@ -912,7 +977,7 @@ public class ManageBooksPanel extends JPanel {
                 boolean deleteCheck = bookDaoImp.moveToBin(book.getBookID());
                 if (deleteCheck) {
                     JOptionPane.showMessageDialog(null, BookStringConstant.BOOK_DELETE_SUCCESS);
-                    resetData();
+                    myInitComponents();
                 } else {
                     JOptionPane.showMessageDialog(null, BookStringConstant.BOOK_DELETE_ERROR);
                 }
@@ -971,7 +1036,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldID.getText();
+        String text = jTextFieldID.getText();
         if (text.equals(BookStringConstant.BOOK_ID)) {
             jTextFieldID.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -979,7 +1044,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldID.getText();
+        String text = jTextFieldID.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldID.setText(BookStringConstant.BOOK_ID);
         }
@@ -987,7 +1052,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldPublishYearFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPublishYearFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldPublishYear.getText();
+        String text = jTextFieldPublishYear.getText();
         if (text.equals(BookStringConstant.BOOK_PUBLISH_YEAR)) {
             jTextFieldPublishYear.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -995,7 +1060,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldPublishYearFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPublishYearFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldPublishYear.getText();
+        String text = jTextFieldPublishYear.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldPublishYear.setText(BookStringConstant.BOOK_PUBLISH_YEAR);
         }
@@ -1003,7 +1068,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldCategoryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldCategoryFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldCategory.getText();
+        String text = jTextFieldCategory.getText();
         if (text.equals(BookStringConstant.BOOK_CATEGORY)) {
             jTextFieldCategory.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -1011,7 +1076,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldCategoryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldCategoryFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldCategory.getText();
+        String text = jTextFieldCategory.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldCategory.setText(BookStringConstant.BOOK_CATEGORY);
         }
@@ -1019,7 +1084,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldAuthorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAuthorFocusGained
         // TODO add your handling code here:
-         String text= jTextFieldAuthor.getText();
+        String text = jTextFieldAuthor.getText();
         if (text.equals(BookStringConstant.BOOK_AUTHOR)) {
             jTextFieldAuthor.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -1027,7 +1092,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldAuthorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAuthorFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldAuthor.getText();
+        String text = jTextFieldAuthor.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldAuthor.setText(BookStringConstant.BOOK_AUTHOR);
         }
@@ -1035,7 +1100,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldPageNumFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPageNumFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldPageNum.getText();
+        String text = jTextFieldPageNum.getText();
         if (text.equals(BookStringConstant.BOOK_PAGE_NUMBER)) {
             jTextFieldPageNum.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -1043,7 +1108,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldPageNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPageNumFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldPageNum.getText();
+        String text = jTextFieldPageNum.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldPageNum.setText(BookStringConstant.BOOK_PAGE_NUMBER);
         }
@@ -1051,7 +1116,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldQuantityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldQuantityFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldQuantity.getText();
+        String text = jTextFieldQuantity.getText();
         if (text.equals(BookStringConstant.BOOK_QUANTITY)) {
             jTextFieldQuantity.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -1059,7 +1124,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldQuantityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldQuantityFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldQuantity.getText();
+        String text = jTextFieldQuantity.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldQuantity.setText(BookStringConstant.BOOK_QUANTITY);
         }
@@ -1067,7 +1132,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldPriceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPriceFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldPrice.getText();
+        String text = jTextFieldPrice.getText();
         if (text.equals(BookStringConstant.BOOK_PRICE)) {
             jTextFieldPrice.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -1075,7 +1140,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldPriceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPriceFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldPrice.getText();
+        String text = jTextFieldPrice.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldPrice.setText(BookStringConstant.BOOK_PRICE);
         }
@@ -1083,7 +1148,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNameFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldName.getText();
+        String text = jTextFieldName.getText();
         if (text.equals(BookStringConstant.BOOK_TITLE)) {
             jTextFieldName.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -1091,7 +1156,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNameFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldName.getText();
+        String text = jTextFieldName.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldName.setText(BookStringConstant.BOOK_TITLE);
         }
@@ -1099,7 +1164,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusGained
         // TODO add your handling code here:
-         String text = jTextFieldSearch.getText();
+        String text = jTextFieldSearch.getText();
         if (text.equals(GeneralStringConstant.GENERAL_SEARCH)) {
             jTextFieldSearch.setText(GeneralStringConstant.GENERAL_EMPTY);
         }
@@ -1107,7 +1172,7 @@ public class ManageBooksPanel extends JPanel {
 
     private void jTextFieldSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusLost
         // TODO add your handling code here:
-         String text = jTextFieldSearch.getText();
+        String text = jTextFieldSearch.getText();
         if (text.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
         }
@@ -1136,6 +1201,7 @@ public class ManageBooksPanel extends JPanel {
     private javax.swing.JPanel jPanelCategory;
     private javax.swing.JPanel jPanelDetail;
     private javax.swing.JPanel jPanelID;
+    private javax.swing.JPanel jPanelMainDetail;
     private javax.swing.JPanel jPanelName;
     private javax.swing.JPanel jPanelPageNum;
     private javax.swing.JPanel jPanelPrice;
@@ -1143,9 +1209,9 @@ public class ManageBooksPanel extends JPanel {
     private javax.swing.JPanel jPanelPublisher;
     private javax.swing.JPanel jPanelQuantity;
     private javax.swing.JPanel jPanelSearch;
-    private javax.swing.JPanel jPanelTextField;
     private javax.swing.JPanel jPanelTitle;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPaneMain;
+    private javax.swing.JScrollPane jScrollPaneTextFieldName;
     private javax.swing.JScrollPane jScrollPanelTable;
     private javax.swing.JSeparator jSeparatorTitle;
     private javax.swing.JTable jTableBook;

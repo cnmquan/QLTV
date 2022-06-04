@@ -5,6 +5,7 @@
 package View.Panel;
 
 import Adapter.SupportFunction;
+import Base.DIContainer;
 import constant.BinStringConstant;
 import constant.GeneralStringConstant;
 import constant.TitleStringConstant;
@@ -18,7 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import model.Bin;
+import DTO.Bin;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -30,11 +32,11 @@ public class ManageBinPanel extends javax.swing.JPanel {
      * Creates new form ManageBinPanel
      */
     public ManageBinPanel() {
-        this.binDaoImp = BinDaoImp.getInstance();
+        this.binDaoImp = DIContainer.getBinDao();
         initComponents();
-        myInitUI();
+        myInitComponents();
         
-        setBounds(0, 0, 1170, 630);
+        setBounds(0, 0, 1160, 740);
     }
 
     private final BinDaoImp binDaoImp;
@@ -42,7 +44,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
     private Vector vctHeader;
     private Vector vctData;
 
-    public void myInitUI() {
+    public void myInitComponents() {
         setDefaultText();
         setDefaultTable();
 
@@ -70,7 +72,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
     }
 
     private void setDefaultTable() {
-        jTableDelete.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
+        jTableDelete.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 18));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -93,6 +95,11 @@ public class ManageBinPanel extends javax.swing.JPanel {
                 return false;
             }
         });
+        
+        DefaultTableModel model = (DefaultTableModel) jTableDelete.getModel();
+        //Add sorter
+        var sorter = new TableRowSorter<DefaultTableModel>(model);
+        jTableDelete.setRowSorter(sorter); 
     }
 
     private void displayDetails(int selectedIndex) {
@@ -170,12 +177,15 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jLabelName = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanelTitle.setBackground(new java.awt.Color(255, 255, 255));
         jPanelTitle.setPreferredSize(new java.awt.Dimension(1170, 50));
         jPanelTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabelTitle.setForeground(new java.awt.Color(255, 51, 51));
         jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitle.setText("Thùng Rác");
         jLabelTitle.setRequestFocusEnabled(false);
@@ -184,22 +194,19 @@ public class ManageBinPanel extends javax.swing.JPanel {
         add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 40));
 
         jScrollPanelTable.setBackground(new java.awt.Color(204, 255, 255));
-        jScrollPanelTable.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPanelTable.setVerifyInputWhenFocusTarget(false);
 
-        jTableDelete.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jTableDelete.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTableDelete.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jTableDelete.setRowHeight(24);
+        jTableDelete.setRowHeight(40);
+        jTableDelete.setShowGrid(true);
         jTableDelete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTableDeleteMousePressed(evt);
@@ -212,10 +219,12 @@ public class ManageBinPanel extends javax.swing.JPanel {
         });
         jScrollPanelTable.setViewportView(jTableDelete);
 
-        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 1190, 260));
+        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 1130, 380));
 
+        jPanelDetail.setBackground(new java.awt.Color(255, 255, 255));
         jPanelDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanelID.setBackground(new java.awt.Color(255, 255, 255));
         jPanelID.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelID.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
@@ -224,12 +233,15 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jPanelID.add(jLabelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 30, 40));
 
         jTextFieldID.setEditable(false);
+        jTextFieldID.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldID.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldID.setText("ID");
+        jTextFieldID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jPanelID.add(jTextFieldID, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 540, 40));
 
         jPanelDetail.add(jPanelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 740, 50));
 
+        jPanelType.setBackground(new java.awt.Color(255, 255, 255));
         jPanelType.setPreferredSize(new java.awt.Dimension(300, 40));
         jPanelType.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -239,12 +251,15 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jPanelType.add(jLabelType, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, -1, 40));
 
         jTextFieldType.setEditable(false);
+        jTextFieldType.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldType.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldType.setText("Loại");
+        jTextFieldType.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jPanelType.add(jTextFieldType, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 540, 40));
 
         jPanelDetail.add(jPanelType, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 740, 50));
 
+        jPanelButton.setBackground(new java.awt.Color(255, 255, 255));
         jPanelButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButtonRecover.setBackground(new java.awt.Color(102, 102, 255));
@@ -273,6 +288,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 180, 130));
 
+        jPanelSearch.setBackground(new java.awt.Color(255, 255, 255));
         jPanelSearch.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelSearch.setFont(new java.awt.Font("Segoe UI", 2, 17)); // NOI18N
@@ -281,6 +297,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
 
         jTextFieldSearch.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldSearch.setText("Tìm kiếm");
+        jTextFieldSearch.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldSearchFocusGained(evt);
@@ -303,9 +320,10 @@ public class ManageBinPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 650, 70));
 
-        jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
+        jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 4, true));
         jPanelDetail.add(jSeparatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 480, 4));
 
+        jPanelName.setBackground(new java.awt.Color(255, 255, 255));
         jPanelName.setPreferredSize(new java.awt.Dimension(300, 40));
         jPanelName.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -315,8 +333,10 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jPanelName.add(jLabelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, -1, 40));
 
         jTextFieldName.setEditable(false);
+        jTextFieldName.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldName.setText("Tên");
+        jTextFieldName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jPanelName.add(jTextFieldName, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 540, 40));
 
         jPanelDetail.add(jPanelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, 740, 50));
@@ -344,7 +364,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
             boolean recoveryCheck = binDaoImp.recoveryData(bin);
             if (recoveryCheck) {
                 JOptionPane.showMessageDialog(null, BinStringConstant.BIN_RECOVERY_SUCCESS);
-                myInitUI();
+                myInitComponents();
             } else {
                 JOptionPane.showMessageDialog(null, BinStringConstant.BIN_RECOVERY_FAILED);
             }
@@ -375,7 +395,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
             boolean deleteCheck = binDaoImp.deleteData(bin);
             if (deleteCheck) {
                 JOptionPane.showMessageDialog(null, BinStringConstant.BIN_DELETE_SUCCESS);
-                myInitUI();
+                myInitComponents();
             } else {
                 JOptionPane.showMessageDialog(null, BinStringConstant.BIN_DELETE_FAILED);
             }

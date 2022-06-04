@@ -18,58 +18,59 @@ import java.sql.SQLException;
  */
 public class DataProvider {
 
-    static String url = "jdbc:postgresql://localhost:5432/QLTV";
-    static String unameDB = "postgres";
-    static String passDB = "admin";
+    private static final String URL = "jdbc:postgresql://localhost:5432/QLTV";
+    private static final String USERNAMEDB = "postgres";
+    private static final String PASSDB = "admin";
 
-    private static DataProvider instance = null;
-    private Connection connection = null;
-
+    private static DataProvider instance;
     private DataProvider() {
         try {
-            connection = DriverManager.getConnection(url, unameDB, passDB);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error: " + ex.getMessage());
         }
     }
 
-    public static DataProvider getInstance() {
+    // Get Connection to Database
+    private static Connection getConnection() {
         if (instance == null) {
             instance = new DataProvider();
         }
-        return DataProvider.instance;
+        try {
+            return DriverManager.getConnection(URL, USERNAMEDB, PASSDB);
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            return null;
+        }        
     }
 
-    public static void setInstance(DataProvider instance) {
-        DataProvider.instance = instance;
-    }
-
-    public void  getConnection() throws SQLException{
-        connection = DriverManager.getConnection(url, unameDB, passDB);
-    }
-    public void closeConnection() {
+    // Close Connection from Database
+    private static void closeConnection(Connection connection) {
         try {
             if (connection != null) {
                 connection.close();
             }
-            connection = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
         }
     }
 
     /**
-     * Get list of row. Often use for (select) query
+     * Get list of row.Often use for (select) query
      *
      * @param query String query
      * @param parameter list parameter
      * @return list of row
      */
-    public ResultSet ExecuteQuery(String query, Object[] parameter) {
+    public static ResultSet ExecuteQuery(String query, Object[] parameter) {
         ResultSet result = null;
-
-        if(connection == null)
-            return null;
+        Connection connection;
+        
+        connection = getConnection();
+        if(connection == null){
+            return result;
+        }
+        
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             int index = 1;
@@ -81,24 +82,29 @@ public class DataProvider {
             }
             result = pstmt.executeQuery();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
-        } 
+        } finally {
+            closeConnection(connection);
+        }
         return result;
     }
 
     /**
-     * Get the number of row. Often use for (insert,update,delete) query
+     * Get the number of row.Often use for (insert,update,delete) query
      *
      * @param query String query
      * @param parameter list parameter
      * @return Number of row
      */
-    public int ExecuteNonQuery(String query, Object[] parameter) {
-        int result = -1;
-        if(connection == null)
+    public static boolean ExecuteNonQuery(String query, Object[] parameter) {
+        boolean result = false;
+        Connection connection;
+        connection = getConnection();
+        if(connection == null){
             return result;
+        }
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             int index = 1;
@@ -108,12 +114,14 @@ public class DataProvider {
                     pstmt.setObject(index++, para);
                 }
             }
-            result = pstmt.executeUpdate();
+            result = pstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
-        } 
+        } finally {
+            closeConnection(connection);
+        }
         return result;
     }
 
@@ -124,10 +132,13 @@ public class DataProvider {
      * @param parameter list parameter
      * @return first data
      */
-    public String ExecuteScalar(String query, Object[] parameter) {
+    public static String ExecuteScalar(String query, Object[] parameter) {
         String result = null;
-        if(connection == null)
+        Connection connection;
+       connection = getConnection();
+        if(connection == null){
             return result;
+        }
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             int index = 1;
@@ -141,10 +152,10 @@ public class DataProvider {
             resultSet.next();
             result = resultSet.getString(1);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
-        } 
+        }
         return result;
     }
 }

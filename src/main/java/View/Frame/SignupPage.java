@@ -45,10 +45,10 @@ public class SignupPage extends javax.swing.JFrame {
         btnSignIn.setText(AuthenStringConstant.SIGN_IN);
         btnSignUp.setText(AuthenStringConstant.SIGN_UP);
 
-        btnShowPass.setVisible(true);
-        btnHidePass.setVisible(false);
-        btnShowRePass.setVisible(true);
-        btnHideRePass.setVisible(false);
+        btnShowPass.setVisible(false);
+        btnHidePass.setVisible(true);
+        btnShowRePass.setVisible(false);
+        btnHideRePass.setVisible(true);
         
         txtRePassword.setEchoChar('*');
         txtPassword.setEchoChar('*');
@@ -73,8 +73,8 @@ public class SignupPage extends javax.swing.JFrame {
         String hassPass = DIContainer.getAccountDAO().hashPassword(pwd);
 
         AccountDTO account = new AccountDTO(name, username, hassPass, email, contact,question,answer);
-        int result = DIContainer.getAccountDAO().create(account);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().create(account);
+        if (result ) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_UP_SUCCESS);
             SigninPage signIn = new SigninPage();
             signIn.setVisible(true);
@@ -99,9 +99,6 @@ public class SignupPage extends javax.swing.JFrame {
         String answer=txtAnswer.getText();
         int idxQuestion=cmbQuestion.getSelectedIndex();
         
-        String question=(String) cmbQuestion.getSelectedItem();
-System.out.println(question);
-System.out.println(answer);
         if (Validator.inputString("[a-zA-Z]+([ '-][a-zA-Z]+)*", name)||name.equals(AccountStringConstant.ACCOUNT_INPUT_NAME)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_NAME);
             return false;

@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
+package DTO;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Vector;
 
 /**
@@ -11,7 +14,7 @@ import java.util.Vector;
  * @author Admin
  */
 public class Book {
-    private String bookID;
+        private String bookID;
     private String bookName;
     private String bookAuthor;
     private String bookCategory;
@@ -19,13 +22,13 @@ public class Book {
     private int bookPageNumber;
     private int bookPublishedYear;
     private double bookPrice;
-    private String publisherID;
     private String publisherName;
+    private LocalDate bookUpdatedDate;   
 
     public Book() {
     }
 
-    public Book(String bookID, String bookName, String bookAuthor, String bookCategory, int bookQuantity, int bookPageNumber, int bookPublishedYear, double bookPrice, String publisherID, String publisherName) {
+    public Book(String bookID, String bookName, String bookAuthor, String bookCategory, int bookQuantity, int bookPageNumber, int bookPublishedYear, double bookPrice, String publisherName) {
         this.bookID = bookID;
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
@@ -34,7 +37,6 @@ public class Book {
         this.bookPageNumber = bookPageNumber;
         this.bookPublishedYear = bookPublishedYear;
         this.bookPrice = bookPrice;
-        this.publisherID = publisherID;
         this.publisherName = publisherName;
     }
 
@@ -102,14 +104,6 @@ public class Book {
         this.bookPrice = bookPrice;
     }
 
-    public String getPublisherID() {
-        return publisherID;
-    }
-
-    public void setPublisherID(String publisherID) {
-        this.publisherID = publisherID;
-    }
-
     public String getPublisherName() {
         return publisherName;
     }
@@ -118,8 +112,14 @@ public class Book {
         this.publisherName = publisherName;
     }
     
-    
-    
+    public LocalDate getBookUpdatedDate() {
+        return bookUpdatedDate;
+    }
+
+    public void setBookUpdatedDate(LocalDate bookUpdatedDate) {
+        this.bookUpdatedDate = bookUpdatedDate;
+    }
+                    
     public Vector convertToVector(){
         Vector vector = new Vector();
         vector.add(this.bookID);
@@ -132,5 +132,20 @@ public class Book {
         vector.add(this.publisherName);
         vector.add(this.bookPublishedYear);
         return vector;
+    }
+    
+    public static Book covertFromResultSet(ResultSet rs) throws SQLException{
+        Book book = new Book();
+        book.setBookID(rs.getString("book_id"));
+        book.setBookName(rs.getString("book_name"));
+        book.setBookCategory(rs.getString("book_category"));
+        book.setBookAuthor(rs.getString("book_author"));
+        book.setBookQuantity(rs.getInt("book_quantity"));
+        book.setBookPageNumber(rs.getInt("book_page_number"));
+        book.setBookPrice(rs.getDouble("book_price"));
+        book.setBookPublishedYear(rs.getInt("book_publish_year"));
+        book.setPublisherName(rs.getString("publisher_name"));
+        book.setBookUpdatedDate(rs.getObject("book_updated_time", LocalDate.class));
+        return book;
     }
 }

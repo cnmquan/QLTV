@@ -12,7 +12,7 @@ package constant;
  */
 public class BookStringConstant {
 
-    // Tên các labe và hint text trong Publisher UI
+     // Tên các label và hint text trong Publisher UI
     public static final String BOOK_ID = "ID sách";
     public static final String BOOK_TITLE = "Tiêu đề";
     public static final String BOOK_CATEGORY = "Thể loại";
@@ -47,8 +47,8 @@ public class BookStringConstant {
     public static final String BOOK_UPDATE_ERROR = "Cập nhật thông tin sách thất bại! Vui lòng thử lại!";
 
     // Tiêu đề của Dialog Xoá
-    public static final String BOOK_DELETE_TITLE = "Bạn có muốn xoá thông tin sách này không?";
+    public static final String BOOK_DELETE_TITLE = "Bạn có muốn chuyển thông tin sách này vào thùng rác không?";
     // Thông báo sau khi thực hiện chức năng xoá
-    public static final String BOOK_DELETE_SUCCESS = "Xoá thông tin sách thành công!";
-    public static final String BOOK_DELETE_ERROR = "Cập nhật thông tin sách thất bại! Vui lòng thử lại!";
+    public static final String BOOK_DELETE_SUCCESS = "Chuyển thông tin sách vào thùng rác thành công!";
+    public static final String BOOK_DELETE_ERROR = "Chuyển thông tin sách vào thùng rác thất bại! Vui lòng thử lại!";
 }
