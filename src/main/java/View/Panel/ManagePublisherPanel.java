@@ -4,12 +4,13 @@
  */
 package View.Panel;
 
+import Base.DIContainer;
 import constant.GeneralStringConstant;
 import constant.PublisherStringConstant;
 import constant.TitleStringConstant;
 import DAO.dao_impl.PublisherDaoImp;
-import model.Publisher;
-import model.TypeFunctionEnum;
+import DTO.Publisher;
+import DTO.TypeFunctionEnum;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -26,15 +28,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ManagePublisherPanel extends javax.swing.JPanel {
 
-    /**
+   /**
      * Creates new form ManagePublisherPanel
      */
     public ManagePublisherPanel() {
         initComponents();
-        this.publisherDaoImp = PublisherDaoImp.getInstance();
-        resetData();
+        this.publisherDaoImp = DIContainer.getPublisherDao();
+        myInitComponents();
 
-        setBounds(0, 0, 1170, 630);
+        setBounds(0, 0, 1160, 740);
     }
 
     /**
@@ -45,7 +47,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
     private Vector vctHeader;
     private Vector vctData;
 
-    public void resetData() {
+    public void myInitComponents() {
         setDefaultText();
         setDefaultTable();
         getVectorData();
@@ -84,7 +86,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
     }
     
     private void setDefaultTable(){
-         jTablePublisher.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
+         jTablePublisher.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 18));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -106,7 +108,12 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
                 //all cells false
                 return false;
             }
-        });        
+        });    
+        
+        DefaultTableModel model = (DefaultTableModel) jTablePublisher.getModel();
+        //Add sorter
+        var sorter = new TableRowSorter<DefaultTableModel>(model);
+        jTablePublisher.setRowSorter(sorter);   
    }
 
     private void displayDetails(int selectedIndex) {
@@ -151,9 +158,9 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
             errorList = errorList + PublisherStringConstant.PUBLISHER_NAME_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
-        if (phoneNumber.isBlank() || phoneNumber.isEmpty()) {
+        if (phoneNumber.isBlank() || phoneNumber.isEmpty() ||phoneNumber.length() < 6) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_PHONE_NUMBER_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        }
+        } 
 
         if (address.isBlank() || address.isEmpty()) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_ADDRESS_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
@@ -212,17 +219,20 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         jTextFieldAddress = new javax.swing.JTextField();
         jLabelAddress = new javax.swing.JLabel();
         jSeparatorTitle = new javax.swing.JSeparator();
-        jScrollPanelTable = new javax.swing.JScrollPane();
-        jTablePublisher = new javax.swing.JTable();
         jPanelTitle = new javax.swing.JPanel();
         jLabelTitle = new javax.swing.JLabel();
+        jScrollPanelTable = new javax.swing.JScrollPane();
+        jTablePublisher = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1170, 630));
         setPreferredSize(new java.awt.Dimension(1170, 630));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanelDetail.setBackground(new java.awt.Color(255, 255, 255));
         jPanelDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanelID.setBackground(new java.awt.Color(255, 255, 255));
         jPanelID.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelID.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
@@ -232,6 +242,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jTextFieldID.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldID.setText("ID");
+        jTextFieldID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldID.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldIDFocusGained(evt);
@@ -249,6 +260,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 370, 50));
 
+        jPanelName.setBackground(new java.awt.Color(255, 255, 255));
         jPanelName.setPreferredSize(new java.awt.Dimension(300, 40));
         jPanelName.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -259,6 +271,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jTextFieldName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldName.setText("Tên nhà xuất bản");
+        jTextFieldName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldNameFocusGained(evt);
@@ -276,6 +289,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelName, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 740, 50));
 
+        jPanelPhoneNumber.setBackground(new java.awt.Color(255, 255, 255));
         jPanelPhoneNumber.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelPhoneNumber.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
@@ -284,6 +298,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jTextFieldPhoneNumber.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldPhoneNumber.setText("Số điện thoại");
+        jTextFieldPhoneNumber.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldPhoneNumber.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldPhoneNumberFocusGained(evt);
@@ -301,6 +316,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, 302, 50));
 
+        jPanelButton.setBackground(new java.awt.Color(255, 255, 255));
         jPanelButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButtonInsert.setBackground(new java.awt.Color(102, 102, 255));
@@ -353,6 +369,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 180, 250));
 
+        jPanelSearch.setBackground(new java.awt.Color(255, 255, 255));
         jPanelSearch.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelSearch.setFont(new java.awt.Font("Segoe UI", 2, 17)); // NOI18N
@@ -361,6 +378,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jTextFieldSearch.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldSearch.setText("Tìm kiếm");
+        jTextFieldSearch.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldSearchFocusGained(evt);
@@ -383,10 +401,12 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, 650, 70));
 
+        jPanelAddress.setBackground(new java.awt.Color(255, 255, 255));
         jPanelAddress.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextFieldAddress.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldAddress.setText("Địa chỉ");
+        jTextFieldAddress.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         jTextFieldAddress.setPreferredSize(new java.awt.Dimension(40, 22));
         jTextFieldAddress.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -409,28 +429,38 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
         jPanelDetail.add(jPanelAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 690, -1));
 
-        jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
+        jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 4, true));
         jPanelDetail.add(jSeparatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 480, 4));
 
         add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1170, 280));
 
+        jPanelTitle.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelTitle.setPreferredSize(new java.awt.Dimension(1170, 50));
+        jPanelTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabelTitle.setForeground(new java.awt.Color(255, 51, 51));
+        jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTitle.setText("Quản lý danh sách nhà xuất bản");
+        jLabelTitle.setRequestFocusEnabled(false);
+        jPanelTitle.add(jLabelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 483, 40));
+
+        add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 40));
+
         jScrollPanelTable.setBackground(new java.awt.Color(204, 255, 255));
-        jScrollPanelTable.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPanelTable.setVerifyInputWhenFocusTarget(false);
 
-        jTablePublisher.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jTablePublisher.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTablePublisher.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jTablePublisher.setRowHeight(24);
+        jTablePublisher.setRowHeight(40);
+        jTablePublisher.setShowGrid(true);
         jTablePublisher.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTablePublisherMousePressed(evt);
@@ -443,18 +473,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         });
         jScrollPanelTable.setViewportView(jTablePublisher);
 
-        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 1170, 300));
-
-        jPanelTitle.setPreferredSize(new java.awt.Dimension(1170, 50));
-        jPanelTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitle.setText("Quản lý danh sách nhà xuất bản");
-        jLabelTitle.setRequestFocusEnabled(false);
-        jPanelTitle.add(jLabelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 483, 40));
-
-        add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 40));
+        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 1120, 390));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTablePublisherMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePublisherMousePressed
@@ -476,7 +495,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         // TODO add your handling code here:
-        resetData();
+        myInitComponents();
     }//GEN-LAST:event_jButtonClearActionPerformed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
@@ -490,7 +509,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
             boolean updateCheck = publisherDaoImp.update(publisher);
             if (updateCheck) {
                 JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_UPDATE_SUCCESS);
-                resetData();
+                myInitComponents();
             } else {
                 JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_UPDATE_ERROR);
             }
@@ -513,7 +532,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
                  boolean deleteCheck = publisherDaoImp.moveToBin(publisher.getPublisherID());
                 if (deleteCheck) {
                     JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_DELETE_SUCCESS);
-                resetData();
+                myInitComponents();
                 } else {
                     JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_DELETE_ERROR);
                 }
@@ -536,7 +555,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
             boolean insertCheck = publisherDaoImp.insert(publisher);
             if (insertCheck) {
                 JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_INSERT_SUCCESS);
-                resetData();
+                myInitComponents();
             } else {
                 JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_INSERT_ERROR);
             }
@@ -668,6 +687,23 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
             jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
         }
     }//GEN-LAST:event_jTextFieldSearchFocusLost
+
+    private void jTextFieldPhoneNumberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPhoneNumberKeyPressed
+        // TODO add your handling code here:
+        String phoneNumber = jTextFieldPhoneNumber.getText();
+        
+        if (evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9' && phoneNumber.length() <= 12) {
+            jTextFieldPhoneNumber.setEditable(true);
+        } else {
+            //Allow backspace and delete
+            if (evt.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE || evt.getExtendedKeyCode() == KeyEvent.VK_DELETE) {
+                jTextFieldPhoneNumber.setEditable(true);
+            } else {
+                jTextFieldPhoneNumber.setEditable(false);
+            }
+        }
+        
+    }//GEN-LAST:event_jTextFieldPhoneNumberKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

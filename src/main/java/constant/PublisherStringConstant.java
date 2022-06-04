@@ -11,7 +11,7 @@ package constant;
  */
 public class PublisherStringConstant {
 
-    // Tên các labe và hint text trong Publisher UI
+   // Tên các labe và hint text trong Publisher UI
     public static final String PUBLISHER_ID = "ID nhà xuất bản";
     public static final String PUBLISHER_NAME = "Tên nhà xuất bản";
     public static final String PUBLISHER_PHONE_NUMBER = "Số điện thoại";
@@ -35,9 +35,9 @@ public class PublisherStringConstant {
     public static final String PUBLISHER_UPDATE_ERROR ="Cập nhật thông tin nhà xuất bản thất bại! Vui lòng thử lại!";
     
     // Tiêu đề của Dialog Xoá
-    public static final String PUBLISHER_DELETE_TITLE = "Bạn có muốn xoá thông tin nhà xuất bản này không?";
+    public static final String PUBLISHER_DELETE_TITLE = "Bạn có muốn chuyển thông tin nhà xuất bản này vào thùng rác không?";
      // Thông báo sau khi thực hiện chức năng xoá
-    public static final String PUBLISHER_DELETE_SUCCESS = "Xoá thông tin nhà xuất bản thành công!";
-    public static final String PUBLISHER_DELETE_ERROR ="Cập nhật thông tin nhà xuất bản thất bại! Vui lòng thử lại!";
+    public static final String PUBLISHER_DELETE_SUCCESS = "Chuyển thông tin nhà xuất bản vào thùng rác thành công!";
+    public static final String PUBLISHER_DELETE_ERROR ="Chuyển thông tin nhà xuất bản vào thùng rác thất bại! Vui lòng thử lại!";
     
 }

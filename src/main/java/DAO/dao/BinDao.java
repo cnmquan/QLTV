@@ -6,7 +6,7 @@ package DAO.dao;
 
 import Base.iGetTitle;
 import java.util.ArrayList;
-import model.Bin;
+import DTO.Bin;
 
 /**
  *

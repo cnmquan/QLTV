@@ -16,6 +16,6 @@ public interface AccountDAO extends BaseDAO<AccountDTO> {
     public boolean isExistUsername(String username)throws SQLException;
     public boolean isExistEmail(String email)throws SQLException;
     public AccountDTO login(String username, String pwd)throws SQLException;
-    public int recoverAccount(String id)throws SQLException;
+    public boolean recoverAccount(String id)throws SQLException;
     public String hashPassword(String pass);
 }

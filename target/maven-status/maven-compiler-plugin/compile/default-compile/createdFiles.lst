@@ -4,6 +4,7 @@ View\Panel\ManagePublisherPanel$18.class
 View\Panel\ManageBinPanel$6.class
 View\Panel\ManageBooksPanel.class
 constant\AccountStringConstant.class
+DTO\TypeFunctionEnum.class
 View\Panel\ManageBooksPanel$30.class
 View\Panel\ManageBooksPanel$10.class
 View\Panel\ManageBooksPanel$20.class
@@ -12,11 +13,11 @@ View\Panel\ManageAccount$3.class
 Base\iGetTitle.class
 View\Panel\ManageBinPanel$3.class
 DAO\dao_impl\BookDaoImp.class
+DTO\Book.class
 View\Panel\ManageAccount$9.class
 View\Frame\SigninPage$3.class
 Base\iValidation.class
 DAO\dao_impl\PublisherDaoImp.class
-model\BinTypeEnum.class
 View\Panel\ManageBooksPanel$18.class
 View\Panel\ManageBooksPanel$3.class
 View\Panel\ManagePublisherPanel$6.class
@@ -24,6 +25,7 @@ View\Frame\SignupPage$6.class
 View\Panel\ManagePublisherPanel$12.class
 View\Frame\HomeForm$7.class
 View\Panel\ManageBooksPanel$23.class
+constant\HomeStringConstant.class
 Base\iDeleteHandler.class
 View\Frame\SigninPage$6.class
 constant\AuthenStringConstant.class
@@ -57,8 +59,8 @@ View\Frame\SignupPage$1.class
 View\Panel\ManageAccount.class
 Base\iCRUD.class
 View\Panel\ManagePublisherPanel$17.class
-model\Bin.class
 constant\BookStringConstant.class
+View\Panel\HomePanel$1.class
 View\Panel\ManageBooksPanel$25.class
 View\Frame\HomeForm$6.class
 View\Panel\ManageBooksPanel$5.class
@@ -78,7 +80,6 @@ View\Panel\ManageBooksPanel$24.class
 View\Frame\HomeForm$8.class
 View\Panel\ManageBooksPanel$14.class
 View\Panel\ManageAccount$10.class
-model\Publisher.class
 View\Frame\HomeForm$5.class
 View\Panel\ManageBinPanel.class
 View\Panel\AuthorListPanel.class
@@ -87,6 +88,7 @@ View\Frame\SignupPage$4.class
 constant\TitleStringConstant.class
 View\Frame\SignupPage$7.class
 View\Panel\ManageBooksPanel$11.class
+DTO\BinTypeEnum.class
 Base\BaseDAO.class
 View\Panel\ManageBooksPanel$1.class
 View\Panel\ManagePublisherPanel$8.class
@@ -98,8 +100,8 @@ View\Panel\ManageBinPanel$5.class
 DAO\dao_impl\BinDaoImp.class
 View\Panel\ManageBooksPanel$7.class
 View\Panel\ManagePublisherPanel$2.class
-model\Book.class
 View\Panel\ManageBinPanel$2.class
+constant\DatabaseStringConstant.class
 View\Panel\ManageAccount$5.class
 View\Panel\ManageBooksPanel$9.class
 View\Panel\ManageAccount$1.class
@@ -113,17 +115,17 @@ View\Panel\ManageBooksPanel$29.class
 View\Panel\ManagePublisherPanel$13.class
 View\Frame\SigninPage$5.class
 View\Frame\SignupPage$5.class
+DTO\Publisher.class
 DAO\dao\AccountDAO.class
-DAO\dao_impl\PublisherDaoImp$SingletonHelper.class
 View\Panel\HomePanel.class
 Adapter\PanelButtonMouseAdapter.class
+View\Panel\ManagePublisherPanel$19.class
 constant\GeneralStringConstant.class
 View\Panel\ManageBooksPanel$16.class
 View\Panel\ManageBooksPanel$28.class
 View\Frame\SigninPage$4.class
 constant\PublisherStringConstant.class
 View\Frame\HomeForm$2.class
-DAO\dao_impl\BookDaoImp$SingletonHelper.class
 View\Frame\SigninPage.class
 View\Panel\ManagePublisherPanel$1.class
 View\Panel\ManageBooksPanel$8.class
@@ -131,5 +133,4 @@ View\Panel\ManageAccount$7.class
 DTO\AccountDTO.class
 View\Frame\SignupPage.class
 View\Panel\ManageBinPanel$4.class
-model\TypeFunctionEnum.class
-DAO\dao_impl\BinDaoImp$SingletonHelper.class
+DTO\Bin.class

@@ -4,7 +4,6 @@
  */
 package Base;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -16,12 +15,12 @@ import java.util.ArrayList;
  */
 public interface BaseDAO<T> {
     
-    public int create(T t)throws SQLException;
+    public boolean create(T t)throws SQLException;
     public ArrayList<T> findAll() throws SQLException;
     public T findByID(String id) throws SQLException;
-    public int update(T t) throws SQLException;
-    public int delete(T t) throws SQLException;
-    public int delete(String id) throws SQLException;
+    public boolean update(T t) throws SQLException;
+    public boolean delete(T t) throws SQLException;
+    public boolean delete(String id) throws SQLException;
         
 //    public final Connection connection=DataProvider.getInstance().getConnection();
 //    default void closeConnection() throws SQLException{

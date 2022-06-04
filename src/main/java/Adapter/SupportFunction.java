@@ -6,7 +6,7 @@ package Adapter;
 
 import constant.GeneralStringConstant;
 import constant.TitleStringConstant;
-import model.BinTypeEnum;
+import DTO.BinTypeEnum;
 
 /**
  *

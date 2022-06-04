@@ -8,8 +8,7 @@ import Base.iCRUD;
 import Base.iDeleteHandler;
 import Base.iGetTitle;
 import Base.iValidation;
-import java.util.ArrayList;
-import model.Publisher;
+import DTO.Publisher;
 
 /**
  *

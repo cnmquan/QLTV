@@ -5,40 +5,26 @@
 package DAO.dao_impl;
 
 import DAO.dao.BinDao;
-import Adapter.DatabaseConnection;
+import Base.DIContainer;
 import constant.BinStringConstant;
-import constant.GeneralStringConstant;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-import model.Bin;
-import model.BinTypeEnum;
-import model.Book;
-import model.Publisher;
+import DTO.Bin;
+import DTO.BinTypeEnum;
+import DTO.Book;
+import DTO.Publisher;
 
 /**
  *
  * @author Admin
  */
 public class BinDaoImp implements BinDao {
-    public BinDaoImp() {
+     public BinDaoImp() {
+        
     }         
-
-    // Create singleton class for binDAO
-    private static class SingletonHelper {
-
-        private static final BinDaoImp INSTANCE = new BinDaoImp();
-    }
-
-    // Create binDAO Singleton
-    public static BinDaoImp getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
     
-    private PublisherDaoImp publishDaoImp = PublisherDaoImp.getInstance();
-    private BookDaoImp bookDaoImp = BookDaoImp.getInstance();
+    private final PublisherDaoImp publishDaoImp = DIContainer.getPublisherDao();
+    private final BookDaoImp bookDaoImp = DIContainer.getBookDao();
 
     @Override
     public ArrayList<Bin> getBinList() {                     
@@ -83,10 +69,6 @@ public class BinDaoImp implements BinDao {
                 return bookDaoImp.delete(bin.getId());
             }
             case Publisher -> {
-                ArrayList<Book> listBookByPublisher = bookDaoImp.getListByPublisher(bin.getId());
-                for(Book book : listBookByPublisher){
-                    bookDaoImp.delete(book.getBookID());
-                }
                 return publishDaoImp.delete(bin.getId());
             }
             default -> {

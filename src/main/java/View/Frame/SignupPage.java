@@ -56,8 +56,8 @@ public class SignupPage extends javax.swing.JFrame {
         String contact = txtContact.getText();
 
         AccountDTO account = new AccountDTO(name, username, pwd, email, contact);
-        int result = DIContainer.getAccountDAO().create(account);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().create(account);
+        if (result) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_UP_SUCCESS);
             SigninPage signIn = new SigninPage();
             signIn.setVisible(true);

@@ -7,13 +7,11 @@ package View.Panel;
 import Base.DIContainer;
 import DTO.AccountDTO;
 import Validate.Validator;
-import View.Frame.SigninPage;
 import constant.AccountStringConstant;
 import constant.AuthenStringConstant;
 import constant.GeneralStringConstant;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.awt.Font;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -24,7 +22,7 @@ import javax.swing.table.TableRowSorter;
 
 /**
  *
- * @email Asus
+ * @email admin
  */
 public class ManageAccount extends javax.swing.JPanel {
 
@@ -68,8 +66,8 @@ public class ManageAccount extends javax.swing.JPanel {
         String contact = txtContact.getText();
 
         AccountDTO newAccount = new AccountDTO(name, username, "123456", email, contact);
-        int result = DIContainer.getAccountDAO().create(newAccount);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().create(newAccount);
+        if (result) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_UP_SUCCESS + "\nMật khẩu mặc định là: 123456");
             setAccountDetailToTable();
         } else {
@@ -378,8 +376,6 @@ public class ManageAccount extends javax.swing.JPanel {
             }
         ));
         tblAccountDetail.setRowHeight(40);
-        tblAccountDetail.setShowHorizontalLines(true);
-        tblAccountDetail.setShowVerticalLines(true);
         tblAccountDetail.getTableHeader().setReorderingAllowed(false);
         tblAccountDetail.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -507,8 +503,8 @@ public class ManageAccount extends javax.swing.JPanel {
         }
 
         AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact);
-        int result = DIContainer.getAccountDAO().update(newAccount);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().update(newAccount);
+        if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_SUCCESS);
             setAccountDetailToTable();
         } else {
@@ -519,8 +515,8 @@ public class ManageAccount extends javax.swing.JPanel {
     private void jButtonRecoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRecoverActionPerformed
         // TODO add your handling code here:
         String id = txtID.getText();
-        int result = DIContainer.getAccountDAO().recoverAccount(id);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().recoverAccount(id);
+        if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_RECOVER_SUCCESS);
         } else {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_RECOVER_FAIL);
@@ -529,8 +525,8 @@ public class ManageAccount extends javax.swing.JPanel {
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         String id = txtID.getText();
-        int result = DIContainer.getAccountDAO().delete(id);
-        if (result > 0) {
+        boolean result = DIContainer.getAccountDAO().delete(id);
+        if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_SUCCESS);
             setAccountDetailToTable();
         } else {

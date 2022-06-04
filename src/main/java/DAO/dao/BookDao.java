@@ -9,7 +9,7 @@ import Base.iDeleteHandler;
 import Base.iGetTitle;
 import Base.iValidation;
 import java.util.ArrayList;
-import model.Book;
+import DTO.Book;
 
 
 /**
@@ -17,6 +17,7 @@ import model.Book;
  * @author Admin
  */
 public interface BookDao extends iCRUD<Book>, iGetTitle, iValidation<Book>, iDeleteHandler<Book> {
-    ArrayList<Book> getListByPublisher(String publisherID);
-
+    ArrayList<Book> getNewestFiveBook();
+    int getSumBook();
+    String getLongestString(String attribute);
 }

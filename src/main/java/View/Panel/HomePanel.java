@@ -4,18 +4,115 @@
  */
 package View.Panel;
 
+import Base.DIContainer;
+import DAO.dao_impl.BookDaoImp;
+import DTO.Book;
+import constant.DatabaseStringConstant;
+import constant.HomeStringConstant;
+import java.awt.Color;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Admin
  */
 public class HomePanel extends javax.swing.JPanel {
 
+    
     /**
      * Creates new form HomePanel
      */
     public HomePanel() {
+        this.bookDaoImp = DIContainer.getBookDao();
         initComponents();
-        setBounds(0, 0,1170, 630);
+        myInitComponents();
+        setBounds(0, 0, 1160, 740);
+    }
+
+    private final BookDaoImp bookDaoImp;
+    private ArrayList<Book> listBook;
+    private Vector vctBookHeader;
+    private Vector vctBookData;
+
+    public void myInitComponents() {
+        setLableText();
+        setBookValue();
+        setDefaultTable();
+        getVectorBookData();
+        showTableBookData(this.vctBookData);
+    }
+
+    private void setLableText() {
+        jLabelNoOfBookTitle.setText(HomeStringConstant.HOME_NO_OF_BOOK);
+        jLabelNoOfReaderTitle.setText(HomeStringConstant.HOME_NO_OF_READER);
+        jLabelIssuedBooksTitle.setText(HomeStringConstant.HOME_NO__OF_ISSUE);
+        jLabelDefaultlerListTitle.setText(HomeStringConstant.HOME_NO__OF_RETURN_BOOK);
+        jLabelReaderDetailsTitle.setText(HomeStringConstant.HOME_TITLE_READER_TABLE);
+        jLabelBookDetailsTitle.setText(HomeStringConstant.HOME_TITLE_BOOK_TABLE);
+    }
+
+    private void setBookValue() {
+        int numBook = bookDaoImp.getSumBook();
+        jLabelNoOfBook.setText(String.valueOf(numBook));
+                
+    }
+
+    private void setDefaultTable() {
+        jTableReaderDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        jScrollPaneReaderDetail.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        jScrollPaneReaderDetail.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        jTableReaderDetail.setBackground(Color.WHITE);
+        jTableReaderDetail.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTableReaderDetail.setFillsViewportHeight(true);
+
+        jTableBookDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        jScrollPaneBookDetail.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        jScrollPaneBookDetail.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        jTableBookDetail.setBackground(Color.WHITE);
+        jTableBookDetail.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTableBookDetail.setFillsViewportHeight(true);       
+    }
+
+    private void getVectorBookData() {
+        this.listBook = bookDaoImp.getNewestFiveBook();
+        this.vctBookData = new Vector();
+        for (int i = 0; i < this.listBook.size(); i++) {
+            Vector vctRow = this.listBook.get(i).convertToVector();
+            vctBookData.add(vctRow);
+        }
+    }
+
+    public void showTableBookData(Vector vctData) {
+        this.vctBookHeader = this.bookDaoImp.getTitleColumn();
+
+        jTableBookDetail.setModel(new DefaultTableModel(vctData, vctBookHeader) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+
+        });
+
+        // Permanent Column
+        jTableBookDetail.getColumnModel().getColumn(1).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_NAME).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(2).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_CATEGORY).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(3).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_AUTHOR).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(7).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.PUBLISHER_NAME).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(8).setPreferredWidth(150);
     }
 
     /**
@@ -27,10 +124,8 @@ public class HomePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelReaderDetailsTitle = new javax.swing.JLabel();
-        jLabelBookDetailsTitle = new javax.swing.JLabel();
         jPanelPieChart = new javax.swing.JPanel();
-        jLabelDefautlerListTitle = new javax.swing.JLabel();
+        jLabelDefaultlerListTitle = new javax.swing.JLabel();
         jPanelNoOfBook = new javax.swing.JPanel();
         jLabelNoOfBook = new javax.swing.JLabel();
         jPanelDefautlerList = new javax.swing.JPanel();
@@ -42,203 +137,156 @@ public class HomePanel extends javax.swing.JPanel {
         jLabelIssuedBooks = new javax.swing.JLabel();
         jPanelNoOfReader = new javax.swing.JPanel();
         jLabelNoOfReader = new javax.swing.JLabel();
+        jPanelBookDetail = new javax.swing.JPanel();
+        jLabelBookDetailsTitle = new javax.swing.JLabel();
+        jScrollPaneBookDetail = new javax.swing.JScrollPane();
+        jTableBookDetail = new javax.swing.JTable();
+        jPanelReaderDetail = new javax.swing.JPanel();
+        jLabelReaderDetailsTitle = new javax.swing.JLabel();
+        jScrollPaneReaderDetail = new javax.swing.JScrollPane();
+        jTableReaderDetail = new javax.swing.JTable();
 
-        setPreferredSize(new java.awt.Dimension(1170, 630));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setMinimumSize(new java.awt.Dimension(1288, 800));
+        setPreferredSize(new java.awt.Dimension(1288, 800));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelReaderDetailsTitle.setBackground(new java.awt.Color(102, 102, 102));
-        jLabelReaderDetailsTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
-        jLabelReaderDetailsTitle.setForeground(new java.awt.Color(102, 102, 102));
-        jLabelReaderDetailsTitle.setText("Reader Details");
+        jPanelPieChart.setBackground(new java.awt.Color(204, 255, 204));
+        jPanelPieChart.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(jPanelPieChart, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 180, 447, 540));
 
-        jLabelBookDetailsTitle.setBackground(new java.awt.Color(102, 102, 102));
-        jLabelBookDetailsTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
-        jLabelBookDetailsTitle.setForeground(new java.awt.Color(102, 102, 102));
-        jLabelBookDetailsTitle.setText("Book  Details");
-
-        jPanelPieChart.setLayout(new java.awt.BorderLayout());
-
-        jLabelDefautlerListTitle.setBackground(new java.awt.Color(102, 102, 102));
-        jLabelDefautlerListTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
-        jLabelDefautlerListTitle.setForeground(new java.awt.Color(102, 102, 102));
-        jLabelDefautlerListTitle.setText("Defaulter List");
+        jLabelDefaultlerListTitle.setBackground(new java.awt.Color(102, 102, 102));
+        jLabelDefaultlerListTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
+        jLabelDefaultlerListTitle.setForeground(new java.awt.Color(102, 102, 102));
+        jLabelDefaultlerListTitle.setText("Defaulter List");
+        add(jLabelDefaultlerListTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 250, -1));
 
         jPanelNoOfBook.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(255, 51, 51)));
         jPanelNoOfBook.setPreferredSize(new java.awt.Dimension(260, 1));
+        jPanelNoOfBook.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelNoOfBook.setBackground(new java.awt.Color(102, 102, 102));
         jLabelNoOfBook.setFont(new java.awt.Font("Segoe Pro Black", 0, 50)); // NOI18N
         jLabelNoOfBook.setForeground(new java.awt.Color(102, 102, 102));
         jLabelNoOfBook.setText("10000");
+        jPanelNoOfBook.add(jLabelNoOfBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, 198, -1));
 
-        javax.swing.GroupLayout jPanelNoOfBookLayout = new javax.swing.GroupLayout(jPanelNoOfBook);
-        jPanelNoOfBook.setLayout(jPanelNoOfBookLayout);
-        jPanelNoOfBookLayout.setHorizontalGroup(
-            jPanelNoOfBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelNoOfBookLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelNoOfBook, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
-        );
-        jPanelNoOfBookLayout.setVerticalGroup(
-            jPanelNoOfBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelNoOfBookLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelNoOfBook)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        add(jPanelNoOfBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 210, 100));
 
         jPanelDefautlerList.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(102, 102, 255)));
         jPanelDefautlerList.setPreferredSize(new java.awt.Dimension(260, 1));
+        jPanelDefautlerList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelDefautlerList.setBackground(new java.awt.Color(102, 102, 102));
         jLabelDefautlerList.setFont(new java.awt.Font("Segoe Pro Black", 0, 50)); // NOI18N
         jLabelDefautlerList.setForeground(new java.awt.Color(102, 102, 102));
         jLabelDefautlerList.setText("10000");
+        jPanelDefautlerList.add(jLabelDefautlerList, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, -1, -1));
 
-        javax.swing.GroupLayout jPanelDefautlerListLayout = new javax.swing.GroupLayout(jPanelDefautlerList);
-        jPanelDefautlerList.setLayout(jPanelDefautlerListLayout);
-        jPanelDefautlerListLayout.setHorizontalGroup(
-            jPanelDefautlerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelDefautlerListLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelDefautlerList)
-                .addContainerGap(58, Short.MAX_VALUE))
-        );
-        jPanelDefautlerListLayout.setVerticalGroup(
-            jPanelDefautlerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelDefautlerListLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelDefautlerList)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        add(jPanelDefautlerList, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 60, 210, 100));
 
         jLabelNoOfBookTitle.setBackground(new java.awt.Color(102, 102, 102));
         jLabelNoOfBookTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
         jLabelNoOfBookTitle.setForeground(new java.awt.Color(102, 102, 102));
         jLabelNoOfBookTitle.setText("No Of Books");
+        add(jLabelNoOfBookTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 190, -1));
 
         jLabelIssuedBooksTitle.setBackground(new java.awt.Color(102, 102, 102));
         jLabelIssuedBooksTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
         jLabelIssuedBooksTitle.setForeground(new java.awt.Color(102, 102, 102));
         jLabelIssuedBooksTitle.setText("Issued Books");
+        add(jLabelIssuedBooksTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 20, 190, -1));
 
         jLabelNoOfReaderTitle.setBackground(new java.awt.Color(102, 102, 102));
         jLabelNoOfReaderTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
         jLabelNoOfReaderTitle.setForeground(new java.awt.Color(102, 102, 102));
         jLabelNoOfReaderTitle.setText("No Of Reader");
+        add(jLabelNoOfReaderTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 190, -1));
 
         jPanelIssuedBooks.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(255, 51, 51)));
         jPanelIssuedBooks.setPreferredSize(new java.awt.Dimension(260, 1));
+        jPanelIssuedBooks.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelIssuedBooks.setBackground(new java.awt.Color(102, 102, 102));
         jLabelIssuedBooks.setFont(new java.awt.Font("Segoe Pro Black", 0, 50)); // NOI18N
         jLabelIssuedBooks.setForeground(new java.awt.Color(102, 102, 102));
         jLabelIssuedBooks.setText("10000");
+        jPanelIssuedBooks.add(jLabelIssuedBooks, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, -1, -1));
 
-        javax.swing.GroupLayout jPanelIssuedBooksLayout = new javax.swing.GroupLayout(jPanelIssuedBooks);
-        jPanelIssuedBooks.setLayout(jPanelIssuedBooksLayout);
-        jPanelIssuedBooksLayout.setHorizontalGroup(
-            jPanelIssuedBooksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelIssuedBooksLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelIssuedBooks)
-                .addContainerGap(58, Short.MAX_VALUE))
-        );
-        jPanelIssuedBooksLayout.setVerticalGroup(
-            jPanelIssuedBooksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelIssuedBooksLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelIssuedBooks)
-                .addGap(25, 25, 25))
-        );
+        add(jPanelIssuedBooks, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 60, 210, 100));
 
         jPanelNoOfReader.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(102, 102, 255)));
         jPanelNoOfReader.setPreferredSize(new java.awt.Dimension(260, 1));
+        jPanelNoOfReader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelNoOfReader.setBackground(new java.awt.Color(102, 102, 102));
         jLabelNoOfReader.setFont(new java.awt.Font("Segoe Pro Black", 0, 50)); // NOI18N
         jLabelNoOfReader.setForeground(new java.awt.Color(102, 102, 102));
         jLabelNoOfReader.setText("10000");
+        jPanelNoOfReader.add(jLabelNoOfReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, -1, -1));
 
-        javax.swing.GroupLayout jPanelNoOfReaderLayout = new javax.swing.GroupLayout(jPanelNoOfReader);
-        jPanelNoOfReader.setLayout(jPanelNoOfReaderLayout);
-        jPanelNoOfReaderLayout.setHorizontalGroup(
-            jPanelNoOfReaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelNoOfReaderLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelNoOfReader)
-                .addContainerGap(58, Short.MAX_VALUE))
-        );
-        jPanelNoOfReaderLayout.setVerticalGroup(
-            jPanelNoOfReaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelNoOfReaderLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelNoOfReader)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        add(jPanelNoOfReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, 210, 100));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelReaderDetailsTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelNoOfBook, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelNoOfBookTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelNoOfReader, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelNoOfReaderTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabelBookDetailsTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelIssuedBooks, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelIssuedBooksTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelDefautlerListTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanelDefautlerList, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanelPieChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelNoOfBookTitle)
-                    .addComponent(jLabelNoOfReaderTitle)
-                    .addComponent(jLabelIssuedBooksTitle)
-                    .addComponent(jLabelDefautlerListTitle))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanelNoOfBook, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelNoOfReader, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelIssuedBooks, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelDefautlerList, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabelReaderDetailsTitle)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                        .addComponent(jPanelPieChart, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(jLabelBookDetailsTitle))))
-        );
+        jPanelBookDetail.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelBookDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelBookDetailsTitle.setBackground(new java.awt.Color(102, 102, 102));
+        jLabelBookDetailsTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
+        jLabelBookDetailsTitle.setForeground(new java.awt.Color(102, 102, 102));
+        jLabelBookDetailsTitle.setText("Book  Details");
+        jPanelBookDetail.add(jLabelBookDetailsTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 190, -1));
+
+        jTableBookDetail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTableBookDetail.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTableBookDetail.setRowHeight(40);
+        jScrollPaneBookDetail.setViewportView(jTableBookDetail);
+
+        jPanelBookDetail.add(jScrollPaneBookDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 590, 250));
+
+        add(jPanelBookDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 610, 300));
+
+        jPanelReaderDetail.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelReaderDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelReaderDetailsTitle.setBackground(new java.awt.Color(102, 102, 102));
+        jLabelReaderDetailsTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
+        jLabelReaderDetailsTitle.setForeground(new java.awt.Color(102, 102, 102));
+        jLabelReaderDetailsTitle.setText("Reader Details");
+        jPanelReaderDetail.add(jLabelReaderDetailsTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 190, -1));
+
+        jTableReaderDetail.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPaneReaderDetail.setViewportView(jTableReaderDetail);
+
+        jPanelReaderDetail.add(jScrollPaneReaderDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 590, 220));
+
+        add(jPanelReaderDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 610, 260));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabelBookDetailsTitle;
+    private javax.swing.JLabel jLabelDefaultlerListTitle;
     private javax.swing.JLabel jLabelDefautlerList;
-    private javax.swing.JLabel jLabelDefautlerListTitle;
     private javax.swing.JLabel jLabelIssuedBooks;
     private javax.swing.JLabel jLabelIssuedBooksTitle;
     private javax.swing.JLabel jLabelNoOfBook;
@@ -246,10 +294,16 @@ public class HomePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelNoOfReader;
     private javax.swing.JLabel jLabelNoOfReaderTitle;
     private javax.swing.JLabel jLabelReaderDetailsTitle;
+    private javax.swing.JPanel jPanelBookDetail;
     private javax.swing.JPanel jPanelDefautlerList;
     private javax.swing.JPanel jPanelIssuedBooks;
     private javax.swing.JPanel jPanelNoOfBook;
     private javax.swing.JPanel jPanelNoOfReader;
     private javax.swing.JPanel jPanelPieChart;
+    private javax.swing.JPanel jPanelReaderDetail;
+    private javax.swing.JScrollPane jScrollPaneBookDetail;
+    private javax.swing.JScrollPane jScrollPaneReaderDetail;
+    private javax.swing.JTable jTableBookDetail;
+    private javax.swing.JTable jTableReaderDetail;
     // End of variables declaration//GEN-END:variables
 }

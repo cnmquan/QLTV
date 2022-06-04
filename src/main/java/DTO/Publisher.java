@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
+package DTO;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 
 /**
@@ -58,8 +60,8 @@ public class Publisher {
     public void setPublisherAddress(String publisherAddress) {
         this.publisherAddress = publisherAddress;
     }
-    
-     public Vector convertToVector(){
+
+    public Vector convertToVector() {
         Vector vector = new Vector();
         vector.add(this.publisherID);
         vector.add(this.publisherName);
@@ -68,4 +70,14 @@ public class Publisher {
         return vector;
     }
 
+    public static Publisher convertFromResultSet(ResultSet rs) throws SQLException {
+        Publisher publisher = new Publisher();
+
+        publisher.setPublisherID(rs.getString("publisher_id"));
+        publisher.setPublisherName(rs.getString("publisher_name"));
+        publisher.setPublisherPhoneNumber(rs.getString("publisher_phone_number"));
+        publisher.setPublisherAddress(rs.getString("publisher_address"));
+
+        return publisher;
+    }
 }

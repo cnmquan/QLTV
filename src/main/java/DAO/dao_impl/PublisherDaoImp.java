@@ -5,19 +5,15 @@
 package DAO.dao_impl;
 
 import DAO.dao.PublisherDao;
-import DAO.dao_impl.BookDaoImp;
-import Adapter.DatabaseConnection;
+import Base.DataProvider;
 import constant.PublisherStringConstant;
-import model.Publisher;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import DTO.Publisher;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import model.Book;
+import constant.GeneralStringConstant;
 
 /**
  *
@@ -28,201 +24,185 @@ public class PublisherDaoImp implements PublisherDao {
     public PublisherDaoImp() {
     }
 
-    // Create singleton class for publisherDAO
-    private static class SingletonHelper {
-
-        private static final PublisherDaoImp INSTANCE = new PublisherDaoImp();
-    }
-
-    // Create PublisherDAO Singleton
-    public static PublisherDaoImp getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
-    
-    private BookDaoImp bookDaoImp = BookDaoImp.getInstance();
-
     // Get All List Publisher from SQL Server
     @Override
     public ArrayList<Publisher> getAll() {
         ArrayList<Publisher> list = new ArrayList<>();
-        Connection c = null;
-        String sql = "SELECT * FROM publishers "
-                + " WHERE publisher_is_deleted = false"
-                + " ORDER BY publisher_id";
-        try {
-            c = DatabaseConnection.getConnection();
-            Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery(sql);
 
+        String sql = "SELECT "
+                + "publisher_id, "
+                + "publisher_name, "
+                + "publisher_phone_number, "
+                + "publisher_address "
+                + "FROM publishers "
+                + "WHERE publisher_is_deleted = false "
+                + "ORDER BY publisher_id";
+
+        ResultSet rs = DataProvider.ExecuteQuery(sql, null);
+        try {
             while (rs.next()) {
-                Publisher publisher = new Publisher();
-                publisher.setPublisherID(rs.getString("publisher_id"));
-                publisher.setPublisherName(rs.getString("publisher_name"));
-                publisher.setPublisherPhoneNumber(rs.getString("publisher_phone_number"));
-                publisher.setPublisherAddress(rs.getString("publisher_address"));
+                Publisher publisher = Publisher.convertFromResultSet(rs);
                 list.add(publisher);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            DatabaseConnection.close(c);
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
         }
+
+        return list;
+    }
+
+    @Override
+    public Publisher getAttribute(String attribute, String a) {
+        Publisher publisher = new Publisher();
+        String sql = "SELECT "
+                + "publisher_id, "
+                + "publisher_name, "
+                + "publisher_phone_number, "
+                + "publisher_address "
+                + "from publishers "
+                + "WHERE " + attribute + " = ?";
+
+        ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
+            a
+        });
+
+        try {
+            while (rs.next()) {
+                publisher = Publisher.convertFromResultSet(rs);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+        return publisher;
+    }
+
+    @Override
+    public ArrayList<Publisher> getDeleteList() {
+        ArrayList<Publisher> list = new ArrayList<>();
+        String sql = "SELECT "
+                + "publisher_id, "
+                + "publisher_name, "
+                + "publisher_phone_number,"
+                + "publisher_address "
+                + "FROM publishers "
+                + "WHERE publisher_is_deleted = true "
+                + "ORDER BY publisher_id";
+
+        ResultSet rs = DataProvider.ExecuteQuery(sql, null);
+
+        try {
+            while (rs.next()) {
+                Publisher publisher = Publisher.convertFromResultSet(rs);
+                list.add(publisher);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
         return list;
     }
 
     // Insert Publisher object to SQL Database
     @Override
     public boolean insert(Publisher t) {
-        String sql = "INSERT INTO publishers(publisher_id,publisher_name,publisher_phone_number,publisher_address,publisher_is_deleted) VALUES(?,?,?,?,false)";
-        boolean rowInserted = false;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
+        boolean rowInserted;
+        String sql = "INSERT INTO publishers("
+                + "publisher_id, "
+                + "publisher_name, "
+                + "publisher_phone_number, "
+                + "publisher_address, "
+                + "publisher_is_deleted) "
+                + "VALUES("
+                + "?, "
+                + "?, "
+                + "?, "
+                + "?, "
+                + "false)";
 
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, t.getPublisherID());
-            statement.setString(2, t.getPublisherName());
-            statement.setString(3, t.getPublisherPhoneNumber());
-            statement.setString(4, t.getPublisherAddress());
+        rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
+            t.getPublisherID(), 
+            t.getPublisherName(), 
+            t.getPublisherPhoneNumber(), 
+            t.getPublisherAddress()
+        });
 
-            rowInserted = statement.executeUpdate() > 0;
-
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            DatabaseConnection.close(con);
-        }
         return rowInserted;
     }
 
     // Update Publisher object to SQL Database
     @Override
     public boolean update(Publisher t) {
-        String sql = "UPDATE publishers SET publisher_name = ?, publisher_phone_number = ?, publisher_address = ? ";
-        sql += " WHERE publisher_id = ?";
+        boolean rowUpdated;
+        String sql = "UPDATE publishers "
+                + "SET publisher_name = ?, "
+                + "publisher_phone_number = ?, "
+                + "publisher_address = ? "
+                + "WHERE publisher_id = ?";
 
-        boolean rowUpdated = false;
-        Connection con = null;
-
-        try {
-            con = DatabaseConnection.getConnection();
-
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, t.getPublisherName());
-            statement.setString(2, t.getPublisherPhoneNumber());
-            statement.setString(3, t.getPublisherAddress());
-            statement.setString(4, t.getPublisherID());
-
-            rowUpdated = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
+        rowUpdated = DataProvider.ExecuteNonQuery(sql, new Object[]{
+            t.getPublisherName(),
+            t.getPublisherPhoneNumber(),
+            t.getPublisherAddress(),
+            t.getPublisherID()
+        });
 
         return rowUpdated;
     }
 
     @Override
     public boolean delete(String id) {
-        String sql = "DELETE FROM publishers   "
-                + " WHERE publisher_id = ?";
+        boolean rowDeleted;
+        String sql = "DELETE FROM publishers "
+                + "WHERE publisher_id = ?";
 
-        boolean rowUpdated = false;
-        Connection con = null;
+        rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
+            id
+        });
 
-        try {
-            con = DatabaseConnection.getConnection();
+        return rowDeleted;
+    }
+    
+     @Override
+    public boolean delete(Publisher t) throws SQLException {
+        boolean rowDeleted;
+        String sql = "DELETE FROM publishers "
+                + "WHERE publisher_id = ?";
 
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, id);
+        rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
+            t.getPublisherID()
+        });
 
-            rowUpdated = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
-        return rowUpdated;
+        return rowDeleted;
     }
 
     // Delete Publisher object to SQL Database
     @Override
     public boolean moveToBin(String id) {
-        ArrayList<Book> bookList = bookDaoImp.getListByPublisher(id);
-        for(Book book : bookList){
-            bookDaoImp.moveToBin(book.getBookID());
-        }
-        String sql = "UPDATE publishers SET publisher_is_deleted = true ";
-        sql += " WHERE publisher_id = ?";
-        boolean rowDeleted = false;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
+        boolean rowMovedToBin;
+        String sql = "UPDATE publishers "
+                + "SET publisher_is_deleted = true "
+                + "FWHERE publisher_id = ?";
 
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, id);
+        rowMovedToBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
+            id
+        });
 
-            rowDeleted = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
-
-        return rowDeleted;
+        return rowMovedToBin;
     }
 
     @Override
     public boolean removeFromBin(String id) {
-        String sql = "UPDATE publishers SET publisher_is_deleted = false  "
-                + " WHERE publisher_id = ?";
+        boolean rowRemovedFromBin;
+        String sql = "UPDATE publishers "
+                + "SET publisher_is_deleted = false  "
+                + "WHERE publisher_id = ?";
 
-        boolean rowUpdated = false;
-        Connection con = null;
+        rowRemovedFromBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
+            id
+        });
 
-        try {
-            con = DatabaseConnection.getConnection();
-
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, id);
-
-            rowUpdated = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
-        return rowUpdated;
-    }
-
-    @Override
-    public Publisher getAttribute(String atribute, String a) {
-        String sql = "SELECT * from publishers WHERE ? = ?";
-        Publisher publisher = new Publisher();
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
-
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, atribute);
-            statement.setString(2, a);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                publisher.setPublisherID(resultSet.getString("publisher_id"));
-                publisher.setPublisherName(resultSet.getString("publisher_name"));
-                publisher.setPublisherPhoneNumber(resultSet.getString("publisher_phone_number"));
-                publisher.setPublisherAddress(resultSet.getString("publisher_address"));
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
-
-        return publisher;
+        return rowRemovedFromBin;
     }
 
     @Override
@@ -241,7 +221,7 @@ public class PublisherDaoImp implements PublisherDao {
                 return p.getPublisherID();
             }
         }
-        return "";
+        return GeneralStringConstant.GENERAL_EMPTY;
     }
 
     @Override
@@ -252,34 +232,6 @@ public class PublisherDaoImp implements PublisherDao {
             }
         }
         return false;
-    }
-
-    @Override
-    public ArrayList<Publisher> getDeleteList() {
-        ArrayList<Publisher> list = new ArrayList<>();
-        Connection c = null;
-        String sql = "SELECT * FROM publishers "
-                + " WHERE publisher_is_deleted = true"
-                + " ORDER BY publisher_id";
-        try {
-            c = DatabaseConnection.getConnection();
-            Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery(sql);
-
-            while (rs.next()) {
-                Publisher publisher = new Publisher();
-                publisher.setPublisherID(rs.getString("publisher_id"));
-                publisher.setPublisherName(rs.getString("publisher_name"));
-                publisher.setPublisherPhoneNumber(rs.getString("publisher_phone_number"));
-                publisher.setPublisherAddress(rs.getString("publisher_address"));
-                list.add(publisher);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            DatabaseConnection.close(c);
-        }
-        return list;
     }
 
     @Override
@@ -296,6 +248,6 @@ public class PublisherDaoImp implements PublisherDao {
     @Override
     public boolean validateString(String s) {
         return s.isBlank() || s.isEmpty();
-    }
+    }  
 
 }
