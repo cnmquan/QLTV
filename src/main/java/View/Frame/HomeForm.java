@@ -6,42 +6,40 @@ package View.Frame;
 
 import Adapter.PanelButtonMouseAdapter;
 import DTO.AccountDTO;
-import View.Panel.HomePanel;
-import View.Panel.ManageAccount;
-import View.Panel.ManageBinPanel;
-import View.Panel.ManageBooksPanel;
-import View.Panel.ManagePublisherPanel;
+import View.Panel.*;
 import constant.GeneralStringConstant;
 import constant.TitleStringConstant;
+
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
  * @author Admin
  */
 public class HomeForm extends javax.swing.JFrame {
 
-    AccountDTO account=null;
+    AccountDTO account = null;
+
     /**
      * Creates new form HomeForm
      */
-    public HomeForm() {
+    public HomeForm() throws SQLException {
         initComponents();
-        myInitComponents();
-        addPanelToHomePage();
-        this.setLocationRelativeTo(null);       
-    }
-
-    public HomeForm(AccountDTO account) {
-        initComponents();
-        
-        this.account=account;
         myInitComponents();
         addPanelToHomePage();
         this.setLocationRelativeTo(null);
-        jLabelGreeting.setText("Xin chào, "+ account.getName());
+    }
+
+    public HomeForm(AccountDTO account) throws SQLException {
+        initComponents();
+
+        this.account = account;
+        myInitComponents();
+        addPanelToHomePage();
+        this.setLocationRelativeTo(null);
+        jLabelGreeting.setText("Xin chào, " + account.getName());
     }
 
     /**
@@ -85,7 +83,6 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelPublisherList = new javax.swing.JPanel();
         jLabelPublisherList = new javax.swing.JLabel();
         jPanelMainContent = new javax.swing.JPanel();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1520, 830));
@@ -105,12 +102,12 @@ public class HomeForm extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanelIndicationLayout = new javax.swing.GroupLayout(jPanelIndication);
         jPanelIndication.setLayout(jPanelIndicationLayout);
         jPanelIndicationLayout.setHorizontalGroup(
-            jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 5, Short.MAX_VALUE)
+                jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 5, Short.MAX_VALUE)
         );
         jPanelIndicationLayout.setVerticalGroup(
-            jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+                jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 60, Short.MAX_VALUE)
         );
 
         jPanelTitle.add(jPanelIndication, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 0, 5, 60));
@@ -286,12 +283,12 @@ public class HomeForm extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanelMainContentLayout = new javax.swing.GroupLayout(jPanelMainContent);
         jPanelMainContent.setLayout(jPanelMainContentLayout);
         jPanelMainContentLayout.setHorizontalGroup(
-            jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1160, Short.MAX_VALUE)
+                jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 1160, Short.MAX_VALUE)
         );
         jPanelMainContentLayout.setVerticalGroup(
-            jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 740, Short.MAX_VALUE)
+                jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 740, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanelMainContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 58, 1160, 740));
@@ -303,8 +300,8 @@ public class HomeForm extends javax.swing.JFrame {
     private void jPanelLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelLogoutMouseClicked
         // TODO add your handling code here:
         SigninPage signIn = new SigninPage();
-            signIn.setVisible(true);
-            this.dispose();
+        signIn.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jPanelLogoutMouseClicked
 
     /**
@@ -314,7 +311,7 @@ public class HomeForm extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -336,18 +333,22 @@ public class HomeForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new HomeForm().setVisible(true);
+            try {
+                new HomeForm().setVisible(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
-    
-    private void setNavigationTitle(){
+
+    private void setNavigationTitle() {
         jLabelManageBook.setText(TitleStringConstant.MANAGE_BOOK);
         jLabelPublisherList.setText(TitleStringConstant.MANAGE_PUBLISHER);
     }
 
     private void myInitComponents() {
         setNavigationTitle();
-        
+
         jPanelExit.addMouseListener(new PanelButtonMouseAdapter(jPanelExit, -1) {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -376,19 +377,18 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelManageReader.addMouseListener(new PanelButtonMouseAdapter(jPanelManageReader, 0) {
             @Override
             public void mouseClicked(MouseEvent e) {
-//                clickedMenu(panelManageReader);
+                clickedMenu(panelManageReader);
             }
         });
-        
         jPanelManageAccount.addMouseListener(new PanelButtonMouseAdapter(jPanelManageAccount, 0) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 clickedMenu(panelManageAccount);
             }
         });
-        
+
         jPanelPublisherList.addMouseListener(new PanelButtonMouseAdapter(jPanelPublisherList, 0) {
-             @Override
+            @Override
             public void mouseClicked(MouseEvent e) {
                 panelManagePublishers.myInitComponents();
                 clickedMenu(panelManagePublishers);
@@ -397,7 +397,12 @@ public class HomeForm extends javax.swing.JFrame {
 
         jPanelIsueBook.addMouseListener(new PanelButtonMouseAdapter(jPanelIsueBook, 0));
 
-        jPanelReturnBook.addMouseListener(new PanelButtonMouseAdapter(jPanelReturnBook, 0));
+        jPanelReturnBook.addMouseListener(new PanelButtonMouseAdapter(jPanelReturnBook, 0){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                clickedMenu(panelManageBorrow);
+            }
+        });
 
         jPanelViewRecord.addMouseListener(new PanelButtonMouseAdapter(jPanelViewRecord, 0));
 
@@ -415,22 +420,23 @@ public class HomeForm extends javax.swing.JFrame {
 
     }
 
-    private void addPanelToHomePage() {
+    private void addPanelToHomePage() throws SQLException {
 
         panelHome = new HomePanel();
         panelManageBooks = new ManageBooksPanel();
         panelManagePublishers = new ManagePublisherPanel();
-//        panelManageReader = new ManageReaderPanel();
+        panelManageReader = new ManageReaderPanel();
         panelManageBin = new ManageBinPanel();
-        panelManageAccount=new ManageAccount(account);
-        
+        panelManageBorrow = new ManageBorrowPanel();
+        panelManageAccount = new ManageAccount(account);
+
         jPanelMainContent.add(panelHome);
         jPanelMainContent.add(panelManageBooks);
         jPanelMainContent.add(panelManagePublishers);
-//        jPanelMainContent.add(panelManageReader);
+        jPanelMainContent.add(panelManageReader);
         jPanelMainContent.add(panelManageBin);
-        jPanelMainContent.add(panelManageAccount);        
-
+        jPanelMainContent.add(panelManageAccount);
+        jPanelMainContent.add(panelManageBorrow);
         clickedMenu(panelHome);
     }
 
@@ -438,10 +444,10 @@ public class HomeForm extends javax.swing.JFrame {
         panelHome.setVisible(false);
         panelManageBooks.setVisible(false);
         panelManagePublishers.setVisible(false);
-//        panelManageReader.setVisible(false);
+        panelManageReader.setVisible(false);
         panelManageBin.setVisible(false);
         panelManageAccount.setVisible(false);
-
+        panelManageBorrow.setVisible(false);
         panel.setVisible(true);
     }
 
@@ -483,7 +489,8 @@ public class HomeForm extends javax.swing.JFrame {
     private HomePanel panelHome;
     private ManageBooksPanel panelManageBooks;
     private ManagePublisherPanel panelManagePublishers;
-//    private ManageReaderPanel panelManageReader;
+    private ManageReaderPanel panelManageReader;
     private ManageBinPanel panelManageBin;
     private ManageAccount panelManageAccount;
+    private ManageBorrowPanel panelManageBorrow;
 }

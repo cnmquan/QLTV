@@ -18,9 +18,9 @@ import java.sql.SQLException;
  */
 public class DataProvider {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/QLTV";
+    private static final String URL = "jdbc:postgresql://localhost:5432/qltv";
     private static final String USERNAMEDB = "postgres";
-    private static final String PASSDB = "admin";
+    private static final String PASSDB = "talavua5122001";
 
     private static DataProvider instance;
     private DataProvider() {
