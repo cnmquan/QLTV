@@ -15,8 +15,12 @@ public class AccountStringConstant {
     public static final String ACCOUNT_NAME = "Chủ sở hữu";
     public static final String ACCOUNT_USERNAME = "Tài khoản";
     public static final String ACCOUNT_PWD = "Mật khẩu";
+    public static final String ACCOUNT_RE_PWD = "Xác thực mật khẩu";
     public static final String ACCOUNT_EMAIL = "Email";
     public static final String ACCOUNT_CONTACT = "Liên hệ";
+    public static final String ACCOUNT_QUESTION = "Câu hỏi bảo mật";
+    public static final String ACCOUNT_ANSWER = "Đáp án";
+    public static final String ACCOUNT_ROLE = "Vị trí";
     
     // Hint text trong text field UI
     public static final String ACCOUNT_INPUT_ID = "ID của bạn là";
@@ -25,13 +29,18 @@ public class AccountStringConstant {
     public static final String ACCOUNT_INPUT_PWD = "Nhập mật khẩu";
     public static final String ACCOUNT_INPUT_EMAIL = "Nhập email";
     public static final String ACCOUNT_INPUT_CONTACT = "Nhập số điện thoại";
+    public static final String ACCOUNT_INPUT_ANSWER = "Nhập đáp án";
     
     //Thông báo lỗi khi kiểm tra
      public static final String ACCOUNT_ERROR_NAME = "Vui lòng nhập tên thủ thư (Không dấu)";
     public static final String ACCOUNT_ERROR_USERNAME = "Vui lòng nhập tên tài khoản";
     public static final String ACCOUNT_ERROR_PWD = "Vui lòng nhập mật khẩu";
+    public static final String ACCOUNT_ERROR_RE_PWD = "Vui lòng nhập xác thực mật khẩu";
     public static final String ACCOUNT_ERROR_EMAIL = "Vui lòng nhập đúng định dạng email";
     public static final String ACCOUNT_ERROR_CONTACT = "Vui lòng nhập đúng định dạng số điện thoại";
+    public static final String ACCOUNT_ERROR_QUESTION = "Vui lòng chọn câu hỏi bảo mật";
+    public static final String ACCOUNT_ERROR_ANSWER = "Vui lòng nhập đáp án";
+    public static final String ACCOUNT_ERROR_NOT_MATCH = "Mật khẩu và xác thực mật khẩu không khớp";
     public static final String ACCOUNT_EXIST_EMAIL = "Email đã tồn tại";
     public static final String ACCOUNT_EXIST_USERNAME = "Tài khoản đã tồn tại";
         

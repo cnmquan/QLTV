@@ -27,9 +27,12 @@ public class AccountDAOImpl implements AccountDAO {
                 + "username, "
                 + "password, "
                 + "email, "
-                + "contact) "
+                + "contact,"
+                + "question,"
+                + "answer,"
+                + "role) "
                 + "VALUES "
-                + "(?,?,?,?,?);";
+                + "(?,?,?,?,?,?,?,?);";
 
         //Call function to execute insert query
         boolean result = DataProvider.ExecuteNonQuery(query, new Object[]{
@@ -37,8 +40,10 @@ public class AccountDAOImpl implements AccountDAO {
             account.getUsername(), 
             account.getPassword(), 
             account.getEmail(), 
-            account.getContact()
-        });
+            account.getContact(),
+            account.getQuestion(),
+            account.getAnswer(),
+            "LIBRARIAN"});
         if (result) {
             System.out.println("Insert successful");
         } else {
@@ -50,7 +55,7 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public ArrayList<AccountDTO> findAll() {
         //Declare variables
-        String query = "select * from \"public\".account;";
+        String query = "select * from \"public\".account order by id;";
         ArrayList<AccountDTO> lAccounts = new ArrayList<>();
 
         //Call function to execute select query
@@ -93,7 +98,10 @@ public class AccountDAOImpl implements AccountDAO {
                 + "username=?, "
                 + "password=?, "
                 + "email=?, "
-                + "contact=? "
+                + "contact=?, "
+                + "question=?, "
+                + "answer=?, "
+                + "role=? "
                 + "WHERE id = ?";
 
         //Call function to execute update query
@@ -103,9 +111,12 @@ public class AccountDAOImpl implements AccountDAO {
             account.getPassword(),
             account.getEmail(),
             account.getContact(),
+            account.getQuestion(),
+            account.getAnswer(),
+            account.getRole(),
             Integer.parseInt(account.getId())};
         boolean result = DataProvider.ExecuteNonQuery(query, parameter);
-        if (result) {
+        if (result ) {
             System.out.println("Update successful");
         } else {
             System.out.println("Update failed");
@@ -149,22 +160,6 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public boolean isExistEmail(String email) {
-        // Declare variable
-        String query = "select * from \"public\".account where email = '" + email + "'";
-        boolean isExist = false;
-
-        //Call function to execute select query
-        try {
-            ResultSet data = DataProvider.ExecuteQuery(query, null);
-            isExist = data.next();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return isExist;
-    }
-
-    @Override
     public AccountDTO login(String username, String pwd) {
         // Declare variable
         String query = "select * from \"public\".account where username = '" + username + "' and password = '" + pwd + "'";
@@ -189,7 +184,7 @@ public class AccountDAOImpl implements AccountDAO {
 
         //Call function to execute to delete query
         boolean result = DataProvider.ExecuteNonQuery(query, null);
-        if (result) {
+        if (result ) {
             System.out.println("Delete successful");
         } else {
             System.out.println("Delete failed");
@@ -206,7 +201,7 @@ public class AccountDAOImpl implements AccountDAO {
 
         //Call function to execute update query
         boolean result = DataProvider.ExecuteNonQuery(query, new Object[]{id});
-        if (result) {
+        if (result ) {
             System.out.println("Update successful");
         } else {
             System.out.println("Update failed");

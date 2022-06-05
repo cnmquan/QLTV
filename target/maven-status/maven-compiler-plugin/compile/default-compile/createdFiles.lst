@@ -22,6 +22,7 @@ View\Panel\ManageBooksPanel$18.class
 View\Panel\ManageBooksPanel$3.class
 View\Panel\ManagePublisherPanel$6.class
 View\Frame\SignupPage$6.class
+View\Frame\SignupPage$11.class
 View\Panel\ManagePublisherPanel$12.class
 View\Frame\HomeForm$7.class
 View\Panel\ManageBooksPanel$23.class
@@ -45,7 +46,6 @@ View\Panel\ManageBinPanel$1.class
 View\Panel\ManageBooksPanel$19.class
 View\Panel\ManagePublisherPanel$16.class
 View\Frame\SigninPage$1.class
-View\Panel\ManageReaderPanel.class
 View\Frame\SignupPage$9.class
 View\Panel\ManageBooksPanel$6.class
 View\Panel\ManagePublisherPanel$3.class
@@ -66,6 +66,7 @@ View\Frame\HomeForm$6.class
 View\Panel\ManageBooksPanel$5.class
 View\Panel\ManagePublisherPanel$4.class
 View\Panel\ManagePublisherPanel$10.class
+View\Frame\SignupPage$10.class
 View\Frame\SignupPage$8.class
 View\Panel\ManageBinPanel$7.class
 Base\DataProvider.class
@@ -76,13 +77,13 @@ constant\BinStringConstant.class
 View\Panel\ManageBooksPanel$4.class
 Adapter\DatabaseConnection.class
 View\Panel\ManageBooksPanel$17.class
+View\Frame\SignupPage$12.class
 View\Panel\ManageBooksPanel$24.class
 View\Frame\HomeForm$8.class
 View\Panel\ManageBooksPanel$14.class
 View\Panel\ManageAccount$10.class
 View\Frame\HomeForm$5.class
 View\Panel\ManageBinPanel.class
-View\Panel\AuthorListPanel.class
 View\Panel\ManagePublisherPanel$14.class
 View\Frame\SignupPage$4.class
 constant\TitleStringConstant.class
@@ -119,7 +120,7 @@ DTO\Publisher.class
 DAO\dao\AccountDAO.class
 View\Panel\HomePanel.class
 Adapter\PanelButtonMouseAdapter.class
-View\Panel\ManagePublisherPanel$19.class
+Validate\OnlyNum.class
 constant\GeneralStringConstant.class
 View\Panel\ManageBooksPanel$16.class
 View\Panel\ManageBooksPanel$28.class
@@ -129,6 +130,7 @@ View\Frame\HomeForm$2.class
 View\Frame\SigninPage.class
 View\Panel\ManagePublisherPanel$1.class
 View\Panel\ManageBooksPanel$8.class
+View\Frame\SignupPage$13.class
 View\Panel\ManageAccount$7.class
 DTO\AccountDTO.class
 View\Frame\SignupPage.class
