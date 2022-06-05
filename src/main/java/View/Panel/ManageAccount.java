@@ -288,7 +288,7 @@ public class ManageAccount extends javax.swing.JPanel {
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         txtUsername.setMargin(new java.awt.Insets(3, 6, 3, 6));
-        jPanel1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 300, 40));
+        jPanel1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 300, 40));
 
         txtName.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
@@ -301,14 +301,14 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtNameFocusLost(evt);
             }
         });
-        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 300, 40));
+        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 300, 40));
 
         txtID.setEditable(false);
         txtID.setBackground(new java.awt.Color(255, 255, 255));
         txtID.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         txtID.setMargin(new java.awt.Insets(3, 6, 3, 6));
-        jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 300, 40));
+        jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 300, 40));
 
         txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
@@ -321,7 +321,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtEmailFocusLost(evt);
             }
         });
-        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, 300, 40));
+        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 300, 40));
 
         txtContact.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtContact.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
@@ -334,7 +334,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtContactFocusLost(evt);
             }
         });
-        jPanel1.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 150, 300, 40));
+        jPanel1.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 150, 300, 40));
 
         txtAnswer.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtAnswer.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
@@ -347,7 +347,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 txtAnswerFocusLost(evt);
             }
         });
-        jPanel1.add(txtAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 760, 40));
+        jPanel1.add(txtAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 280, 760, 40));
 
         lblUsername.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         lblUsername.setForeground(new java.awt.Color(51, 51, 51));
@@ -362,7 +362,7 @@ public class ManageAccount extends javax.swing.JPanel {
         lblEmail.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         lblEmail.setForeground(new java.awt.Color(51, 51, 51));
         lblEmail.setText("Email");
-        jPanel1.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, -1, -1));
+        jPanel1.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, -1, -1));
 
         lblID.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         lblID.setForeground(new java.awt.Color(51, 51, 51));
@@ -372,30 +372,30 @@ public class ManageAccount extends javax.swing.JPanel {
         lblContact.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         lblContact.setForeground(new java.awt.Color(51, 51, 51));
         lblContact.setText("Số điện thoại");
-        jPanel1.add(lblContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, -1, -1));
+        jPanel1.add(lblContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 160, -1, -1));
 
         lblAnswer.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         lblAnswer.setForeground(new java.awt.Color(51, 51, 51));
         lblAnswer.setText("Đáp án");
-        jPanel1.add(lblAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, -1, -1));
+        jPanel1.add(lblAnswer, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
 
         lblQuestion.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         lblQuestion.setForeground(new java.awt.Color(51, 51, 51));
         lblQuestion.setText("Câu hỏi bảo mật");
-        jPanel1.add(lblQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+        jPanel1.add(lblQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
 
         lblRole.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         lblRole.setForeground(new java.awt.Color(51, 51, 51));
         lblRole.setText("Vị trí");
-        jPanel1.add(lblRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, -1, -1));
+        jPanel1.add(lblRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, -1, -1));
 
         cmbRole.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         cmbRole.setBorder(null);
-        jPanel1.add(cmbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 300, 40));
+        jPanel1.add(cmbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 300, 40));
 
         cmbQuestion.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         cmbQuestion.setBorder(null);
-        jPanel1.add(cmbQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 880, 40));
+        jPanel1.add(cmbQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 760, 40));
 
         jButtonInsert.setBackground(new java.awt.Color(102, 102, 255));
         jButtonInsert.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -407,7 +407,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonInsertActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 10, 150, 50));
+        jPanel1.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 10, 150, 50));
 
         jButtonUpdate.setBackground(new java.awt.Color(204, 204, 0));
         jButtonUpdate.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -419,7 +419,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonUpdateActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 70, 150, 50));
+        jPanel1.add(jButtonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 70, 150, 50));
 
         jButtonRecover.setBackground(new java.awt.Color(255, 102, 51));
         jButtonRecover.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -431,7 +431,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonRecoverActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonRecover, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 190, 150, 50));
+        jPanel1.add(jButtonRecover, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 190, 150, 50));
 
         jButtonDelete.setBackground(new java.awt.Color(255, 0, 51));
         jButtonDelete.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -443,9 +443,9 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonDeleteActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 130, 150, 50));
+        jPanel1.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 130, 150, 50));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1170, 360));
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1170, 330));
 
         tblAccountDetail.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tblAccountDetail.setModel(new javax.swing.table.DefaultTableModel(
@@ -467,7 +467,7 @@ public class ManageAccount extends javax.swing.JPanel {
 
         jScrollPanelTable.setViewportView(jScrollPane2);
 
-        jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 1120, 270));
+        jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 1120, 290));
 
         add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 740));
     }// </editor-fold>//GEN-END:initComponents

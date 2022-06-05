@@ -12,9 +12,13 @@ import View.Panel.ManageAccount;
 import View.Panel.ManageBinPanel;
 import View.Panel.ManageBooksPanel;
 import View.Panel.ManagePublisherPanel;
+import View.Panel.*;
 import constant.GeneralStringConstant;
 import constant.TitleStringConstant;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -29,7 +33,7 @@ public class HomeForm extends javax.swing.JFrame {
     /**
      * Creates new form HomeForm
      */
-    public HomeForm() {
+    public HomeForm() throws SQLException {
         initComponents();
         myInitComponents();
         addPanelToHomePage();
@@ -41,7 +45,11 @@ public class HomeForm extends javax.swing.JFrame {
 
         this.account = account;
         myInitComponents();
-        addPanelToHomePage();
+        try {
+            addPanelToHomePage();
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setLocationRelativeTo(null);
         jLabelGreeting.setText("Xin chào, " + account.getName());
     }
@@ -365,7 +373,7 @@ public class HomeForm extends javax.swing.JFrame {
         // TODO add your handling code here:
        jPanelMainContent.remove(panelManageAccount);
         panelManageAccount = new ManageAccount(account,true);
-        jPanelMainContent.add(panelManageAccount);  
+        jPanelMainContent.add(panelManageAccount);
         clickedMenu(panelManageAccount);
     }//GEN-LAST:event_btnInfoActionPerformed
 
@@ -388,7 +396,7 @@ public class HomeForm extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -410,7 +418,11 @@ public class HomeForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new HomeForm().setVisible(true);
+            try {
+                new HomeForm().setVisible(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
@@ -437,6 +449,7 @@ public class HomeForm extends javax.swing.JFrame {
             }
         });
 
+
         jPanelLMSDashBoard.addMouseListener(new PanelButtonMouseAdapter(jPanelLMSDashBoard, 0) {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -455,10 +468,9 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelManageReader.addMouseListener(new PanelButtonMouseAdapter(jPanelManageReader, 0) {
             @Override
             public void mouseClicked(MouseEvent e) {
-//                clickedMenu(panelManageReader);
+                clickedMenu(panelManageReader);
             }
         });
-
         jPanelManageAccount.addMouseListener(new PanelButtonMouseAdapter(jPanelManageAccount, 0) {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -476,7 +488,12 @@ public class HomeForm extends javax.swing.JFrame {
 
         jPanelIsueBook.addMouseListener(new PanelButtonMouseAdapter(jPanelIsueBook, 0));
 
-        jPanelReturnBook.addMouseListener(new PanelButtonMouseAdapter(jPanelReturnBook, 0));
+        jPanelReturnBook.addMouseListener(new PanelButtonMouseAdapter(jPanelReturnBook, 0){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                clickedMenu(panelManageBorrow);
+            }
+        });
 
         jPanelViewRecord.addMouseListener(new PanelButtonMouseAdapter(jPanelViewRecord, 0));
 
@@ -494,23 +511,27 @@ public class HomeForm extends javax.swing.JFrame {
 
     }
 
-    private void addPanelToHomePage() {
+    private void addPanelToHomePage() throws SQLException {
 
         panelHome = new HomePanel();
         panelManageBooks = new ManageBooksPanel();
         panelManagePublishers = new ManagePublisherPanel();
-//        panelManageReader = new ManageReaderPanel();
+        panelManageReader = new ManageReaderPanel();
         panelManageBin = new ManageBinPanel();
+        panelManageBorrow = new ManageBorrowPanel();
+
         panelManageAccount = new ManageAccount(account,false);
         panelChanegPwd = new ChangePwdPanel(account);
 
         jPanelMainContent.add(panelHome);
         jPanelMainContent.add(panelManageBooks);
         jPanelMainContent.add(panelManagePublishers);
-//        jPanelMainContent.add(panelManageReader);
+        jPanelMainContent.add(panelManageReader);
         jPanelMainContent.add(panelManageBin);
         jPanelMainContent.add(panelManageAccount);
-        jPanelMainContent.add(panelChanegPwd);        
+        jPanelMainContent.add(panelManageBorrow);
+        jPanelMainContent.add(panelManageAccount);
+        jPanelMainContent.add(panelChanegPwd);
 
         clickedMenu(panelHome);
     }
@@ -519,11 +540,12 @@ public class HomeForm extends javax.swing.JFrame {
         panelHome.setVisible(false);
         panelManageBooks.setVisible(false);
         panelManagePublishers.setVisible(false);
-//        panelManageReader.setVisible(false);
+        panelManageReader.setVisible(false);
         panelManageBin.setVisible(false);
         panelManageAccount.setVisible(false);
         panelChanegPwd.setVisible(false);
 
+        panelManageBorrow.setVisible(false);
         panel.setVisible(true);
     }
 
@@ -570,8 +592,9 @@ public class HomeForm extends javax.swing.JFrame {
     private HomePanel panelHome;
     private ManageBooksPanel panelManageBooks;
     private ManagePublisherPanel panelManagePublishers;
-//    private ManageReaderPanel panelManageReader;
+    private ManageReaderPanel panelManageReader;
     private ManageBinPanel panelManageBin;
     private ManageAccount panelManageAccount;
+    private ManageBorrowPanel panelManageBorrow;
     private ChangePwdPanel panelChanegPwd;
 }

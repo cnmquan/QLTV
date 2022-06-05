@@ -4,10 +4,7 @@
  */
 package Base;
 
-import DAO.dao_impl.AccountDAOImpl;
-import DAO.dao_impl.BinDaoImp;
-import DAO.dao_impl.BookDaoImp;
-import DAO.dao_impl.PublisherDaoImp;
+import DAO.dao_impl.*;
 
 /**
  *
@@ -33,4 +30,7 @@ public class DIContainer {
     public static BinDaoImp getBinDao(){
         return new BinDaoImp();
     }
+
+    public static ReaderDaoImp getReaderDao(){return new ReaderDaoImp();}
+    public static BorrowDaoImp getBorrowDao(){return new BorrowDaoImp();}
 }

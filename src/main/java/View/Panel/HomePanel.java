@@ -6,11 +6,15 @@ package View.Panel;
 
 import Base.DIContainer;
 import DAO.dao_impl.BookDaoImp;
+import DAO.dao_impl.BorrowDaoImp;
+import DAO.dao_impl.ReaderDaoImp;
 import DTO.Book;
 import constant.DatabaseStringConstant;
 import constant.HomeStringConstant;
+
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JScrollPane;
@@ -18,23 +22,26 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
  * @author Admin
  */
 public class HomePanel extends javax.swing.JPanel {
 
-    
+
     /**
      * Creates new form HomePanel
      */
     public HomePanel() {
         this.bookDaoImp = DIContainer.getBookDao();
+        this.readerDaoImp = DIContainer.getReaderDao();
+        this.borrowDaoImp = DIContainer.getBorrowDao();
         initComponents();
         myInitComponents();
         setBounds(0, 0, 1160, 740);
     }
 
     private final BookDaoImp bookDaoImp;
+    private final ReaderDaoImp readerDaoImp;
+    private final BorrowDaoImp borrowDaoImp;
     private ArrayList<Book> listBook;
     private Vector vctBookHeader;
     private Vector vctBookData;
@@ -42,6 +49,8 @@ public class HomePanel extends javax.swing.JPanel {
     public void myInitComponents() {
         setLableText();
         setBookValue();
+        setReaderValue();
+        setBorrowValue();
         setDefaultTable();
         getVectorBookData();
         showTableBookData(this.vctBookData);
@@ -59,7 +68,22 @@ public class HomePanel extends javax.swing.JPanel {
     private void setBookValue() {
         int numBook = bookDaoImp.getSumBook();
         jLabelNoOfBook.setText(String.valueOf(numBook));
-                
+
+    }
+
+    private void setReaderValue() {
+        int numReader = readerDaoImp.getAll().size();
+        jLabelNoOfReader.setText(String.valueOf(numReader));
+    }
+
+    private void setBorrowValue() {
+        try {
+            int numBorrow = borrowDaoImp.getAll().size();
+            jLabelDefautlerList.setText(String.valueOf(numBorrow));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void setDefaultTable() {
@@ -83,7 +107,7 @@ public class HomePanel extends javax.swing.JPanel {
 
         jTableBookDetail.setBackground(Color.WHITE);
         jTableBookDetail.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        jTableBookDetail.setFillsViewportHeight(true);       
+        jTableBookDetail.setFillsViewportHeight(true);
     }
 
     private void getVectorBookData() {
@@ -238,15 +262,15 @@ public class HomePanel extends javax.swing.JPanel {
 
         jTableBookDetail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableBookDetail.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
+                new Object[][]{
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String[]{
+                        "Title 1", "Title 2", "Title 3", "Title 4"
+                }
         ));
         jTableBookDetail.setRowHeight(40);
         jScrollPaneBookDetail.setViewportView(jTableBookDetail);
@@ -265,15 +289,15 @@ public class HomePanel extends javax.swing.JPanel {
         jPanelReaderDetail.add(jLabelReaderDetailsTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 190, -1));
 
         jTableReaderDetail.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
+                new Object[][]{
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String[]{
+                        "Title 1", "Title 2", "Title 3", "Title 4"
+                }
         ));
         jScrollPaneReaderDetail.setViewportView(jTableReaderDetail);
 
