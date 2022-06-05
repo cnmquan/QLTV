@@ -56,7 +56,7 @@ public class SigninPage extends javax.swing.JFrame {
         return true;
     }
 
-    public void login() {
+    public void login() throws SQLException {
         String username = txtUsername.getText();
         String pwd = txtPassword.getText();
         String hashPass = DIContainer.getAccountDAO().hashPassword(pwd);
@@ -206,7 +206,11 @@ public class SigninPage extends javax.swing.JFrame {
         btnSignIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSignIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignInActionPerformed(evt);
+                try {
+                    btnSignInActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jPanel2.add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 470, 320, 70));
@@ -253,7 +257,7 @@ public class SigninPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtPasswordFocusLost
 
-    private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
+    private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_btnSignInActionPerformed
         // TODO add your handling code here:
         if (validateInput())
             login();

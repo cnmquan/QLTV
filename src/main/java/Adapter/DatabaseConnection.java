@@ -15,9 +15,9 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static DatabaseConnection instance;
     
-    private String url="jdbc:postgresql://localhost:5432/QLTV";
+    private String url="jdbc:postgresql://localhost:5432/qltv";
     private String login="postgres";
-    private String pass="admin";
+    private String pass="talavua5122001";
     
     private DatabaseConnection(){
         try {
