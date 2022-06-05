@@ -29,13 +29,19 @@ public class SigninPage extends javax.swing.JFrame {
 
     private void initUI() {
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
-        txtPassword.setText(AccountStringConstant.ACCOUNT_INPUT_PWD);
+        txtPassword.setEchoChar('*');
+        
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblPassword.setText(AccountStringConstant.ACCOUNT_PWD);
         lblSignIn.setText(AuthenStringConstant.SIGN_IN);
+
         btnSignIn.setText(AuthenStringConstant.SIGN_IN);
         btnSignUp.setText(AuthenStringConstant.SIGN_UP);
+
+        btnShowPass.setVisible(false);
+        btnHidePass.setVisible(true);        
     }
+
     /**
      * This function use for validate input of user
      *
@@ -43,7 +49,7 @@ public class SigninPage extends javax.swing.JFrame {
      */
     public boolean validateInput() {
         String username = txtUsername.getText();
-        String pwd = txtPassword.getText();
+        String pwd = new String(txtPassword.getPassword());
 
         if (username.equals("")) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_USERNAME);
@@ -58,10 +64,9 @@ public class SigninPage extends javax.swing.JFrame {
 
     public void login() {
         String username = txtUsername.getText();
-        String pwd = txtPassword.getText();
-        String hashPass = DIContainer.getAccountDAO().hashPassword(pwd);
-        System.out.println("hash pass: "+hashPass);
-        AccountDTO account = DIContainer.getAccountDAO().login(username, hashPass);
+        String pwd = new String(txtPassword.getPassword());
+        
+        AccountDTO account = DIContainer.getAccountDAO().login(username, pwd);
         if (account != null) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_IN_SUCCESS);
             HomeForm home = new HomeForm(account);
@@ -93,9 +98,12 @@ public class SigninPage extends javax.swing.JFrame {
         lblPassword = new javax.swing.JLabel();
         lblSignIn = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JTextField();
         btnSignUp = new javax.swing.JButton();
         btnSignIn = new javax.swing.JButton();
+        btnHidePass = new javax.swing.JLabel();
+        btnShowPass = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -107,15 +115,15 @@ public class SigninPage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 255));
         jLabel2.setText("Advance Library");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 50, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/library-3.png.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 840, 620));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 840, 620));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 51, 51));
         jLabel6.setText("Chào mừng ");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, 750));
 
@@ -171,29 +179,15 @@ public class SigninPage extends javax.swing.JFrame {
         });
         jPanel2.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 350, 40));
 
-        txtPassword.setBackground(new java.awt.Color(102, 102, 255));
-        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        txtPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
-        txtPassword.setMargin(new java.awt.Insets(3, 6, 3, 6));
-        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtPasswordFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtPasswordFocusLost(evt);
-            }
-        });
-        jPanel2.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 350, 40));
-
         btnSignUp.setBackground(new java.awt.Color(255, 51, 51));
         btnSignUp.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnSignUp.setForeground(new java.awt.Color(255, 255, 255));
         btnSignUp.setText("Đăng ký");
         btnSignUp.setBorder(null);
         btnSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSignUp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignUpActionPerformed(evt);
+        btnSignUp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSignUpMouseClicked(evt);
             }
         });
         jPanel2.add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 600, 320, 70));
@@ -204,12 +198,46 @@ public class SigninPage extends javax.swing.JFrame {
         btnSignIn.setText("Đăng nhập");
         btnSignIn.setBorder(null);
         btnSignIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSignIn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignInActionPerformed(evt);
+        btnSignIn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSignInMouseClicked(evt);
             }
         });
         jPanel2.add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 470, 320, 70));
+
+        btnHidePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-closed-eye-32.png"))); // NOI18N
+        btnHidePass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHidePass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHidePassMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnHidePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, -1, -1));
+
+        btnShowPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-eye-32.png"))); // NOI18N
+        btnShowPass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnShowPass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnShowPassMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnShowPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, -1, -1));
+
+        txtPassword.setBackground(new java.awt.Color(102, 102, 255));
+        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txtPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
+        jPanel2.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 350, 40));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Quên mật khẩu");
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 340, -1, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 0, 530, 750));
 
@@ -237,34 +265,40 @@ public class SigninPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtUsernameFocusLost
 
-    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
+    private void btnShowPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowPassMouseClicked
         // TODO add your handling code here:
-        String password = txtPassword.getText();
-        if (password.equals(AccountStringConstant.ACCOUNT_INPUT_PWD)) {
-            txtPassword.setText(GeneralStringConstant.GENERAL_EMPTY);
-        }
-    }//GEN-LAST:event_txtPasswordFocusGained
+        btnShowPass.setVisible(false);
+        btnHidePass.setVisible(true);
 
-    private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
-        // TODO add your handling code here:
-        String password = txtPassword.getText();
-        if (password.equals(GeneralStringConstant.GENERAL_EMPTY)) {
-            txtPassword.setText(AccountStringConstant.ACCOUNT_INPUT_PWD);
-        }
-    }//GEN-LAST:event_txtPasswordFocusLost
+        txtPassword.setEchoChar('*');
+    }//GEN-LAST:event_btnShowPassMouseClicked
 
-    private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
+    private void btnHidePassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHidePassMouseClicked
+        btnShowPass.setVisible(true);
+        btnHidePass.setVisible(false);
+
+        txtPassword.setEchoChar((char) 0);
+    }//GEN-LAST:event_btnHidePassMouseClicked
+
+    private void btnSignInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignInMouseClicked
         // TODO add your handling code here:
         if (validateInput())
             login();
-    }//GEN-LAST:event_btnSignInActionPerformed
+    }//GEN-LAST:event_btnSignInMouseClicked
 
-    private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
+    private void btnSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignUpMouseClicked
         // TODO add your handling code here:
         SignupPage signUp = new SignupPage();
         signUp.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnSignUpActionPerformed
+    }//GEN-LAST:event_btnSignUpMouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        // TODO add your handling code here:
+        ForgotPwdPage forgotPage = new ForgotPwdPage();
+        forgotPage.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseClicked
 
     /**
      * @param args the command line arguments
@@ -306,6 +340,8 @@ public class SigninPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnExit;
+    private javax.swing.JLabel btnHidePass;
+    private javax.swing.JLabel btnShowPass;
     private javax.swing.JButton btnSignIn;
     private javax.swing.JButton btnSignUp;
     private javax.swing.JLabel jLabel1;
@@ -313,14 +349,14 @@ public class SigninPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblSignIn;
     private javax.swing.JLabel lblUsername;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    
 }

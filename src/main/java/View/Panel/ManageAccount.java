@@ -28,49 +28,49 @@ import javax.swing.text.PlainDocument;
  * @email Asus
  */
 public class ManageAccount extends javax.swing.JPanel {
-
+    
     AccountDTO account = null;
 
     /**
      * Creates new form ManageAccount
+     *
      * @param account Account of current user
      */
-    public ManageAccount(AccountDTO account) {
+    public ManageAccount(AccountDTO account, boolean isShowMyInfo) {
         initComponents();
-
+        
         this.account = account;
-        setBounds(0, 0, 1288, 800);
+        setBounds(0, 0, 1160, 740);
         setDefaultTable();
         setAccountDetailToTable();
         initUI();
+        if (isShowMyInfo) {
+            setDataToField(account.getId());
+            showFunction(account.getId());
+        }        
     }
-
+    
     private void initUI() {
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         txtContact.setText(AccountStringConstant.ACCOUNT_INPUT_CONTACT);
         txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
         txtName.setText(AccountStringConstant.ACCOUNT_INPUT_NAME);
         txtID.setText(AccountStringConstant.ACCOUNT_INPUT_ID);
-
+        
         lblID.setText(AccountStringConstant.ACCOUNT_ID);
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblName.setText(AccountStringConstant.ACCOUNT_NAME);
         lblContact.setText(AccountStringConstant.ACCOUNT_CONTACT);
         lblEmail.setText(AccountStringConstant.ACCOUNT_EMAIL);
+        lblQuestion.setText(AccountStringConstant.ACCOUNT_QUESTION);
+        lblAnswer.setText(AccountStringConstant.ACCOUNT_ANSWER);
         
         cmbQuestion.setModel(new DefaultComboBoxModel(AuthenStringConstant.QUESTIONS));
-        cmbRole.setModel(new DefaultComboBoxModel(AuthenStringConstant.ROLES));        
+        cmbRole.setModel(new DefaultComboBoxModel(AuthenStringConstant.ROLES));
         
         PlainDocument doc = (PlainDocument) txtContact.getDocument();
         doc.setDocumentFilter(new OnlyNum());
         jButtonInsert.setVisible(false);
-    }
-
-    /**
-     * method to insert values into account table
-     */
-    public void insertAccount() {
-        
     }
 
     /**
@@ -83,7 +83,7 @@ public class ManageAccount extends javax.swing.JPanel {
         String username = txtUsername.getText();
         String email = txtEmail.getText();
         String contact = txtContact.getText();
-
+        
         if (Validator.inputString("[a-zA-Z]+([ '-][a-zA-Z]+)*", name)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_NAME);
             return false;
@@ -102,11 +102,11 @@ public class ManageAccount extends javax.swing.JPanel {
         }
         return true;
     }
-
+    
     public boolean checkExistUsername() {
         String username = txtUsername.getText();
-        boolean isExist ;
-
+        boolean isExist;
+        
         if (!username.equals("") && DIContainer.getAccountDAO().isExistUsername(username)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_USERNAME);
             isExist = true;
@@ -115,15 +115,15 @@ public class ManageAccount extends javax.swing.JPanel {
         }
         return isExist;
     }
-
+    
     private void setDefaultTable() {
         tblAccountDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
+        
         jScrollPanelTable.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
+        
         tblAccountDetail.setBackground(Color.WHITE);
         tblAccountDetail.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         tblAccountDetail.setFillsViewportHeight(true);
@@ -131,11 +131,14 @@ public class ManageAccount extends javax.swing.JPanel {
         //Add column header
         DefaultTableModel model = (DefaultTableModel) tblAccountDetail.getModel();
         String[] titles
-                = {AccountStringConstant.ACCOUNT_ID, AccountStringConstant.ACCOUNT_NAME, AccountStringConstant.ACCOUNT_USERNAME, AccountStringConstant.ACCOUNT_EMAIL, AccountStringConstant.ACCOUNT_CONTACT,AccountStringConstant.ACCOUNT_ROLE};
+                = {AccountStringConstant.ACCOUNT_ID, AccountStringConstant.ACCOUNT_NAME, AccountStringConstant.ACCOUNT_USERNAME, AccountStringConstant.ACCOUNT_EMAIL, AccountStringConstant.ACCOUNT_CONTACT, AccountStringConstant.ACCOUNT_ROLE};
         for (String title : titles) {
             model.addColumn(title);
         }
+        
         model.setColumnCount(titles.length);
+        tblAccountDetail.setDefaultEditor(Object.class, null);
+        tblAccountDetail.setRowSelectionAllowed(true);
     }
 
     /**
@@ -144,17 +147,17 @@ public class ManageAccount extends javax.swing.JPanel {
     private void setAccountDetailToTable() {
         DefaultTableModel model = (DefaultTableModel) tblAccountDetail.getModel();
         ArrayList<AccountDTO> lAccounts = new ArrayList<AccountDTO>();
-
+        
         model.setRowCount(0);
         lAccounts = DIContainer.getAccountDAO().findAll();
         lAccounts.forEach((AccountDTO account) -> {
-            Object[] object = {account.getId(), account.getName(), account.getUsername(), account.getEmail(), account.getContact(),account.getRole()};
+            Object[] object = {account.getId(), account.getName(), account.getUsername(), account.getEmail(), account.getContact(), account.getRole()};
             model.addRow(object);
         });
     }
     
-    private void setDataToField(String id){
-        AccountDTO currentAcc=DIContainer.getAccountDAO().findByID(id);
+    private void setDataToField(String id) {
+        AccountDTO currentAcc = DIContainer.getAccountDAO().findByID(id);
         
         txtID.setText(currentAcc.getId());
         txtName.setText(currentAcc.getName());
@@ -165,9 +168,20 @@ public class ManageAccount extends javax.swing.JPanel {
         
         cmbRole.setSelectedItem(currentAcc.getRole());
         cmbQuestion.setSelectedItem(currentAcc.getQuestion());
+        
+        
     }
     
-    private void showField(){        
+    private void showFunction(String id) {
+        if (account.getRole().equals("ADMIN")) {
+            if (account.getId().equals(id)) {
+                cmbRole.setEnabled(false);
+                jButtonDelete.setVisible(false);
+            } else {
+                cmbRole.setEnabled(true);
+                jButtonDelete.setVisible(true);
+            }
+        }
         if (!account.getRole().equals("ADMIN")) {
             jButtonDelete.setVisible(false);
             jButtonRecover.setVisible(false);
@@ -183,32 +197,32 @@ public class ManageAccount extends javax.swing.JPanel {
                 jButtonUpdate.setVisible(true);
                 
                 lblQuestion.setVisible(true);
-            lblAnswer.setVisible(true);
-            cmbQuestion.setVisible(true);
-            txtAnswer.setVisible(true);
+                lblAnswer.setVisible(true);
+                cmbQuestion.setVisible(true);
+                txtAnswer.setVisible(true);
             }
         }
     }
     
-    private void updateAccount(){
+    private void updateAccount() {
         String id = txtID.getText();
         String name = txtName.getText();
         String username = txtUsername.getText();
         String email = txtEmail.getText();
         String contact = txtContact.getText();
-        String question=(String) cmbQuestion.getSelectedItem();
-        String answer=txtAnswer.getText();
-        String role=(String) cmbRole.getSelectedItem();
+        String question = (String) cmbQuestion.getSelectedItem();
+        String answer = txtAnswer.getText();
+        String role = (String) cmbRole.getSelectedItem();
         
         AccountDTO oldAccount = DIContainer.getAccountDAO().findByID(id);
-        AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact,question,answer,role);
+        AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact, question, answer, role);
         boolean result = DIContainer.getAccountDAO().update(newAccount);
         if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_SUCCESS);
             setAccountDetailToTable();
         } else {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_FAIL);
-        }      
+        }
     }
 
     /**
@@ -294,14 +308,6 @@ public class ManageAccount extends javax.swing.JPanel {
         txtID.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         txtID.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(102, 102, 255)));
         txtID.setMargin(new java.awt.Insets(3, 6, 3, 6));
-        txtID.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtIDFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtIDFocusLost(evt);
-            }
-        });
         jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 300, 40));
 
         txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
@@ -482,22 +488,6 @@ public class ManageAccount extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txtNameFocusLost
 
-    private void txtIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDFocusGained
-        // TODO add your handling code here:
-        String password = txtID.getText();
-        if (password.equals(AccountStringConstant.ACCOUNT_INPUT_PWD)) {
-            txtID.setText(GeneralStringConstant.GENERAL_EMPTY);
-        }
-    }//GEN-LAST:event_txtIDFocusGained
-
-    private void txtIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDFocusLost
-        // TODO add your handling code here:
-        String password = txtID.getText();
-        if (password.equals(GeneralStringConstant.GENERAL_EMPTY)) {
-            txtID.setText(AccountStringConstant.ACCOUNT_INPUT_PWD);
-        }
-    }//GEN-LAST:event_txtIDFocusLost
-
     private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
         // TODO add your handling code here:
         String email = txtEmail.getText();
@@ -532,8 +522,7 @@ public class ManageAccount extends javax.swing.JPanel {
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
         // TODO add your handling code here:
-        if (validateInput() && !checkExistUsername() )
-            insertAccount();
+        
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
@@ -547,7 +536,7 @@ public class ManageAccount extends javax.swing.JPanel {
         // TODO add your handling code here:
         String id = txtID.getText();
         boolean result = DIContainer.getAccountDAO().recoverAccount(id);
-        if (result ) {
+        if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_RECOVER_SUCCESS);
         } else {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_RECOVER_FAIL);
@@ -557,7 +546,7 @@ public class ManageAccount extends javax.swing.JPanel {
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         String id = txtID.getText();
         boolean result = DIContainer.getAccountDAO().delete(id);
-        if (result ) {
+        if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_SUCCESS);
             setAccountDetailToTable();
         } else {
@@ -569,12 +558,10 @@ public class ManageAccount extends javax.swing.JPanel {
         // TODO add your handling code here:
         int rowNo = tblAccountDetail.getSelectedRow();
         TableModel model = tblAccountDetail.getModel();
-        String id=model.getValueAt(rowNo, 0).toString();
+        String id = model.getValueAt(rowNo, 0).toString();
         
-        if (account.getId().equals(id))
-            cmbRole.setEnabled(false);
-        setDataToField(id);  
-        showField();
+        setDataToField(id);
+        showFunction(id);
     }//GEN-LAST:event_tblAccountDetailMouseClicked
 
     private void txtAnswerFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAnswerFocusGained

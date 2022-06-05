@@ -4,15 +4,18 @@
  */
 package DAO.dao_impl;
 
+import Base.DIContainer;
 import Base.DataProvider;
 import DAO.dao.AccountDAO;
 import DTO.AccountDTO;
+import constant.AuthenStringConstant;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 /**
  *
  * @author Asus
@@ -33,13 +36,14 @@ public class AccountDAOImpl implements AccountDAO {
                 + "role) "
                 + "VALUES "
                 + "(?,?,?,?,?,?,?,?);";
+        String hashPass = DIContainer.getAccountDAO().hashPassword(account.getPassword());
 
         //Call function to execute insert query
         boolean result = DataProvider.ExecuteNonQuery(query, new Object[]{
-            account.getName(), 
-            account.getUsername(), 
-            account.getPassword(), 
-            account.getEmail(), 
+            account.getName(),
+            account.getUsername(),
+            hashPass,
+            account.getEmail(),
             account.getContact(),
             account.getQuestion(),
             account.getAnswer(),
@@ -103,12 +107,13 @@ public class AccountDAOImpl implements AccountDAO {
                 + "answer=?, "
                 + "role=? "
                 + "WHERE id = ?";
+        String hashPass = DIContainer.getAccountDAO().hashPassword(account.getPassword());
 
         //Call function to execute update query
         Object[] parameter = new Object[]{
             account.getName(),
             account.getUsername(),
-            account.getPassword(),
+            hashPass,
             account.getEmail(),
             account.getContact(),
             account.getQuestion(),
@@ -116,7 +121,7 @@ public class AccountDAOImpl implements AccountDAO {
             account.getRole(),
             Integer.parseInt(account.getId())};
         boolean result = DataProvider.ExecuteNonQuery(query, parameter);
-        if (result ) {
+        if (result) {
             System.out.println("Update successful");
         } else {
             System.out.println("Update failed");
@@ -162,7 +167,8 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public AccountDTO login(String username, String pwd) {
         // Declare variable
-        String query = "select * from \"public\".account where username = '" + username + "' and password = '" + pwd + "'";
+        String hashPass = DIContainer.getAccountDAO().hashPassword(pwd);
+        String query = "select * from \"public\".account where username = '" + username + "' and password = '" + hashPass + "'";
         AccountDTO account = null;
 
         //Call function to execute select query
@@ -184,7 +190,7 @@ public class AccountDAOImpl implements AccountDAO {
 
         //Call function to execute to delete query
         boolean result = DataProvider.ExecuteNonQuery(query, null);
-        if (result ) {
+        if (result) {
             System.out.println("Delete successful");
         } else {
             System.out.println("Delete failed");
@@ -195,13 +201,15 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public boolean recoverAccount(String id) {
         //Declare query
+        String defaultPwd = AuthenStringConstant.DEFAULT_PWD;
+        String hashPass = DIContainer.getAccountDAO().hashPassword(defaultPwd);
         String query = "UPDATE  \"public\".account SET "
-                + "password='123456' "
+                + "password=? "
                 + "WHERE id =?;";
 
         //Call function to execute update query
-        boolean result = DataProvider.ExecuteNonQuery(query, new Object[]{id});
-        if (result ) {
+        boolean result = DataProvider.ExecuteNonQuery(query, new Object[]{hashPass, Integer.parseInt(id)});
+        if (result) {
             System.out.println("Update successful");
         } else {
             System.out.println("Update failed");
@@ -234,4 +242,48 @@ public class AccountDAOImpl implements AccountDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public boolean changePass(String username, String pwd)  {
+        //Declare query
+        String hashPass = DIContainer.getAccountDAO().hashPassword(pwd);
+        String query = "UPDATE  \"public\".account SET "
+                + "password=? "
+                + "WHERE username =?;";
+
+        //Call function to execute update query
+        boolean result = DataProvider.ExecuteNonQuery(query, new Object[]{hashPass, username});
+        if (result) {
+            System.out.println("Update successful");
+        } else {
+            System.out.println("Update failed");
+        }
+        return result;
+    }
+
+    @Override
+    public AccountDTO findByUsername(String username) {
+        // Declare variable
+        String query = "select * from \"public\".account where username = '" + username + "'";
+        AccountDTO account = null;
+
+        //Call function to execute select query
+        try {
+            ResultSet data = DataProvider.ExecuteQuery(query, null);
+            while (data.next()) {
+                account = new AccountDTO(data);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return account;
+    }
+
+    @Override
+    public boolean validatePass(String oldPwd, String newPwd) {
+        String hashNewPass = DIContainer.getAccountDAO().hashPassword(newPwd);
+        return hashNewPass == null ? oldPwd == null : hashNewPass.equals(oldPwd);
+    }
+    
+    
 }
