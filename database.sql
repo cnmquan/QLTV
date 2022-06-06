@@ -109,11 +109,35 @@ CREATE TABLE public.users (
 
 ALTER TABLE public.users OWNER TO postgres;
 
+CREATE TABLE public.borrows (
+    borrow_id character varying NOT NULL,
+    reader_id character varying NOT NULL,
+    book_id character varying NOT NULL,
+    quantity integer DEFAULT 0 NOT NULL,
+    borrow_date date NOT NULL,
+    return_date date,
+    borrow_is_deleted boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.borrows OWNER TO postgres;
+
+CREATE TABLE public.readers (
+    reader_id character varying NOT NULL,
+    reader_name character varying NOT NULL,
+    reader_phone_number character varying NOT NULL,
+    reader_is_deleted boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.readers OWNER TO postgres;
 --
 -- TOC entry 3326 (class 0 OID 16538)
 -- Dependencies: 209
 -- Data for Name: account; Type: TABLE DATA; Schema: public; Owner: postgres
 --
+
+INSERT INTO public.readers (reader_id, reader_name, reader_phone_number, reader_is_deleted) VALUES ('rd001', 'nguyen doan thinh', '0328384454', false);
 
 INSERT INTO public.account (id, name, username, password, email, contact, question, answer, role) OVERRIDING SYSTEM VALUE VALUES (10000005, 'Phuc', '19522038', 'ea1c6a97e00545178ef6e43110820906', '19522038@gm.uit.edu.vn', '0123456789', 'Họ và tên của người anh họ lớn nhất của bạn là gì?', 'Nguyễn Duy Phúc', 'LIBRARIAN');
 INSERT INTO public.account (id, name, username, password, email, contact, question, answer, role) OVERRIDING SYSTEM VALUE VALUES (10000006, 'Thinh', '19522281', 'f19a694f06ff7045d64fcb3057b269dc', '19522281@gm.uit.edu.vn', '0123456789', 'Họ và tên của người anh họ lớn nhất của bạn là gì?', 'Nguyễn Duy Phúc', 'LIBRARIAN');
@@ -161,7 +185,10 @@ INSERT INTO public.publishers (publisher_id, publisher_name, publisher_phone_num
 INSERT INTO public.publishers (publisher_id, publisher_name, publisher_phone_number, publisher_address, publisher_is_deleted) VALUES ('PUB12', 'NXB Nhan Van', '0123456789', 'Ha Noi, Viet Nam', false);
 INSERT INTO public.publishers (publisher_id, publisher_name, publisher_phone_number, publisher_address, publisher_is_deleted) VALUES ('PUB11', 'NXB IPM', '0123456789', 'Ha Noi, Viet Nam', false);
 
-
+INSERT INTO public.borrows (borrow_id, reader_id, book_id, quantity, borrow_date, return_date, borrow_is_deleted) VALUES ('BR02', 'rd001', 'BK09', 4, '2022-02-22', '2022-02-22', false);
+INSERT INTO public.borrows (borrow_id, reader_id, book_id, quantity, borrow_date, return_date, borrow_is_deleted) VALUES ('BR04', 'rd001', 'BK06', 5, '2001-12-05', '2012-08-12', false);
+INSERT INTO public.borrows (borrow_id, reader_id, book_id, quantity, borrow_date, return_date, borrow_is_deleted) VALUES ('BR03', 'rd001', 'BK01', 5, '2012-02-22', '2012-02-22', false);
+INSERT INTO public.borrows (borrow_id, reader_id, book_id, quantity, borrow_date, return_date, borrow_is_deleted) VALUES ('BR08', 'rd001', 'BK01', 10, '2023-02-22', '2023-02-24', false);
 --
 -- TOC entry 3330 (class 0 OID 16552)
 -- Dependencies: 213
@@ -223,7 +250,11 @@ ALTER TABLE ONLY public.account
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY ("userID");
 
+ALTER TABLE ONLY public.readers
+    ADD CONSTRAINT readers_pkey PRIMARY KEY (reader_id);
 
+ALTER TABLE ONLY public.borrows
+    ADD CONSTRAINT borrows_pkey PRIMARY KEY (borrow_id);
 -- Completed on 2022-06-05 01:47:34
 
 --
