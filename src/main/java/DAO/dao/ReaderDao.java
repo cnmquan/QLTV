@@ -4,7 +4,7 @@ import Base.iCRUD;
 import Base.iDeleteHandler;
 import Base.iGetTitle;
 import Base.iValidation;
-import model.Reader;
+import DTO.Reader;
 
 public interface ReaderDao extends iCRUD<Reader>, iGetTitle, iValidation<Reader>, iDeleteHandler<Reader> {
 

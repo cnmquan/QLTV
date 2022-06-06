@@ -13,13 +13,16 @@ public class AuthenStringConstant {
     //Xác thực người dùng
     public static final String SIGN_IN = "ĐĂNG NHẬP";
     public static final String SIGN_UP = "ĐĂNG KÝ";
+    public static final String FORGOT_PWD = "Quên mật khẩu";
+    public static final String CHANGE_PWD = "Cập nhật mật khẩu";
 
     //Kết quả Xác thực người dùng
     public static final String SIGN_IN_SUCCESS = "Đăng nhập thành công";
     public static final String SIGN_UP_SUCCESS = "Đăng ký thành công";
     public static final String SIGN_IN_FAIL = "Sai tài khoản hoặc mật khẩu";
     public static final String SIGN_UP_FAIL = "Đăng ký thất bại";
-
+    public static final String ANSWER_NOT_MATCH = "Đáp án không khớp";
+    public static final String ACCOUNT_NOT_FOUND = "Không tìm thấy tài khoản này";
     //Bộ câu hỏi
     public static final String[] QUESTIONS = {
         "Biệt danh hồi bé của bạn là gì?",
@@ -39,10 +42,17 @@ public class AuthenStringConstant {
         "Công việc đầu tiên của bạn ở thành phố hay thị trấn nào?",
         "Tên nơi tổ chức tiệc cưới của bạn là gì?"
     };
-    
+
     //danh sách chức năng
     public static final String[] ROLES = {
         "ADMIN",
         "LIBRARIAN"
+    };    
+    public static final String[] ROLES_VS={
+        "Quản trị viên",
+        "Thủ thư"
     };
+
+    //Mật khẩu mặc định
+    public static final String DEFAULT_PWD = "123456";
 }

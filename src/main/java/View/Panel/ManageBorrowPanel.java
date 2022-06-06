@@ -7,11 +7,9 @@ package View.Panel;
 import DAO.dao_impl.BookDaoImp;
 import DAO.dao_impl.BorrowDaoImp;
 import DAO.dao_impl.ReaderDaoImp;
-import DTO.Book;
-import DTO.Borrow;
-import DTO.TypeFunctionEnum;
+import DTO.*;
 import constant.*;
-import model.Reader;
+import DTO.Reader;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

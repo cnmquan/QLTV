@@ -6,7 +6,7 @@ import DAO.dao.ReaderDao;
 import DTO.Book;
 import DTO.Publisher;
 import constant.ReaderStringConstant;
-import model.Reader;
+import DTO.Reader;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,6 +33,8 @@ public class ReaderDaoImp implements ReaderDao {
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+
+
         return list;
     }
 
@@ -121,17 +123,17 @@ public class ReaderDaoImp implements ReaderDao {
                 + "FROM readers "
                 + "WHERE " + attribute + " = ?";
 
-        ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
-                s
-        });
-
-        try {
-            while (rs.next()) {
-                reader = Reader.covertFromResultSet(rs);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
-        }
+//        ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
+//                s
+//        });
+//
+//        try {
+//            while (rs.next()) {
+//                reader = Reader.covertFromResultSet(rs);
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Error: " + ex.getMessage());
+//        }
 
         return reader;
     }

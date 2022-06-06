@@ -8,7 +8,7 @@ import DAO.dao_impl.ReaderDaoImp;
 import DTO.TypeFunctionEnum;
 import constant.GeneralStringConstant;
 import constant.ReaderStringConstant;
-import model.Reader;
+import DTO.Reader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

@@ -17,4 +17,7 @@ public interface AccountDAO extends BaseDAO<AccountDTO> {
     public AccountDTO login(String username, String pwd)throws SQLException;
     public boolean recoverAccount(String id)throws SQLException;
     public String hashPassword(String pass);
+    public boolean changePass(String username, String pwd)throws SQLException;
+    public boolean validatePass(String oldPwd, String newPwd);
+    public AccountDTO findByUsername(String username)throws SQLException;
 }

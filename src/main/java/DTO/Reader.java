@@ -1,4 +1,4 @@
-package model;
+package DTO;
 
 import DTO.Book;
 
