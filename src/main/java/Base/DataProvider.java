@@ -83,9 +83,7 @@ public class DataProvider {
             result = pstmt.executeQuery();
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
-        } finally {
+        }  finally {
             closeConnection(connection);
         }
         return result;

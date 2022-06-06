@@ -101,35 +101,6 @@ public class HomeForm extends javax.swing.JFrame {
         jLabelPublisherList = new javax.swing.JLabel();
         jPanelMainContent = new javax.swing.JPanel();
 
-        jPopupMenu.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-
-        btnInfo.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        btnInfo.setText("jMenuItem1");
-        btnInfo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInfoActionPerformed(evt);
-            }
-        });
-        jPopupMenu.add(btnInfo);
-
-        btnChangePwd.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        btnChangePwd.setText("jMenuItem2");
-        btnChangePwd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChangePwdActionPerformed(evt);
-            }
-        });
-        jPopupMenu.add(btnChangePwd);
-        jPopupMenu.add(jSeparator);
-
-        btnLogOut.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        btnLogOut.setText("jMenuItem3");
-        btnLogOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogOutActionPerformed(evt);
-            }
-        });
-        jPopupMenu.add(btnLogOut);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);

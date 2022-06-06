@@ -4,6 +4,7 @@ import Adapter.DatabaseConnection;
 import Base.DataProvider;
 import DAO.dao.ReaderDao;
 import DTO.Book;
+import DTO.Publisher;
 import constant.ReaderStringConstant;
 import DTO.Reader;
 
@@ -20,50 +21,33 @@ public class ReaderDaoImp implements ReaderDao {
     @Override
     public ArrayList<Reader> getAll() {
         ArrayList<Reader> list = new ArrayList<>();
-        Connection c = null;
         String sql = "SELECT * FROM readers "
                 + " WHERE reader_is_deleted = false"
                 + " ORDER BY reader_id";
-//        try {
-//            c = DatabaseConnection.getConnection();
-//            Statement s = c.createStatement();
-//            ResultSet rs = s.executeQuery(sql);
-//
-//            while (rs.next()) {
-//                Reader reader = new Reader();
-//                reader.setId(rs.getString("reader_id"));
-//                reader.setName(rs.getString("reader_name"));
-//                reader.setPhoneNumber(rs.getString("reader_phone_number"));
-//                list.add(reader);
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//            DatabaseConnection.close(c);
-//        }
+        ResultSet rs = DataProvider.ExecuteQuery(sql, null);
+        try {
+            while (rs.next()) {
+                Reader reader = Reader.covertFromResultSet(rs);
+                list.add(reader);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+
         return list;
     }
 
     @Override
     public boolean insert(Reader reader) {
         String sql = "INSERT INTO readers(reader_id,reader_name,reader_phone_number,reader_is_deleted) VALUES(?,?,?,false)";
-        boolean rowInserted = false;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
+        boolean rowInserted;
+        rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
+                reader.getId(),
+                reader.getName(),
+                reader.getPhoneNumber(),
+        });
 
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, reader.getId());
-            statement.setString(2, reader.getName());
-            statement.setString(3, reader.getPhoneNumber());
-
-            rowInserted = statement.executeUpdate() > 0;
-
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            DatabaseConnection.close(con);
-        }
         return rowInserted;
     }
 
@@ -73,22 +57,12 @@ public class ReaderDaoImp implements ReaderDao {
         sql += " WHERE reader_id = ?";
 
         boolean rowUpdated = false;
-        Connection con = null;
+        rowUpdated = DataProvider.ExecuteNonQuery(sql, new Object[]{
+                reader.getName(),
+                reader.getPhoneNumber(),
 
-        try {
-            con = DatabaseConnection.getConnection();
-
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, reader.getName());
-            statement.setString(2, reader.getPhoneNumber());
-            statement.setString(3, reader.getId());
-
-            rowUpdated = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
+                reader.getId()
+        });
 
         return rowUpdated;
     }
@@ -97,50 +71,35 @@ public class ReaderDaoImp implements ReaderDao {
     public boolean delete(String id) {
         String sql = "DELETE FROM readers   "
                 + " WHERE reader_id = ?";
-
-        boolean rowUpdated = false;
-        Connection con = null;
-
-        try {
-            con = DatabaseConnection.getConnection();
-
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, id);
-
-            rowUpdated = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
-        return rowUpdated;
+        boolean rowDeleted;
+        rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
+                id
+        });
+        return rowDeleted;
     }
 
     @Override
     public boolean delete(Reader reader) throws SQLException {
-        return false;
+        boolean rowDeleted;
+        String sql = "DELETE FROM readers "
+                + "WHERE reader_id = ?";
+
+        rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
+                reader.getId()
+        });
+
+        return rowDeleted;
     }
 
     @Override
     public boolean moveToBin(String id) {
         String sql = "UPDATE readers SET reader_is_deleted = true ";
         sql += " WHERE reader_id = ?";
-        boolean rowDeleted = false;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
+        boolean rowMovedToBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
+                id
+        });
 
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, id);
-
-            rowDeleted = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
-
-        return rowDeleted;
+        return rowMovedToBin;
     }
 
     @Override
@@ -148,22 +107,10 @@ public class ReaderDaoImp implements ReaderDao {
         String sql = "UPDATE readers SET reader_is_deleted = false  "
                 + " WHERE reader_id = ?";
 
-        boolean rowUpdated = false;
-        Connection con = null;
-
-        try {
-            con = DatabaseConnection.getConnection();
-
-            PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, id);
-
-            rowUpdated = statement.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            DatabaseConnection.close(con);
-        }
-        return rowUpdated;
+        boolean rowRemovedFromBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
+                id
+        });
+        return rowRemovedFromBin;
     }
 
     @Override
@@ -212,15 +159,12 @@ public class ReaderDaoImp implements ReaderDao {
     @Override
     public ArrayList<Reader> getDeleteList() {
         ArrayList<Reader> list = new ArrayList<>();
-        Connection c = null;
         String sql = "SELECT * FROM readers "
                 + " WHERE reader_is_deleted = true"
                 + " ORDER BY reader_id";
-        try {
-            c = DatabaseConnection.getConnection();
-            Statement s = c.createStatement();
-            ResultSet rs = s.executeQuery(sql);
 
+        ResultSet rs = DataProvider.ExecuteQuery(sql, null);
+        try {
             while (rs.next()) {
                 Reader reader = new Reader();
                 reader.setId(rs.getString("reader_id"));
@@ -231,8 +175,6 @@ public class ReaderDaoImp implements ReaderDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            DatabaseConnection.close(c);
         }
         return list;
     }
