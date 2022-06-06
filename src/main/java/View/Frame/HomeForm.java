@@ -83,6 +83,7 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelPublisherList = new javax.swing.JPanel();
         jLabelPublisherList = new javax.swing.JLabel();
         jPanelMainContent = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1520, 830));
@@ -102,12 +103,12 @@ public class HomeForm extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanelIndicationLayout = new javax.swing.GroupLayout(jPanelIndication);
         jPanelIndication.setLayout(jPanelIndicationLayout);
         jPanelIndicationLayout.setHorizontalGroup(
-                jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 5, Short.MAX_VALUE)
+            jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 5, Short.MAX_VALUE)
         );
         jPanelIndicationLayout.setVerticalGroup(
-                jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 60, Short.MAX_VALUE)
+            jPanelIndicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
         );
 
         jPanelTitle.add(jPanelIndication, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 0, 5, 60));
@@ -283,12 +284,12 @@ public class HomeForm extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanelMainContentLayout = new javax.swing.GroupLayout(jPanelMainContent);
         jPanelMainContent.setLayout(jPanelMainContentLayout);
         jPanelMainContentLayout.setHorizontalGroup(
-                jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 1160, Short.MAX_VALUE)
+            jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
         );
         jPanelMainContentLayout.setVerticalGroup(
-                jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 740, Short.MAX_VALUE)
+            jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanelMainContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 58, 1160, 740));
