@@ -1,6 +1,5 @@
 package DAO.dao_impl;
 
-import Adapter.DatabaseConnection;
 import Base.DataProvider;
 import DAO.dao.ReaderDao;
 import DTO.Book;
@@ -123,17 +122,17 @@ public class ReaderDaoImp implements ReaderDao {
                 + "FROM readers "
                 + "WHERE " + attribute + " = ?";
 
-//        ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
-//                s
-//        });
-//
-//        try {
-//            while (rs.next()) {
-//                reader = Reader.covertFromResultSet(rs);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Error: " + ex.getMessage());
-//        }
+        ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
+                s
+        });
+
+        try {
+            while (rs.next()) {
+                reader = Reader.covertFromResultSet(rs);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
 
         return reader;
     }

@@ -48,6 +48,8 @@ public class AccountStringConstant {
     public static final String ACCOUNT_EXIST_EMAIL = "Email đã tồn tại";
     public static final String ACCOUNT_EXIST_USERNAME = "Tài khoản đã tồn tại";
         
+    // Tiêu đề của Dialog Xoá
+    public static final String ACCOUNT_DELETE_TITLE = "Bạn có chắc chắn muốn xóa người dùng này không?";
     //Thông báo CRUD
     public static final String ACCOUNT_CREATE_SUCCESS="Thêm tài khoản thành công";
     public static final String ACCOUNT_UPDATE_SUCCESS="Cập nhật tài khoản thành công";

@@ -22,7 +22,7 @@ public interface iCRUD<T> {
 
     boolean delete(String id) throws SQLException;
     
-    public boolean delete(T t) throws SQLException;
+    boolean delete(T t) throws SQLException;
     
     T getAttribute(String atribute, String s);
 }

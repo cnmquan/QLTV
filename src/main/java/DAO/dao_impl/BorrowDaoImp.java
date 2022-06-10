@@ -38,16 +38,16 @@ public class BorrowDaoImp implements BorrowDao {
                 + "WHERE borrow_is_deleted = false "
                 + "ORDER BY borrow_id";
         ResultSet resultSet = DataProvider.ExecuteQuery(sql, null);
-//        try {
-//            while (resultSet.next()) {
-//                Borrow borrow = Borrow.convertFromResultSet(resultSet);
-//                borrows.add(borrow);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Error: " + ex.getMessage());
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            while (resultSet.next()) {
+                Borrow borrow = Borrow.convertFromResultSet(resultSet);
+                borrows.add(borrow);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
         return borrows;
     }

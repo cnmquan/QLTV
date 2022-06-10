@@ -66,7 +66,6 @@ View\Panel\ManageBooksPanel$27.class
 View\Panel\ManageBorrowPanel$30.class
 constant\BinStringConstant.class
 View\Panel\ManageBooksPanel$4.class
-Adapter\DatabaseConnection.class
 View\Panel\ManageBorrowPanel$6.class
 DAO\dao\BorrowDao.class
 View\Panel\ManageBorrowPanel$3.class
@@ -197,7 +196,7 @@ View\Panel\ManageBorrowPanel$9.class
 View\Frame\HomeForm$13.class
 DAO\dao_impl\BorrowDaoImp.class
 DTO\BinTypeEnum.class
-Base\BaseDAO.class
+View\Panel\ManageAccount$ROLE_TYPE.class
 View\Panel\ManagePublisherPanel$8.class
 View\Frame\HomeForm.class
 View\Panel\ManageBooksPanel$21.class

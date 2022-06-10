@@ -14,13 +14,13 @@ import constant.GeneralStringConstant;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.awt.Font;
+import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import javax.swing.text.PlainDocument;
 
 /**
@@ -28,8 +28,12 @@ import javax.swing.text.PlainDocument;
  * @email Asus
  */
 public class ManageAccount extends javax.swing.JPanel {
-    
+
     AccountDTO account = null;
+
+    enum ROLE_TYPE {
+        EN, VN
+    };
 
     /**
      * Creates new form ManageAccount
@@ -38,7 +42,7 @@ public class ManageAccount extends javax.swing.JPanel {
      */
     public ManageAccount(AccountDTO account, boolean isShowMyInfo) {
         initComponents();
-        
+
         this.account = account;
         setBounds(0, 0, 1160, 740);
         setDefaultTable();
@@ -47,16 +51,16 @@ public class ManageAccount extends javax.swing.JPanel {
         if (isShowMyInfo) {
             setDataToField(account.getId());
             showFunction(account.getId());
-        }        
+        }
     }
-    
+
     private void initUI() {
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         txtContact.setText(AccountStringConstant.ACCOUNT_INPUT_CONTACT);
         txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
         txtName.setText(AccountStringConstant.ACCOUNT_INPUT_NAME);
         txtID.setText(AccountStringConstant.ACCOUNT_INPUT_ID);
-        
+
         lblID.setText(AccountStringConstant.ACCOUNT_ID);
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblName.setText(AccountStringConstant.ACCOUNT_NAME);
@@ -64,10 +68,10 @@ public class ManageAccount extends javax.swing.JPanel {
         lblEmail.setText(AccountStringConstant.ACCOUNT_EMAIL);
         lblQuestion.setText(AccountStringConstant.ACCOUNT_QUESTION);
         lblAnswer.setText(AccountStringConstant.ACCOUNT_ANSWER);
-        
+
         cmbQuestion.setModel(new DefaultComboBoxModel(AuthenStringConstant.QUESTIONS));
-        cmbRole.setModel(new DefaultComboBoxModel(AuthenStringConstant.ROLES));
-        
+        cmbRole.setModel(new DefaultComboBoxModel(AuthenStringConstant.ROLES_VS));
+
         PlainDocument doc = (PlainDocument) txtContact.getDocument();
         doc.setDocumentFilter(new OnlyNum());
         jButtonInsert.setVisible(false);
@@ -83,7 +87,7 @@ public class ManageAccount extends javax.swing.JPanel {
         String username = txtUsername.getText();
         String email = txtEmail.getText();
         String contact = txtContact.getText();
-        
+
         if (Validator.inputString("[a-zA-Z]+([ '-][a-zA-Z]+)*", name)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_NAME);
             return false;
@@ -102,11 +106,11 @@ public class ManageAccount extends javax.swing.JPanel {
         }
         return true;
     }
-    
+
     public boolean checkExistUsername() {
         String username = txtUsername.getText();
         boolean isExist;
-        
+
         if (!username.equals("") && DIContainer.getAccountDAO().isExistUsername(username)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_USERNAME);
             isExist = true;
@@ -115,15 +119,15 @@ public class ManageAccount extends javax.swing.JPanel {
         }
         return isExist;
     }
-    
+
     private void setDefaultTable() {
         tblAccountDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
+
         jScrollPanelTable.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        
+
         tblAccountDetail.setBackground(Color.WHITE);
         tblAccountDetail.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         tblAccountDetail.setFillsViewportHeight(true);
@@ -135,7 +139,7 @@ public class ManageAccount extends javax.swing.JPanel {
         for (String title : titles) {
             model.addColumn(title);
         }
-        
+
         model.setColumnCount(titles.length);
         tblAccountDetail.setDefaultEditor(Object.class, null);
         tblAccountDetail.setRowSelectionAllowed(true);
@@ -147,31 +151,29 @@ public class ManageAccount extends javax.swing.JPanel {
     private void setAccountDetailToTable() {
         DefaultTableModel model = (DefaultTableModel) tblAccountDetail.getModel();
         ArrayList<AccountDTO> lAccounts = new ArrayList<AccountDTO>();
-        
+
         model.setRowCount(0);
-        lAccounts = DIContainer.getAccountDAO().findAll();
+        lAccounts = DIContainer.getAccountDAO().getAll();
         lAccounts.forEach((AccountDTO account) -> {
-            Object[] object = {account.getId(), account.getName(), account.getUsername(), account.getEmail(), account.getContact(), account.getRole()};
+            Object[] object = {account.getId(), account.getName(), account.getUsername(), account.getEmail(), account.getContact(), vietsubRole(account.getRole())};
             model.addRow(object);
         });
     }
-    
+
     private void setDataToField(String id) {
-        AccountDTO currentAcc = DIContainer.getAccountDAO().findByID(id);
-        
+        AccountDTO currentAcc = DIContainer.getAccountDAO().getAttribute("id", id);
+
         txtID.setText(currentAcc.getId());
         txtName.setText(currentAcc.getName());
         txtUsername.setText(currentAcc.getUsername());
         txtEmail.setText(currentAcc.getEmail());
         txtContact.setText(currentAcc.getContact());
         txtAnswer.setText(currentAcc.getAnswer());
-        
-        cmbRole.setSelectedItem(currentAcc.getRole());
+
+        cmbRole.setSelectedItem(vietsubRole(currentAcc.getRole()));
         cmbQuestion.setSelectedItem(currentAcc.getQuestion());
-        
-        
     }
-    
+
     private void showFunction(String id) {
         if (account.getRole().equals("ADMIN")) {
             if (account.getId().equals(id)) {
@@ -186,16 +188,16 @@ public class ManageAccount extends javax.swing.JPanel {
             jButtonDelete.setVisible(false);
             jButtonRecover.setVisible(false);
             jButtonUpdate.setVisible(false);
-            
+
             lblQuestion.setVisible(false);
             lblAnswer.setVisible(false);
             cmbQuestion.setVisible(false);
             txtAnswer.setVisible(false);
-            
+
             cmbRole.setEnabled(false);
             if (account.getId().equals(txtID.getText())) {
                 jButtonUpdate.setVisible(true);
-                
+
                 lblQuestion.setVisible(true);
                 lblAnswer.setVisible(true);
                 cmbQuestion.setVisible(true);
@@ -203,7 +205,7 @@ public class ManageAccount extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void updateAccount() {
         String id = txtID.getText();
         String name = txtName.getText();
@@ -212,9 +214,9 @@ public class ManageAccount extends javax.swing.JPanel {
         String contact = txtContact.getText();
         String question = (String) cmbQuestion.getSelectedItem();
         String answer = txtAnswer.getText();
-        String role = (String) cmbRole.getSelectedItem();
-        
-        AccountDTO oldAccount = DIContainer.getAccountDAO().findByID(id);
+        String role = (String) AuthenStringConstant.ROLES[cmbRole.getSelectedIndex()];
+
+        AccountDTO oldAccount = DIContainer.getAccountDAO().getAttribute("id", id);
         AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact, question, answer, role);
         boolean result = DIContainer.getAccountDAO().update(newAccount);
         if (result) {
@@ -223,6 +225,22 @@ public class ManageAccount extends javax.swing.JPanel {
         } else {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_FAIL);
         }
+    }
+
+    private void deleteAccount() {
+        String id = txtID.getText();
+        boolean result = DIContainer.getAccountDAO().delete(id);
+        if (result) {
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_SUCCESS);
+            setAccountDetailToTable();
+        } else {
+            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_FAIL);
+        }
+    }
+
+    private String vietsubRole(String role) {
+        int idxRole = Arrays.asList(AuthenStringConstant.ROLES).indexOf(role);
+        return AuthenStringConstant.ROLES_VS[idxRole];
     }
 
     /**
@@ -397,7 +415,7 @@ public class ManageAccount extends javax.swing.JPanel {
         cmbQuestion.setBorder(null);
         jPanel1.add(cmbQuestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 760, 40));
 
-        jButtonInsert.setBackground(new java.awt.Color(102, 102, 255));
+        jButtonInsert.setBackground(new java.awt.Color(51, 153, 0));
         jButtonInsert.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jButtonInsert.setForeground(new java.awt.Color(255, 255, 255));
         jButtonInsert.setText("Thêm");
@@ -409,7 +427,7 @@ public class ManageAccount extends javax.swing.JPanel {
         });
         jPanel1.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 10, 150, 50));
 
-        jButtonUpdate.setBackground(new java.awt.Color(204, 204, 0));
+        jButtonUpdate.setBackground(new java.awt.Color(102, 102, 255));
         jButtonUpdate.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jButtonUpdate.setForeground(new java.awt.Color(255, 255, 255));
         jButtonUpdate.setText("Cập nhật");
@@ -522,7 +540,7 @@ public class ManageAccount extends javax.swing.JPanel {
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
@@ -544,14 +562,16 @@ public class ManageAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonRecoverActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        String id = txtID.getText();
-        boolean result = DIContainer.getAccountDAO().delete(id);
-        if (result) {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_SUCCESS);
-            setAccountDetailToTable();
-        } else {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_FAIL);
+        int answer = JOptionPane.showConfirmDialog(null,
+                AccountStringConstant.ACCOUNT_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
+                JOptionPane.YES_NO_OPTION);
+
+        if (answer == JOptionPane.NO_OPTION) {
+            // do something
+        } else if (answer == JOptionPane.YES_OPTION) {
+            deleteAccount();
         }
+
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void tblAccountDetailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountDetailMouseClicked
@@ -559,7 +579,7 @@ public class ManageAccount extends javax.swing.JPanel {
         int rowNo = tblAccountDetail.getSelectedRow();
         TableModel model = tblAccountDetail.getModel();
         String id = model.getValueAt(rowNo, 0).toString();
-        
+
         setDataToField(id);
         showFunction(id);
     }//GEN-LAST:event_tblAccountDetailMouseClicked
