@@ -20,6 +20,7 @@ import java.awt.*;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -178,8 +179,8 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         if (quantity > leftInStock && typeFunction == TypeFunctionEnum.Insert) {
             errorList = errorList + BorrowStringConstant.BORROW_QUANTITY_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
-
-        if (borrowDate == null) {
+        Date currentDate = new Date();
+        if (borrowDate == null || borrowDate.after(currentDate)) {
             errorList = errorList + "Ngày mượn sách không hợp lệ" + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
@@ -819,13 +820,12 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
                 int answer = JOptionPane.showConfirmDialog(null,
                         BorrowStringConstant.BORROW_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
                         JOptionPane.YES_NO_OPTION);
-                if(answer == JOptionPane.YES_OPTION){
+                if (answer == JOptionPane.YES_OPTION) {
                     boolean deleteCheck = borrowDaoImp.delete(borrow.getBorrowId());
-                    if(deleteCheck){
+                    if (deleteCheck) {
                         JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_DELETE_SUCCESS);
                         myInitComponents();
-                    }
-                    else{
+                    } else {
                         JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_DELETE_ERROR);
                     }
                 }
