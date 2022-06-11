@@ -113,7 +113,7 @@ public class ReaderDaoImp implements ReaderDao {
     }
 
     @Override
-    public Reader getAttribute(String attribute, String s) {
+    public Reader getAttribute(String attribute, String s){
         Reader reader = new Reader();
         String sql = "SELECT "
                 + "reader_id, "
@@ -121,6 +121,11 @@ public class ReaderDaoImp implements ReaderDao {
                 + "reader_phone_number "
                 + "FROM readers "
                 + "WHERE " + attribute + " = ?";
+        ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
+                s
+        });
+        try {
+            while (rs.next()){
 
         ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
                 s
@@ -134,6 +139,11 @@ public class ReaderDaoImp implements ReaderDao {
             System.out.println("Error: " + ex.getMessage());
         }
 
+            reader = Reader.covertFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return reader;
     }
 
