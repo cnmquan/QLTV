@@ -232,7 +232,7 @@ public class ChangePwdPanel extends javax.swing.JPanel {
         btnUpdate.setBackground(new java.awt.Color(255, 51, 51));
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setText("Đăng ký");
+        btnUpdate.setText("Lưu");
         btnUpdate.setBorder(null);
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.addMouseListener(new java.awt.event.MouseAdapter() {

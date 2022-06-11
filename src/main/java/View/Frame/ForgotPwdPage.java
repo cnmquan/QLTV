@@ -112,7 +112,7 @@ public class ForgotPwdPage extends javax.swing.JFrame {
             return;
         }
 
-        account = DIContainer.getAccountDAO().findByUsername(username);
+        account = DIContainer.getAccountDAO().getAttribute("username",username);
          if (account==null) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.ACCOUNT_NOT_FOUND);
             return;

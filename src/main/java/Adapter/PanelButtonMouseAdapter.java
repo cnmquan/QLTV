@@ -35,12 +35,10 @@ public class PanelButtonMouseAdapter extends MouseAdapter {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if (type == -1) {
-            jPanel.setBackground(mouseExitWidnowColor);
-        } else if (type == 1) {
-            jPanel.setBackground(mouseExitHomeColor);
-        } else {
-            jPanel.setBackground(mouseExitColor);
+        switch (type) {
+            case -1 -> jPanel.setBackground(mouseExitWidnowColor);
+            case 1 -> jPanel.setBackground(mouseExitHomeColor);
+            default -> jPanel.setBackground(mouseExitColor);
         }
     }
 

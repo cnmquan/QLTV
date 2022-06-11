@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class AccountDAOImpl implements AccountDAO {
 
     @Override
-    public boolean create(AccountDTO account) {
+    public boolean insert(AccountDTO account) {
         //Declare query
         String query = "INSERT INTO \"public\".account ("
                 + "name, "
@@ -57,7 +57,7 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public ArrayList<AccountDTO> findAll() {
+    public ArrayList<AccountDTO> getAll() {
         //Declare variables
         String query = "select * from \"public\".account order by id;";
         ArrayList<AccountDTO> lAccounts = new ArrayList<>();
@@ -77,9 +77,9 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public AccountDTO findByID(String id) {
+    public AccountDTO getAttribute(String atribute, String s ) {
         // Declare variable
-        String query = "select * from \"public\".account where id = '" + id + "'";
+        String query = "select * from \"public\".account where "+atribute+" = '" + s + "'";
         AccountDTO account = null;
 
         //Call function to execute select query
@@ -262,28 +262,8 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public AccountDTO findByUsername(String username) {
-        // Declare variable
-        String query = "select * from \"public\".account where username = '" + username + "'";
-        AccountDTO account = null;
-
-        //Call function to execute select query
-        try {
-            ResultSet data = DataProvider.ExecuteQuery(query, null);
-            while (data.next()) {
-                account = new AccountDTO(data);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return account;
-    }
-
-    @Override
     public boolean validatePass(String oldPwd, String newPwd) {
         String hashNewPass = DIContainer.getAccountDAO().hashPassword(newPwd);
         return hashNewPass == null ? oldPwd == null : hashNewPass.equals(oldPwd);
     }
-    
-    
 }

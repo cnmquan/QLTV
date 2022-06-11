@@ -74,7 +74,7 @@ public class SignupPage extends javax.swing.JFrame {
         String answer = txtAnswer.getText();
 
         AccountDTO account = new AccountDTO(name, username, pwd, email, contact, question, answer);
-        boolean result = DIContainer.getAccountDAO().create(account);
+        boolean result = DIContainer.getAccountDAO().insert(account);
         if (result) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_UP_SUCCESS);
             SigninPage signIn = new SigninPage();

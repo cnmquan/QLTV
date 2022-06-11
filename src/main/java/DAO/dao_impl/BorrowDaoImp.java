@@ -38,7 +38,6 @@ public class BorrowDaoImp implements BorrowDao {
                 + "WHERE borrow_is_deleted = false "
                 + "ORDER BY borrow_id";
         ResultSet resultSet = DataProvider.ExecuteQuery(sql, null);
-
         try {
             while (resultSet.next()) {
                 Borrow borrow = Borrow.convertFromResultSet(resultSet);

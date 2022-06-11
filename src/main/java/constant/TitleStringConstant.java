@@ -29,6 +29,6 @@ public class TitleStringConstant {
     //Title popup menu
     public static final String INFORMATION = "Thông tin cá nhân";
     public static final String CHANGE_PWD = "Đổi mật khẩu";
-    public static final String LOG_OUT = "Thoát";
+    public static final String LOG_OUT = "Đăng xuất";
 
 }

@@ -14,23 +14,28 @@ public class DIContainer {
 
     public DIContainer() {
     }
-    
-    public static AccountDAOImpl getAccountDAO(){
+
+    public static AccountDAOImpl getAccountDAO() {
         return new AccountDAOImpl();
     }
-    
-    public static BookDaoImp  getBookDao(){
+
+    public static BookDaoImp getBookDao() {
         return new BookDaoImp();
     }
-    
-    public static PublisherDaoImp getPublisherDao(){
+
+    public static PublisherDaoImp getPublisherDao() {
         return new PublisherDaoImp();
-    }   
-    
-    public static BinDaoImp getBinDao(){
+    }
+
+    public static BinDaoImp getBinDao() {
         return new BinDaoImp();
     }
 
-    public static ReaderDaoImp getReaderDao(){return new ReaderDaoImp();}
-    public static BorrowDaoImp getBorrowDao(){return new BorrowDaoImp();}
+    public static ReaderDaoImp getReaderDao() {
+        return new ReaderDaoImp();
+    }
+
+    public static BorrowDaoImp getBorrowDao() {
+        return new BorrowDaoImp();
+    }
 }

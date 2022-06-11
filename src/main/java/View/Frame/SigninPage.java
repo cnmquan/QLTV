@@ -13,6 +13,8 @@ import constant.GeneralStringConstant;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -31,7 +33,7 @@ public class SigninPage extends javax.swing.JFrame {
     private void initUI() {
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         txtPassword.setEchoChar('*');
-        
+
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblPassword.setText(AccountStringConstant.ACCOUNT_PWD);
         lblSignIn.setText(AuthenStringConstant.SIGN_IN);
@@ -40,7 +42,10 @@ public class SigninPage extends javax.swing.JFrame {
         btnSignUp.setText(AuthenStringConstant.SIGN_UP);
 
         btnShowPass.setVisible(false);
-        btnHidePass.setVisible(true);        
+        btnHidePass.setVisible(true);
+
+        JRootPane rootPane = SwingUtilities.getRootPane(btnSignIn);
+        rootPane.setDefaultButton(btnSignIn);
     }
 
     /**
@@ -66,7 +71,7 @@ public class SigninPage extends javax.swing.JFrame {
     public void login() {
         String username = txtUsername.getText();
         String pwd = new String(txtPassword.getPassword());
-        
+
         AccountDTO account = DIContainer.getAccountDAO().login(username, pwd);
         if (account != null) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_IN_SUCCESS);
@@ -199,9 +204,9 @@ public class SigninPage extends javax.swing.JFrame {
         btnSignIn.setText("Đăng nhập");
         btnSignIn.setBorder(null);
         btnSignIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSignIn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnSignInMouseClicked(evt);
+        btnSignIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignInActionPerformed(evt);
             }
         });
         jPanel2.add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 470, 320, 70));
@@ -281,12 +286,6 @@ public class SigninPage extends javax.swing.JFrame {
         txtPassword.setEchoChar((char) 0);
     }//GEN-LAST:event_btnHidePassMouseClicked
 
-    private void btnSignInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignInMouseClicked
-        // TODO add your handling code here:
-        if (validateInput())
-            login();
-    }//GEN-LAST:event_btnSignInMouseClicked
-
     private void btnSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignUpMouseClicked
         // TODO add your handling code here:
         SignupPage signUp = new SignupPage();
@@ -300,6 +299,12 @@ public class SigninPage extends javax.swing.JFrame {
         forgotPage.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
+        // TODO add your handling code here:
+        if (validateInput())
+            login();
+    }//GEN-LAST:event_btnSignInActionPerformed
 
     /**
      * @param args the command line arguments
