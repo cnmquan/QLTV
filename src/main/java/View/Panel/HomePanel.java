@@ -18,12 +18,13 @@ import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * @author Admin
+ * HomePanel hiển thị những thông tin bao gồm số lượng sách còn, số lượng độc giả, số lượng sách mượn
  */
 public class HomePanel extends javax.swing.JPanel {
 
@@ -40,9 +41,11 @@ public class HomePanel extends javax.swing.JPanel {
         setBounds(0, 0, 1160, 740);
     }
 
-    private final BookDaoImp bookDaoImp;
+    private final BookDaoImp bookDaoImp; 
     private final ReaderDaoImp readerDaoImp;
     private final BorrowDaoImp borrowDaoImp;
+    private int numBook = 0;
+    private int numBorrow = 0;
     private ArrayList<Book> listBook;
     private ArrayList<Reader>listReader;
     private Vector vctBookHeader;
@@ -57,21 +60,23 @@ public class HomePanel extends javax.swing.JPanel {
         setDefaultTable();
         getVectorReaderData();
         getVectorBookData();
+
         showTableReaderData(this.vctReaderData);
+
+        setPieChart();
         showTableBookData(this.vctBookData);
     }
 
     private void setLableText() {
         jLabelNoOfBookTitle.setText(HomeStringConstant.HOME_NO_OF_BOOK);
         jLabelNoOfReaderTitle.setText(HomeStringConstant.HOME_NO_OF_READER);
-        jLabelIssuedBooksTitle.setText(HomeStringConstant.HOME_NO__OF_ISSUE);
         jLabelDefaultlerListTitle.setText(HomeStringConstant.HOME_NO__OF_RETURN_BOOK);
         jLabelReaderDetailsTitle.setText(HomeStringConstant.HOME_TITLE_READER_TABLE);
         jLabelBookDetailsTitle.setText(HomeStringConstant.HOME_TITLE_BOOK_TABLE);
     }
 
     private void setBookValue() {
-        int numBook = bookDaoImp.getSumBook();
+        numBook = bookDaoImp.getSumBook();
         jLabelNoOfBook.setText(String.valueOf(numBook));
 
     }
@@ -83,7 +88,7 @@ public class HomePanel extends javax.swing.JPanel {
 
     private void setBorrowValue() {
         try {
-            int numBorrow = borrowDaoImp.getAll().size();
+            numBorrow = borrowDaoImp.getAll().size();
             jLabelDefautlerList.setText(String.valueOf(numBorrow));
 
         } catch (SQLException e) {
@@ -124,8 +129,7 @@ public class HomePanel extends javax.swing.JPanel {
         }
     }
     private void getVectorReaderData(){
-        this.listReader = ReaderDaoImp.getInstance().getAll();
-        System.out.println(listReader.size());
+        this.listReader = readerDaoImp.getAll();
         this.vctReaderData = new Vector();
         for (int i = 0; i < this.listReader.size(); i++) {
             Vector vctRow = this.listReader.get(i).convertToVector();
@@ -133,7 +137,7 @@ public class HomePanel extends javax.swing.JPanel {
         }
     }
     public void showTableReaderData(Vector vctData){
-        this.vctReaderHeader = ReaderDaoImp.getInstance().getTitleColumn();
+        this.vctReaderHeader = readerDaoImp.getTitleColumn();
         jTableReaderDetail.setModel(new DefaultTableModel(vctData,vctReaderHeader){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -160,6 +164,12 @@ public class HomePanel extends javax.swing.JPanel {
         jTableBookDetail.getColumnModel().getColumn(7).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.PUBLISHER_NAME).length() * 8);
         jTableBookDetail.getColumnModel().getColumn(8).setPreferredWidth(150);
     }
+    
+    private void setPieChart(){
+        JPanel pieChartPanel = PieChartPanel.showChart(numBook, numBorrow);
+        jPanelPieChart.add(pieChartPanel);
+        pieChartPanel.setVisible(true);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -177,10 +187,7 @@ public class HomePanel extends javax.swing.JPanel {
         jPanelDefautlerList = new javax.swing.JPanel();
         jLabelDefautlerList = new javax.swing.JLabel();
         jLabelNoOfBookTitle = new javax.swing.JLabel();
-        jLabelIssuedBooksTitle = new javax.swing.JLabel();
         jLabelNoOfReaderTitle = new javax.swing.JLabel();
-        jPanelIssuedBooks = new javax.swing.JPanel();
-        jLabelIssuedBooks = new javax.swing.JLabel();
         jPanelNoOfReader = new javax.swing.JPanel();
         jLabelNoOfReader = new javax.swing.JLabel();
         jPanelBookDetail = new javax.swing.JPanel();
@@ -198,14 +205,14 @@ public class HomePanel extends javax.swing.JPanel {
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanelPieChart.setBackground(new java.awt.Color(204, 255, 204));
-        jPanelPieChart.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelPieChart.setLayout(new java.awt.BorderLayout());
         add(jPanelPieChart, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 180, 447, 540));
 
         jLabelDefaultlerListTitle.setBackground(new java.awt.Color(102, 102, 102));
         jLabelDefaultlerListTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
         jLabelDefaultlerListTitle.setForeground(new java.awt.Color(102, 102, 102));
         jLabelDefaultlerListTitle.setText("Defaulter List");
-        add(jLabelDefaultlerListTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 250, -1));
+        add(jLabelDefaultlerListTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 20, 250, -1));
 
         jPanelNoOfBook.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(255, 51, 51)));
         jPanelNoOfBook.setPreferredSize(new java.awt.Dimension(260, 1));
@@ -229,7 +236,7 @@ public class HomePanel extends javax.swing.JPanel {
         jLabelDefautlerList.setText("10000");
         jPanelDefautlerList.add(jLabelDefautlerList, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, -1, -1));
 
-        add(jPanelDefautlerList, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 60, 210, 100));
+        add(jPanelDefautlerList, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 210, 100));
 
         jLabelNoOfBookTitle.setBackground(new java.awt.Color(102, 102, 102));
         jLabelNoOfBookTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
@@ -237,29 +244,11 @@ public class HomePanel extends javax.swing.JPanel {
         jLabelNoOfBookTitle.setText("No Of Books");
         add(jLabelNoOfBookTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 190, -1));
 
-        jLabelIssuedBooksTitle.setBackground(new java.awt.Color(102, 102, 102));
-        jLabelIssuedBooksTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
-        jLabelIssuedBooksTitle.setForeground(new java.awt.Color(102, 102, 102));
-        jLabelIssuedBooksTitle.setText("Issued Books");
-        add(jLabelIssuedBooksTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 20, 190, -1));
-
         jLabelNoOfReaderTitle.setBackground(new java.awt.Color(102, 102, 102));
         jLabelNoOfReaderTitle.setFont(new java.awt.Font("Segoe Pro", 1, 20)); // NOI18N
         jLabelNoOfReaderTitle.setForeground(new java.awt.Color(102, 102, 102));
         jLabelNoOfReaderTitle.setText("No Of Reader");
-        add(jLabelNoOfReaderTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 190, -1));
-
-        jPanelIssuedBooks.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(255, 51, 51)));
-        jPanelIssuedBooks.setPreferredSize(new java.awt.Dimension(260, 1));
-        jPanelIssuedBooks.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelIssuedBooks.setBackground(new java.awt.Color(102, 102, 102));
-        jLabelIssuedBooks.setFont(new java.awt.Font("Segoe Pro Black", 0, 50)); // NOI18N
-        jLabelIssuedBooks.setForeground(new java.awt.Color(102, 102, 102));
-        jLabelIssuedBooks.setText("10000");
-        jPanelIssuedBooks.add(jLabelIssuedBooks, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, -1, -1));
-
-        add(jPanelIssuedBooks, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 60, 210, 100));
+        add(jLabelNoOfReaderTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 190, -1));
 
         jPanelNoOfReader.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(102, 102, 255)));
         jPanelNoOfReader.setPreferredSize(new java.awt.Dimension(260, 1));
@@ -271,7 +260,7 @@ public class HomePanel extends javax.swing.JPanel {
         jLabelNoOfReader.setText("10000");
         jPanelNoOfReader.add(jLabelNoOfReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, -1, -1));
 
-        add(jPanelNoOfReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, 210, 100));
+        add(jPanelNoOfReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, 210, 100));
 
         jPanelBookDetail.setBackground(new java.awt.Color(255, 255, 255));
         jPanelBookDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -284,15 +273,15 @@ public class HomePanel extends javax.swing.JPanel {
 
         jTableBookDetail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableBookDetail.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
-                },
-                new String[]{
-                        "Title 1", "Title 2", "Title 3", "Title 4"
-                }
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
         ));
         jTableBookDetail.setRowHeight(40);
         jScrollPaneBookDetail.setViewportView(jTableBookDetail);
@@ -311,15 +300,15 @@ public class HomePanel extends javax.swing.JPanel {
         jPanelReaderDetail.add(jLabelReaderDetailsTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 190, -1));
         jTableReaderDetail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableReaderDetail.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
-                },
-                new String[]{
-                        "Title 1", "Title 2", "Title 3", "Title 4"
-                }
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
         ));
         jScrollPaneReaderDetail.setViewportView(jTableReaderDetail);
 
@@ -333,8 +322,6 @@ public class HomePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelBookDetailsTitle;
     private javax.swing.JLabel jLabelDefaultlerListTitle;
     private javax.swing.JLabel jLabelDefautlerList;
-    private javax.swing.JLabel jLabelIssuedBooks;
-    private javax.swing.JLabel jLabelIssuedBooksTitle;
     private javax.swing.JLabel jLabelNoOfBook;
     private javax.swing.JLabel jLabelNoOfBookTitle;
     private javax.swing.JLabel jLabelNoOfReader;
@@ -342,7 +329,6 @@ public class HomePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelReaderDetailsTitle;
     private javax.swing.JPanel jPanelBookDetail;
     private javax.swing.JPanel jPanelDefautlerList;
-    private javax.swing.JPanel jPanelIssuedBooks;
     private javax.swing.JPanel jPanelNoOfBook;
     private javax.swing.JPanel jPanelNoOfReader;
     private javax.swing.JPanel jPanelPieChart;
