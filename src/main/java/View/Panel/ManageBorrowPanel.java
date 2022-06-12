@@ -24,6 +24,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author thinh
@@ -268,7 +270,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldQuantityFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldQuantityFocusLost(evt);
             }
@@ -297,7 +298,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldIDReaderFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldIDReaderFocusLost(evt);
             }
@@ -307,27 +307,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
                 jTextFieldIDReaderMousePressed(evt);
             }
         });
-        jTextFieldIDReader.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                Reader reader = ReaderDaoImp.getInstance().getAttribute("reader_id", jTextFieldIDReader.getText());
-                jTextFieldReaderName.setText(reader.getName());
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                Reader reader = ReaderDaoImp.getInstance().getAttribute("reader_id", jTextFieldIDReader.getText());
-                jTextFieldReaderName.setText(reader.getName());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                Reader reader = ReaderDaoImp.getInstance().getAttribute("reader_id", jTextFieldIDReader.getText());
-                jTextFieldReaderName.setText(reader.getName());
-            }
-        });
         jTextFieldIDReader.addActionListener(new java.awt.event.ActionListener() {
-
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldIDReaderActionPerformed(evt);
             }
@@ -352,7 +332,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldBookTitleFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldBookTitleFocusLost(evt);
             }
@@ -380,7 +359,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldReaderNameFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldReaderNameFocusLost(evt);
             }
@@ -404,11 +382,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jButtonInsert.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jButtonInsertActionPerformed(evt);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                jButtonInsertActionPerformed(evt);
             }
         });
         jPanelButton.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 150, 50));
@@ -420,11 +394,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jButtonDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jButtonDeleteActionPerformed(evt);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                jButtonDeleteActionPerformed(evt);
             }
         });
         jPanelButton.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 150, 50));
@@ -436,11 +406,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jButtonUpdateActionPerformed(evt);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                jButtonUpdateActionPerformed(evt);
             }
         });
         jPanelButton.add(jButtonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 150, 50));
@@ -473,7 +439,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldSearchFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldSearchFocusLost(evt);
             }
@@ -503,7 +468,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldBorrowDateFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldBorrowDateFocusLost(evt);
             }
@@ -530,7 +494,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldReturnDateFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldReturnDateFocusLost(evt);
             }
@@ -568,7 +531,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldIDBorrowFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldIDBorrowFocusLost(evt);
             }
@@ -597,31 +559,8 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldIDBookFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldIDBookFocusLost(evt);
-            }
-        });
-        jTextFieldIDBook.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                BookDaoImp bookDaoImp = new BookDaoImp();
-                Book book = bookDaoImp.getAttribute("book_id", jTextFieldIDBook.getText());
-                jTextFieldBookTitle.setText(book.getBookName());
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                BookDaoImp bookDaoImp = new BookDaoImp();
-                Book book = bookDaoImp.getAttribute("book_id", jTextFieldIDBook.getText());
-                jTextFieldBookTitle.setText(book.getBookName());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                BookDaoImp bookDaoImp = new BookDaoImp();
-                Book book = bookDaoImp.getAttribute("book_id", jTextFieldIDBook.getText());
-                jTextFieldBookTitle.setText(book.getBookName());
             }
         });
         jTextFieldIDBook.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -658,12 +597,12 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
 
         jTableBorrow.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTableBorrow.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
+            new Object [][] {
 
-                },
-                new String[]{
+            },
+            new String [] {
 
-                }
+            }
         ));
         jTableBorrow.setRowHeight(40);
         jTableBorrow.setShowGrid(true);
@@ -684,22 +623,22 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 1167, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1167, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 740, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 740, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 740, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 740, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 

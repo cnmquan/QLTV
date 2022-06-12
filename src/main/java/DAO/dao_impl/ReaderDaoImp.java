@@ -127,7 +127,7 @@ public class ReaderDaoImp implements ReaderDao {
         try {
             while (rs.next()){
 
-        ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
+         rs = DataProvider.ExecuteQuery(sql, new Object[]{
                 s
         });
 

@@ -319,7 +319,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         jPanelButton.setBackground(new java.awt.Color(255, 255, 255));
         jPanelButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButtonInsert.setBackground(new java.awt.Color(102, 102, 255));
+        jButtonInsert.setBackground(new java.awt.Color(51, 153, 0));
         jButtonInsert.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jButtonInsert.setForeground(new java.awt.Color(255, 255, 255));
         jButtonInsert.setText("Thêm");
@@ -341,12 +341,13 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
                 jButtonDeleteActionPerformed(evt);
             }
         });
-        jPanelButton.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 150, 50));
+        jPanelButton.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 150, 50));
 
-        jButtonUpdate.setBackground(new java.awt.Color(204, 204, 0));
+        jButtonUpdate.setBackground(new java.awt.Color(102, 102, 255));
         jButtonUpdate.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jButtonUpdate.setForeground(new java.awt.Color(255, 255, 255));
         jButtonUpdate.setText("Cập nhật");
+        jButtonUpdate.setAutoscrolls(true);
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -365,7 +366,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
                 jButtonClearActionPerformed(evt);
             }
         });
-        jPanelButton.add(jButtonClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 150, 50));
+        jPanelButton.add(jButtonClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 150, 50));
 
         jPanelDetail.add(jPanelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 180, 250));
 
