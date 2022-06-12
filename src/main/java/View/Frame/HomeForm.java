@@ -141,10 +141,10 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelTitle.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(1380, 0, 50, 60));
 
         jLabelProjectName.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelProjectName.setFont(new java.awt.Font("Segoe UI", 0, 25)); // NOI18N
+        jLabelProjectName.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 25)); // NOI18N
         jLabelProjectName.setForeground(new java.awt.Color(255, 255, 255));
         jLabelProjectName.setText("Library Management System");
-        jPanelTitle.add(jLabelProjectName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 400, -1));
+        jPanelTitle.add(jLabelProjectName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 300, -1));
 
         jLabelGreeting.setBackground(new java.awt.Color(255, 255, 255));
         jLabelGreeting.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 20)); // NOI18N
@@ -195,7 +195,7 @@ public class HomeForm extends javax.swing.JFrame {
         jLabelReturnBook.setForeground(new java.awt.Color(153, 153, 153));
         jLabelReturnBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Return_Purchase_26px.png"))); // NOI18N
         jLabelReturnBook.setText("   Return book");
-        jPanelReturnBook.add(jLabelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 290, 60));
+        jPanelReturnBook.add(jLabelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 210, 60));
 
         jPanelMenuBar.add(jPanelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 340, 60));
 
@@ -348,13 +348,9 @@ public class HomeForm extends javax.swing.JFrame {
     }
 
     private void setNavigationTitle() {
-        jLabelProjectName.setText(TitleStringConstant.PROJECT_NAME);
-        jLabelLMSDashBoard.setText(TitleStringConstant.LMS_DASHBOARD);
         jLabelManageBook.setText(TitleStringConstant.MANAGE_BOOK);
         jLabelPublisherList.setText(TitleStringConstant.MANAGE_PUBLISHER);
         jLabelManageAccount.setText(TitleStringConstant.MANAGE_ACCOUNT);
-        jLabelManageReader.setText(TitleStringConstant.MANAGE_READER);
-        jLabelReturnBook.setText(TitleStringConstant.MANAGE_BORROW);
 
         btnChangePwd.setText(TitleStringConstant.CHANGE_PWD);
         btnInfo.setText(TitleStringConstant.INFORMATION);
