@@ -9,6 +9,7 @@ import DAO.dao_impl.BookDaoImp;
 import DAO.dao_impl.BorrowDaoImp;
 import DAO.dao_impl.ReaderDaoImp;
 import DTO.Book;
+import DTO.Reader;
 import constant.DatabaseStringConstant;
 import constant.HomeStringConstant;
 
@@ -43,16 +44,20 @@ public class HomePanel extends javax.swing.JPanel {
     private final ReaderDaoImp readerDaoImp;
     private final BorrowDaoImp borrowDaoImp;
     private ArrayList<Book> listBook;
+    private ArrayList<Reader>listReader;
     private Vector vctBookHeader;
     private Vector vctBookData;
-
+    private Vector vctReaderHeader;
+    private Vector vctReaderData;
     public void myInitComponents() {
         setLableText();
         setBookValue();
         setReaderValue();
         setBorrowValue();
         setDefaultTable();
+        getVectorReaderData();
         getVectorBookData();
+        showTableReaderData(this.vctReaderData);
         showTableBookData(this.vctBookData);
     }
 
@@ -118,7 +123,24 @@ public class HomePanel extends javax.swing.JPanel {
             vctBookData.add(vctRow);
         }
     }
-
+    private void getVectorReaderData(){
+        this.listReader = ReaderDaoImp.getInstance().getAll();
+        System.out.println(listReader.size());
+        this.vctReaderData = new Vector();
+        for (int i = 0; i < this.listReader.size(); i++) {
+            Vector vctRow = this.listReader.get(i).convertToVector();
+            vctReaderData.add(vctRow);
+        }
+    }
+    public void showTableReaderData(Vector vctData){
+        this.vctReaderHeader = ReaderDaoImp.getInstance().getTitleColumn();
+        jTableReaderDetail.setModel(new DefaultTableModel(vctData,vctReaderHeader){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+    }
     public void showTableBookData(Vector vctData) {
         this.vctBookHeader = this.bookDaoImp.getTitleColumn();
 
@@ -287,7 +309,7 @@ public class HomePanel extends javax.swing.JPanel {
         jLabelReaderDetailsTitle.setForeground(new java.awt.Color(102, 102, 102));
         jLabelReaderDetailsTitle.setText("Reader Details");
         jPanelReaderDetail.add(jLabelReaderDetailsTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 190, -1));
-
+        jTableReaderDetail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableReaderDetail.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{
                         {null, null, null, null},
