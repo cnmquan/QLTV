@@ -325,14 +325,13 @@ public class ManageAccount extends javax.swing.JPanel {
         jPanel2.setPreferredSize(new java.awt.Dimension(1170, 630));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/icons8_Edit_Property_50px.png"))); // NOI18N
         jLabel1.setText("Quản lý tài khoản");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, -1, -1));
 
         jPanel3.setBackground(new java.awt.Color(255, 51, 51));
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, 390, 5));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, 390, 5));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -501,6 +500,7 @@ public class ManageAccount extends javax.swing.JPanel {
 
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1170, 330));
 
+        tblAccountDetail.setAutoCreateRowSorter(true);
         tblAccountDetail.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         tblAccountDetail.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -510,6 +510,7 @@ public class ManageAccount extends javax.swing.JPanel {
 
             }
         ));
+        tblAccountDetail.setAutoscrolls(false);
         tblAccountDetail.setRowHeight(40);
         tblAccountDetail.getTableHeader().setReorderingAllowed(false);
         tblAccountDetail.addMouseListener(new java.awt.event.MouseAdapter() {

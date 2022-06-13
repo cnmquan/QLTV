@@ -10,9 +10,9 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 
 /**
- * This class is used to accept only number
+ * This class is used to accept only number. Source:
+ * https://stackoverflow.com/questions/11093326/restricting-jtextfield-input-to-integers
  *
- * @link https://stackoverflow.com/questions/11093326/restricting-jtextfield-input-to-integers
  * @author Hovercraft Full Of Eels
  */
 public class OnlyNum extends DocumentFilter {

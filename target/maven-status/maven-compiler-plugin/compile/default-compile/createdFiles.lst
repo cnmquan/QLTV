@@ -49,6 +49,7 @@ View\Panel\ManageBorrowPanel$26.class
 View\Panel\ManagePublisherPanel$17.class
 View\Frame\SigninPage$7.class
 constant\BookStringConstant.class
+DTO\PanelTypeEnum.class
 View\Panel\ManageBooksPanel$25.class
 View\Frame\HomeForm$6.class
 View\Panel\ManageBooksPanel$5.class
@@ -86,6 +87,7 @@ View\Panel\ManagePublisherPanel$2.class
 View\Panel\ChangePwdPanel$2.class
 View\Panel\ManageBinPanel$2.class
 View\Panel\ManageReaderPanel$5.class
+Adapter\PanelButtonMouseAdapter$1.class
 View\Panel\ManageAccount$5.class
 View\Frame\ForgotPwdPage$1.class
 View\Panel\ChangePwdPanel.class
@@ -180,7 +182,6 @@ View\Frame\HomeForm$5.class
 View\Panel\ManageBorrowPanel.class
 View\Panel\ChangePwdPanel$4.class
 View\Panel\ManageBorrowPanel$9.class
-View\Frame\HomeForm$13.class
 DAO\dao_impl\BorrowDaoImp.class
 DTO\BinTypeEnum.class
 View\Panel\ManageAccount$ROLE_TYPE.class
@@ -201,10 +202,12 @@ View\Frame\ForgotPwdPage$8.class
 View\Frame\HomeForm$3.class
 Base\DIContainer.class
 View\Panel\ManageBorrowPanel$12.class
+Adapter\SupportFunction$1.class
 DTO\Publisher.class
 View\Panel\HomePanel.class
 View\Frame\HomeForm$11.class
 Validate\OnlyNum.class
+View\Panel\ManagePublisherPanel$19.class
 View\Panel\ManageReaderPanel$11.class
 View\Panel\ManageBorrowPanel$28.class
 View\Panel\ManageBooksPanel$16.class

@@ -24,6 +24,12 @@ import java.util.ArrayList;
 public class AccountDAOImpl implements AccountDAO {
 
     /**
+     * Empty constructor
+     */
+    public AccountDAOImpl() {
+    }
+
+    /**
      * Insert new account to database
      *
      * @param account Account want to intsert

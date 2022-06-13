@@ -6,6 +6,7 @@ package View.Frame;
 
 import Adapter.PanelButtonMouseAdapter;
 import DTO.AccountDTO;
+import DTO.PanelTypeEnum;
 import View.Panel.ChangePwdPanel;
 import View.Panel.HomePanel;
 import View.Panel.ManageAccount;
@@ -15,6 +16,7 @@ import View.Panel.ManagePublisherPanel;
 import View.Panel.*;
 import constant.GeneralStringConstant;
 import constant.TitleStringConstant;
+import java.awt.ComponentOrientation;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -31,7 +33,7 @@ public class HomeForm extends javax.swing.JFrame {
     AccountDTO account = null;
 
     /**
-     * Creates new form HomeForm
+     * Creates new form HomeForm without Account
      */
     public HomeForm() throws SQLException {
         initComponents();
@@ -40,6 +42,9 @@ public class HomeForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
+    /**
+     * Creates new form HomeForm with account
+     */
     public HomeForm(AccountDTO account) {
         initComponents();
 
@@ -132,31 +137,26 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelTitle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 20)); // NOI18N
         jPanelTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_menu_48px_1.png"))); // NOI18N
+        jLabelMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/down_arrow.png"))); // NOI18N
         jLabelMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelMenuMouseClicked(evt);
             }
         });
-        jPanelTitle.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(1380, 0, 50, 60));
+        jPanelTitle.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 0, 50, 60));
 
         jLabelProjectName.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelProjectName.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 25)); // NOI18N
+        jLabelProjectName.setFont(new java.awt.Font("Segoe UI", 0, 28)); // NOI18N
         jLabelProjectName.setForeground(new java.awt.Color(255, 255, 255));
         jLabelProjectName.setText("Library Management System");
-        jPanelTitle.add(jLabelProjectName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 300, -1));
+        jPanelTitle.add(jLabelProjectName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 560, -1));
 
         jLabelGreeting.setBackground(new java.awt.Color(255, 255, 255));
         jLabelGreeting.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 20)); // NOI18N
         jLabelGreeting.setForeground(new java.awt.Color(255, 255, 255));
         jLabelGreeting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/male_user_50px.png"))); // NOI18N
         jLabelGreeting.setText("Welcome, Admin");
-        jLabelGreeting.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jLabelGreetingMouseEntered(evt);
-            }
-        });
-        jPanelTitle.add(jLabelGreeting, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 0, 230, 60));
+        jPanelTitle.add(jLabelGreeting, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 0, 230, 60));
 
         jPanelExit.setBackground(new java.awt.Color(102, 102, 255));
         jPanelExit.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -167,9 +167,9 @@ public class HomeForm extends javax.swing.JFrame {
         jLabelExit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelExit.setText("X");
         jLabelExit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanelExit.add(jLabelExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -1, 40, 50));
+        jPanelExit.add(jLabelExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 60));
 
-        jPanelTitle.add(jPanelExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1460, 0, 40, 50));
+        jPanelTitle.add(jPanelExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1450, 0, 50, 60));
 
         getContentPane().add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1500, 60));
 
@@ -195,7 +195,7 @@ public class HomeForm extends javax.swing.JFrame {
         jLabelReturnBook.setForeground(new java.awt.Color(153, 153, 153));
         jLabelReturnBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Return_Purchase_26px.png"))); // NOI18N
         jLabelReturnBook.setText("   Return book");
-        jPanelReturnBook.add(jLabelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 210, 60));
+        jPanelReturnBook.add(jLabelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 280, 60));
 
         jPanelMenuBar.add(jPanelReturnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 340, 60));
 
@@ -281,10 +281,7 @@ public class HomeForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabelGreetingMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelGreetingMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabelGreetingMouseEntered
-
+    // Xử lý sự kiện Button Information
     private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         // TODO add your handling code here:
         jPanelMainContent.remove(panelManageAccount);
@@ -293,6 +290,7 @@ public class HomeForm extends javax.swing.JFrame {
         clickedMenu(panelManageAccount);
     }//GEN-LAST:event_btnInfoActionPerformed
 
+    // Xử lý sự kiện Button Đăng xuất
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         // TODO add your handling code here:
         SigninPage signIn = new SigninPage();
@@ -300,14 +298,22 @@ public class HomeForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogOutActionPerformed
 
+    // Xử lý sự kiện Button thay đổi mật khẩu
     private void btnChangePwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePwdActionPerformed
         // TODO add your handling code here:
         clickedMenu(panelChanegPwd);
     }//GEN-LAST:event_btnChangePwdActionPerformed
 
+    // Xử lý sự kiện khi nhấn chuột vào label Menu
     private void jLabelMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuMouseClicked
         // TODO add your handling code here:
-        jPopupMenu.show(jLabelMenu, evt.getX(), evt.getY());
+//        System.out.println(jLabelGreeting.getX()-2*jLabelGreeting.getWidth());
+        jPopupMenu.show(jLabelMenu, evt.getX(),                 evt.getY());
+        jPopupMenu.setLocation(
+         jLabelMenu.getX() +jLabelMenu.getWidth()- jPopupMenu.getWidth(),
+                jLabelMenu.getY()+jPopupMenu.getHeight()
+//        jLabelMenu.getY()-0*jLabelGreeting.getHeight()
+      );
     }//GEN-LAST:event_jLabelMenuMouseClicked
 
     /**
@@ -347,20 +353,28 @@ public class HomeForm extends javax.swing.JFrame {
         });
     }
 
+    // Dán những biến trong TitleStringConstant vào label
     private void setNavigationTitle() {
+        jLabelProjectName.setText(TitleStringConstant.PROJECT_NAME);
+        jLabelLMSDashBoard.setText(TitleStringConstant.LMS_DASHBOARD);
         jLabelManageBook.setText(TitleStringConstant.MANAGE_BOOK);
         jLabelPublisherList.setText(TitleStringConstant.MANAGE_PUBLISHER);
         jLabelManageAccount.setText(TitleStringConstant.MANAGE_ACCOUNT);
+        jLabelManageReader.setText(TitleStringConstant.MANAGE_READER);
+        jLabelReturnBook.setText(TitleStringConstant.MANAGE_BORROW);
+        jLabelBin.setText(TitleStringConstant.MANAGE_BIN);
 
         btnChangePwd.setText(TitleStringConstant.CHANGE_PWD);
         btnInfo.setText(TitleStringConstant.INFORMATION);
         btnLogOut.setText(TitleStringConstant.LOG_OUT);
     }
 
+    // Khởi tạo các giá trị bổ sung cho initComponent()
     private void myInitComponents() {
         setNavigationTitle();
 
-        jPanelExit.addMouseListener(new PanelButtonMouseAdapter(jPanelExit, -1) {
+        // Xử lí sự kiện click chuột của Panel Exit
+        jPanelExit.addMouseListener(new PanelButtonMouseAdapter(jPanelExit, PanelTypeEnum.Exit) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (JOptionPane.showConfirmDialog(null, GeneralStringConstant.GENERAL_EXIT, GeneralStringConstant.GENERAL_CONFIRMATION, JOptionPane.YES_NO_OPTION) == 0) {
@@ -369,14 +383,16 @@ public class HomeForm extends javax.swing.JFrame {
             }
         });
 
-        jPanelLMSDashBoard.addMouseListener(new PanelButtonMouseAdapter(jPanelLMSDashBoard, 1) {
+        // Xử lí sự kiện click chuột của Panel Dashboard
+        jPanelLMSDashBoard.addMouseListener(new PanelButtonMouseAdapter(jPanelLMSDashBoard, PanelTypeEnum.Home) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 clickedMenu(panelHome);
             }
         });
 
-        jPanelManageBook.addMouseListener(new PanelButtonMouseAdapter(jPanelManageBook, 0) {
+        // Xử lí sự kiện click chuột của Panel Manage Book
+        jPanelManageBook.addMouseListener(new PanelButtonMouseAdapter(jPanelManageBook, PanelTypeEnum.Function) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panelManageBooks.myInitComponents();
@@ -384,33 +400,41 @@ public class HomeForm extends javax.swing.JFrame {
             }
         });
 
-        jPanelManageReader.addMouseListener(new PanelButtonMouseAdapter(jPanelManageReader, 0) {
+        // Xử lí sự kiện click chuột của Panel Manage Reader
+        jPanelManageReader.addMouseListener(new PanelButtonMouseAdapter(jPanelManageReader, PanelTypeEnum.Function) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 clickedMenu(panelManageReader);
             }
         });
-        jPanelManageAccount.addMouseListener(new PanelButtonMouseAdapter(jPanelManageAccount, 0) {
+        
+        // Xử lí sự kiện click chuột của Panel Manage Account
+        jPanelManageAccount.addMouseListener(new PanelButtonMouseAdapter(jPanelManageAccount, PanelTypeEnum.Function) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 clickedMenu(panelManageAccount);
             }
         });
 
-        jPanelPublisherList.addMouseListener(new PanelButtonMouseAdapter(jPanelPublisherList, 0) {
+        // Xử lí sự kiện click chuột của Panel Manage Publisher
+        jPanelPublisherList.addMouseListener(new PanelButtonMouseAdapter(jPanelPublisherList, PanelTypeEnum.Function) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panelManagePublishers.myInitComponents();
                 clickedMenu(panelManagePublishers);
             }
         });
-        jPanelReturnBook.addMouseListener(new PanelButtonMouseAdapter(jPanelReturnBook, 0) {
+        
+        // Xử lí sự kiện click chuột của Panel Return book
+        jPanelReturnBook.addMouseListener(new PanelButtonMouseAdapter(jPanelReturnBook, PanelTypeEnum.Function) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 clickedMenu(panelManageBorrow);
             }
         });
-        jPanelBin.addMouseListener(new PanelButtonMouseAdapter(jPanelBin, 0) {
+        
+        // Xử lí sự kiện click chuột của Panel Manage Bin
+        jPanelBin.addMouseListener(new PanelButtonMouseAdapter(jPanelBin, PanelTypeEnum.Function) {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panelManageBin.myInitComponents();
@@ -419,6 +443,7 @@ public class HomeForm extends javax.swing.JFrame {
         });
     }
 
+    // Thêm những Panel vào trong form (cập nhật thanh menu)
     private void addPanelToHomePage() throws SQLException {
 
         panelHome = new HomePanel();
@@ -444,6 +469,7 @@ public class HomeForm extends javax.swing.JFrame {
         clickedMenu(panelHome);
     }
 
+    // Xử lí sự kiện khi click vào Menu
     private void clickedMenu(JPanel panel) {
         panelHome.setVisible(false);
         panelManageBooks.setVisible(false);
@@ -488,12 +514,27 @@ public class HomeForm extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator;
     // End of variables declaration//GEN-END:variables
 
+    // Home Panel
     private HomePanel panelHome;
+    
+    // Manage Book Panel
     private ManageBooksPanel panelManageBooks;
+    
+    // Manage Publisher Panel
     private ManagePublisherPanel panelManagePublishers;
+    
+    // Manage Reader Panel
     private ManageReaderPanel panelManageReader;
+    
+    // Manage Bin Panel
     private ManageBinPanel panelManageBin;
+    
+    // Manage Account Panel
     private ManageAccount panelManageAccount;
+    
+    // Manage Borrow Panel
     private ManageBorrowPanel panelManageBorrow;
+    
+    // Change Password Panel
     private ChangePwdPanel panelChanegPwd;
 }

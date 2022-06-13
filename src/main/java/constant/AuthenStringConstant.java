@@ -5,8 +5,9 @@
 package constant;
 
 /**
+ * This class is used to define some Authen String Constant
  *
- * @author Asus
+ * @author Nguyễn Duy Phúc
  */
 public class AuthenStringConstant {
 
@@ -47,12 +48,12 @@ public class AuthenStringConstant {
     public static final String[] ROLES = {
         "ADMIN",
         "LIBRARIAN"
-    };    
-    public static final String[] ROLES_VS={
+    };
+    public static final String[] ROLES_VS = {
         "Quản trị viên",
         "Thủ thư"
     };
- 
+
     //Mật khẩu mặc định
     public static final String DEFAULT_PWD = "123456";
 }

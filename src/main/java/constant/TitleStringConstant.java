@@ -12,7 +12,7 @@ package constant;
 public class TitleStringConstant {
     
     // Tên của title Project
-    public static final String PROJECT_NAME = "QUẢN LÝ THƯ VIỆN";
+    public static final String PROJECT_NAME = "PHẦN MỀM QUẢN LÝ THƯ VIỆN";
     // Tên của title LMS DashBoard
     public static final String LMS_DASHBOARD = "Dashboard";
     // Tên của title Book UI

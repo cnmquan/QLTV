@@ -5,8 +5,7 @@
 package DTO;
 
 /**
- *
- * @author Admin
+ * TypeFunctionEnum dùng để phân biệt các loại chức năng liên quan tới function
  */
 public enum TypeFunctionEnum {
     Insert,

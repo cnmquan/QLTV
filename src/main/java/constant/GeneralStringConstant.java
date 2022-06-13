@@ -7,7 +7,6 @@ package constant;
 /**
 * Mục đích của lớp [GeneralStringConstant] là để tạo những static final chung
  * gán cho những Component UI và các ký tự thường được sử dụng
- * @author Admin
  */
 public class GeneralStringConstant {
     // Các ký tự bổ trợ
