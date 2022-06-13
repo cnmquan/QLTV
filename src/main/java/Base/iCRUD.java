@@ -8,21 +8,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- *
- * @author Admin
+ * Dùng để xử lý các chức năng liên quan tới database
  * @param <T>
  */
 public interface iCRUD<T> {
 
-    ArrayList<T> getAll() throws SQLException;
+    // Lấy toàn bộ danh sách từ database của bảng T
+    public ArrayList<T> getAll() throws SQLException;
 
-    boolean insert(T t) throws SQLException;
+    // Chèn phần từ T vào bảng trong database
+    public boolean insert(T t) throws SQLException;
 
-    boolean update(T t) throws SQLException;
+    // Cập nhật phần tử T của bảng trong database
+    public boolean update(T t) throws SQLException;
 
-    boolean delete(String id) throws SQLException;
+    // Xoá phần tử với ID tương ứng của bảng T trong database
+    public boolean delete(String id) throws SQLException;
     
-    boolean delete(T t) throws SQLException;
+    // Xoá phần tử T ra khỏi bảng trong database
+    public boolean delete(T t) throws SQLException;
     
-    T getAttribute(String atribute, String s);
+    // Lấy T từ giá trị đã chọn
+    public T getAttribute(String atribute, String s);
 }

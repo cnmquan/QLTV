@@ -23,30 +23,39 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
- *
- * @author Admin
+ * ManagePublisherPanel dùng để hiển thị danh sách nhà xuất bản, có thể thêm,
+ * xoá, sửa nhà xuất bản
  */
 public class ManagePublisherPanel extends javax.swing.JPanel {
 
-   /**
-     * Creates new form ManagePublisherPanel
-     */
     public ManagePublisherPanel() {
-        initComponents();
+        /**
+         * Khởi tạo giá trị cho publisherDaoImp thông qua DIContainer   
+         *
+         */
         this.publisherDaoImp = DIContainer.getPublisherDao();
+
+        initComponents();
+
+        // Bổ sung thêm cho initComponents
         myInitComponents();
 
         setBounds(0, 0, 1160, 740);
     }
 
-    /**
-     * Creates new form ManageBooksPanel
-     */
+    // publisherDaoImp dùng để xử lý những chức năng có liên quan tới Publisher
     private final PublisherDaoImp publisherDaoImp;
+
+    // publisherList là danh sách Publisher và được lấy từ trong database
     private ArrayList<Publisher> publisherList;
+
+    // vctHeader dùng để đặt Header trong JTablePublisher
     private Vector vctHeader;
+
+    // vctData dùng để đặt Row trong JTablePublisher
     private Vector vctData;
 
+    // Dùng để khởi tạo các giá trị lấy từ Database cũng như đặt các giá trị final vào các Label
     public void myInitComponents() {
         setDefaultText();
         setDefaultTable();
@@ -55,6 +64,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         clearInfo();
     }
 
+    // Dùng để gán các giá trị Publisher từ Database vào vctData thông qua publisherDaoImp
     public void getVectorData() {
         this.publisherList = publisherDaoImp.getAll();
         this.vctData = new Vector();
@@ -63,42 +73,45 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
             vctData.add(vctRow);
         }
     }
-    
+
+    // Dùng để setText các jLabel thông qua TitleStringConstant, PublisherStringConstant, GeneralStringConstant
     private void setDefaultText() {
         jLabelTitle.setText(TitleStringConstant.MANAGE_PUBLISHER);
-        
+
         jLabelID.setText(PublisherStringConstant.PUBLISHER_ID);
         jLabelName.setText(PublisherStringConstant.PUBLISHER_NAME);
         jLabelPhoneNumber.setText(PublisherStringConstant.PUBLISHER_PHONE_NUMBER);
         jLabelAddress.setText(PublisherStringConstant.PUBLISHER_ADDRESS);
         jLabelSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
-        
+
         jTextFieldID.setText(PublisherStringConstant.PUBLISHER_ID);
         jTextFieldName.setText(PublisherStringConstant.PUBLISHER_NAME);
         jTextFieldPhoneNumber.setText(PublisherStringConstant.PUBLISHER_PHONE_NUMBER);
         jTextFieldAddress.setText(PublisherStringConstant.PUBLISHER_ADDRESS);
         jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
-        
+
         jButtonInsert.setText(GeneralStringConstant.GENERAL_INSERT);
         jButtonUpdate.setText(GeneralStringConstant.GENERAL_UPDATE);
         jButtonClear.setText(GeneralStringConstant.GENERAL_CLEAR);
         jButtonDelete.setText(GeneralStringConstant.GENERAL_DELETE);
     }
-    
-    private void setDefaultTable(){
-         jTablePublisher.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+    // Dùng để set những thông số mặc định của bảng
+    private void setDefaultTable() {
+        jTablePublisher.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 18));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         jScrollPanelTable.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        
+
         jTablePublisher.setBackground(Color.WHITE);
         jTablePublisher.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTablePublisher.setFillsViewportHeight(true);
     }
 
-    public void showTableData(Vector vctData) {       
+    // Hiển thị bảng jTablePublisher được gán vctData
+    public void showTableData(Vector vctData) {
 
         this.vctHeader = this.publisherDaoImp.getTitleColumn();
 
@@ -108,14 +121,15 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
                 //all cells false
                 return false;
             }
-        });    
-        
+        });
+
         DefaultTableModel model = (DefaultTableModel) jTablePublisher.getModel();
         //Add sorter
         var sorter = new TableRowSorter<DefaultTableModel>(model);
-        jTablePublisher.setRowSorter(sorter);   
-   }
+        jTablePublisher.setRowSorter(sorter);
+    }
 
+    // Hiển thị thông tin chi tiết của Publisher khi chọn 1 hàng trong jTablePublisher
     private void displayDetails(int selectedIndex) {
         Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
 
@@ -130,6 +144,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         jTextFieldAddress.setText(address);
     }
 
+    // Xoá những giá trị đã điền khỏi jTextField
     private void clearInfo() {
         jTablePublisher.clearSelection();
         jTextFieldID.setText(PublisherStringConstant.PUBLISHER_ID);
@@ -139,29 +154,38 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
     }
 
-    // Validate when insert/ update data
-    // typeFunction = 1 is insert
-    // typeFunction = 2 is update
-    private boolean validateBookData(String id, String name, String phoneNumber, String address, TypeFunctionEnum typeFunction) {
+    // Kiểm tra khi nhấn vào nút Insert/Update/Delete
+    private boolean validateBookData(String id, String name,
+            String phoneNumber, String address, TypeFunctionEnum typeFunction) {
+
+        // Khởi tạo chuỗi errorList
         String errorList = GeneralStringConstant.GENERAL_EMPTY;
+
+        // Kiểm tra ID nhập vào có trống không
         if (id.isBlank() || id.isEmpty() || id.equals(PublisherStringConstant.PUBLISHER_ID)) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_ID_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        } else if (publisherDaoImp.isExist(this.publisherList, id) && typeFunction == TypeFunctionEnum.Insert) {
+        } // Kiểm tra ID nhập vào có trùng với ID đã có trong danh sách khi Insert không 
+        else if (publisherDaoImp.isExist(this.publisherList, id) && typeFunction == TypeFunctionEnum.Insert) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_ID_INSERT_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        } else if (publisherDaoImp.isExistDeleteList(id) && typeFunction == TypeFunctionEnum.Insert) {
+        } // Kiểm tra ID nhập vào có trùng với ID đã có trong danh sách thùng rác khi Insert không 
+        else if (publisherDaoImp.isExistDeleteList(id) && typeFunction == TypeFunctionEnum.Insert) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_ID_DELETED_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        } else if (!publisherDaoImp.isExist(this.publisherList, id) && (typeFunction == TypeFunctionEnum.Update || typeFunction == TypeFunctionEnum.Delete)) {
+        } // Kiểm tra ID có khác với ID đã có trong danh sách khi Update/Delete không
+        else if (!publisherDaoImp.isExist(this.publisherList, id) && (typeFunction == TypeFunctionEnum.Update || typeFunction == TypeFunctionEnum.Delete)) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_ID_UPDATE_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra Tên nhập vào có trống không
         if (name.isBlank() || name.isEmpty()) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_NAME_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
-        if (phoneNumber.isBlank() || phoneNumber.isEmpty() ||phoneNumber.length() < 6) {
+        // Kiểm tra Số điện thoại nhập vào có lớn hơn 6 ký tự không
+        if (phoneNumber.isBlank() || phoneNumber.isEmpty() || phoneNumber.length() < 6) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_PHONE_NUMBER_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        } 
+        }
 
+        // Kiểm tra Địa chỉ nhập vào có trống không
         if (address.isBlank() || address.isEmpty()) {
             errorList = errorList + PublisherStringConstant.PUBLISHER_ADDRESS_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
@@ -174,10 +198,11 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }
 
+    // Dùng để search Table khi nhập trong Tìm kiếm
     private void setTableBySearch(String text) {
         this.vctData.clear();
         for (Publisher publisher : this.publisherList) {
-            if ( publisher.getPublisherID().toLowerCase().contains(text.toLowerCase())
+            if (publisher.getPublisherID().toLowerCase().contains(text.toLowerCase())
                     || publisher.getPublisherName().toLowerCase().contains(text.toLowerCase())
                     || publisher.getPublisherAddress().toLowerCase().contains(text.toLowerCase())
                     || publisher.getPublisherPhoneNumber().toLowerCase().contains(text.toLowerCase())) {
@@ -310,6 +335,11 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         jTextFieldPhoneNumber.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTextFieldPhoneNumberMousePressed(evt);
+            }
+        });
+        jTextFieldPhoneNumber.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldPhoneNumberKeyPressed(evt);
             }
         });
         jPanelPhoneNumber.add(jTextFieldPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 180, 40));
@@ -477,12 +507,14 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 1120, 390));
     }// </editor-fold>//GEN-END:initComponents
 
+    // Xử lý sự kiện Mouse Pressed của jTable Publisher
     private void jTablePublisherMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePublisherMousePressed
         // TODO add your handling code here:
         int selectedRow = jTablePublisher.getSelectedRow();
         displayDetails(selectedRow);
     }//GEN-LAST:event_jTablePublisherMousePressed
 
+    // Xử lý sự kiện Key Released của jTable Publisher
     private void jTablePublisherKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTablePublisherKeyReleased
         // TODO add your handling code here:
         //        int selectedRow = jTableBook.getSelectedRow();
@@ -494,11 +526,13 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTablePublisherKeyReleased
 
+    // Xử lý sự kiện Press của Button Clear
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         // TODO add your handling code here:
         myInitComponents();
     }//GEN-LAST:event_jButtonClearActionPerformed
 
+     // Xử lý sự kiện Press của Button Update
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -517,6 +551,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
+     // Xử lý sự kiện Press của Button Delete
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -525,25 +560,26 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         String phoneNumber = jTextFieldPhoneNumber.getText();
         if (validateBookData(id, name, phoneNumber, address, TypeFunctionEnum.Delete)) {
             Publisher publisher = new Publisher(id, name, phoneNumber, address);
-           
+
             int answer = JOptionPane.showConfirmDialog(null,
                     PublisherStringConstant.PUBLISHER_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
                     JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
-                 boolean deleteCheck = publisherDaoImp.moveToBin(publisher.getPublisherID());
+                boolean deleteCheck = publisherDaoImp.moveToBin(publisher.getPublisherID());
                 if (deleteCheck) {
                     JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_DELETE_SUCCESS);
-                myInitComponents();
+                    myInitComponents();
                 } else {
                     JOptionPane.showMessageDialog(null, PublisherStringConstant.PUBLISHER_DELETE_ERROR);
                 }
             } else {
-                
+
             }
 
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
+     // Xử lý sự kiện Press của Button Insert
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -563,6 +599,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
+     // Xử lý sự kiện Mouse Press của Text Field Địa chỉ
     private void jTextFieldAddressMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldAddressMousePressed
         // TODO add your handling code here:
         String author = jTextFieldAddress.getText();
@@ -571,6 +608,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldAddressMousePressed
 
+    // Xử lý sự kiện Mouse Press của Text Field Tên nhà xuất bản
     private void jTextFieldNameMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldNameMousePressed
         // TODO add your handling code here:
         String name = jTextFieldName.getText();
@@ -579,6 +617,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldNameMousePressed
 
+    // Xử lý sự kiện Mouse Press của Text Field ID nhà xuất bản
     private void jTextFieldIDMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldIDMousePressed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -587,6 +626,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldIDMousePressed
 
+    // Xử lý sự kiện Mouse Press của Text Field Số điện thoại
     private void jTextFieldPhoneNumberMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldPhoneNumberMousePressed
         // TODO add your handling code here:
         String id = jTextFieldPhoneNumber.getText();
@@ -595,12 +635,14 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldPhoneNumberMousePressed
 
+    // Xử lý sự kiện Key Released của Text Field Tìm kiếm
     private void jTextFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchKeyReleased
         // TODO add your handling code here:
         String text = jTextFieldSearch.getText();
         setTableBySearch(text);
     }//GEN-LAST:event_jTextFieldSearchKeyReleased
 
+    // Xử lý sự kiện Mouse Press của Text Field Tìm kiếm
     private void jTextFieldSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldSearchMousePressed
         // TODO add your handling code here:
         String search = jTextFieldSearch.getText();
@@ -609,6 +651,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchMousePressed
 
+    // Xử lý sự kiện Focus Gained của Text Field ID Nhà xuất bản
     private void jTextFieldIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDFocusGained
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -617,6 +660,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldIDFocusGained
 
+    // Xử lý sự kiện Focus Gained của Text Field Số điện thoại
     private void jTextFieldPhoneNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPhoneNumberFocusGained
         // TODO add your handling code here:
         String phoneNumber = jTextFieldPhoneNumber.getText();
@@ -625,6 +669,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldPhoneNumberFocusGained
 
+    // Xử lý sự kiện Focus Gained của Text Field Tên nhà xuất bản
     private void jTextFieldNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNameFocusGained
         // TODO add your handling code here:
         String name = jTextFieldName.getText();
@@ -633,6 +678,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldNameFocusGained
 
+    // Xử lý sự kiện Focus Gained của Text Field Địa chỉ
     private void jTextFieldAddressFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAddressFocusGained
         // TODO add your handling code here:
         String address = jTextFieldAddress.getText();
@@ -641,14 +687,16 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldAddressFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field ID Nhà xuất bản
     private void jTextFieldIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDFocusLost
         // TODO add your handling code here:
-        String id = jTextFieldID.getText();        
+        String id = jTextFieldID.getText();
         if (id.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldID.setText(PublisherStringConstant.PUBLISHER_ID);
         }
     }//GEN-LAST:event_jTextFieldIDFocusLost
 
+    // Xử lý sự kiện Focus Lost của Text Field Số điện thoại
     private void jTextFieldPhoneNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPhoneNumberFocusLost
         // TODO add your handling code here:
         String phoneNumber = jTextFieldPhoneNumber.getText();
@@ -657,6 +705,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldPhoneNumberFocusLost
 
+    // Xử lý sự kiện Focus Lost của Text Field Tên nhà xuất bản
     private void jTextFieldNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNameFocusLost
         // TODO add your handling code here:
         String name = jTextFieldName.getText();
@@ -665,6 +714,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldNameFocusLost
 
+    // Xử lý sự kiện Focus Lost của Text Field Địa chỉ
     private void jTextFieldAddressFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAddressFocusLost
         // TODO add your handling code here:
         String address = jTextFieldAddress.getText();
@@ -673,6 +723,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldAddressFocusLost
 
+    // Xử lý sự kiện Focus Gained của Text Field Tìm kiếm
     private void jTextFieldSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusGained
         // TODO add your handling code here:
         String search = jTextFieldSearch.getText();
@@ -681,18 +732,20 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Tìm kiếm
     private void jTextFieldSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusLost
         // TODO add your handling code here:
-         String search = jTextFieldSearch.getText();
+        String search = jTextFieldSearch.getText();
         if (search.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
         }
     }//GEN-LAST:event_jTextFieldSearchFocusLost
 
+    // Xử lý sự kiện Key Press của Text Field Số điện thoại
     private void jTextFieldPhoneNumberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPhoneNumberKeyPressed
         // TODO add your handling code here:
         String phoneNumber = jTextFieldPhoneNumber.getText();
-        
+
         if (evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9' && phoneNumber.length() <= 12) {
             jTextFieldPhoneNumber.setEditable(true);
         } else {
@@ -703,7 +756,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
                 jTextFieldPhoneNumber.setEditable(false);
             }
         }
-        
+
     }//GEN-LAST:event_jTextFieldPhoneNumberKeyPressed
 
 

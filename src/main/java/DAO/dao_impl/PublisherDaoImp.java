@@ -16,15 +16,15 @@ import java.util.Vector;
 import constant.GeneralStringConstant;
 
 /**
- *
- * @author Admin
+ * PublisherDaoImp Dùng để thực thi hàm được implements từ PublisherDao
  */
 public class PublisherDaoImp implements PublisherDao {
 
+    // Default Constructor
     public PublisherDaoImp() {
     }
 
-    // Get All List Publisher from SQL Server
+    // Lấy toàn bộ danh sách từ database của bảng Nhà xuất bản
     @Override
     public ArrayList<Publisher> getAll() {
         ArrayList<Publisher> list = new ArrayList<>();
@@ -51,6 +51,7 @@ public class PublisherDaoImp implements PublisherDao {
         return list;
     }
 
+    // Lấy Nhà xuất bản từ giá trị a của thuộc tính attribute đã chọn
     @Override
     public Publisher getAttribute(String attribute, String a) {
         Publisher publisher = new Publisher();
@@ -77,6 +78,7 @@ public class PublisherDaoImp implements PublisherDao {
         return publisher;
     }
 
+    // Lấy danh sách các đối tượng Nhà xuất bản đã bị ẩn trong database
     @Override
     public ArrayList<Publisher> getDeleteList() {
         ArrayList<Publisher> list = new ArrayList<>();
@@ -103,7 +105,7 @@ public class PublisherDaoImp implements PublisherDao {
         return list;
     }
 
-    // Insert Publisher object to SQL Database
+    // Chèn phần từ nhà xuất bản vào bảng trong database
     @Override
     public boolean insert(Publisher t) {
         boolean rowInserted;
@@ -121,16 +123,16 @@ public class PublisherDaoImp implements PublisherDao {
                 + "false)";
 
         rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-            t.getPublisherID(), 
-            t.getPublisherName(), 
-            t.getPublisherPhoneNumber(), 
+            t.getPublisherID(),
+            t.getPublisherName(),
+            t.getPublisherPhoneNumber(),
             t.getPublisherAddress()
         });
 
         return rowInserted;
     }
 
-    // Update Publisher object to SQL Database
+    // Cập nhật phần tử nhà xuất bản của bảng trong database
     @Override
     public boolean update(Publisher t) {
         boolean rowUpdated;
@@ -150,6 +152,7 @@ public class PublisherDaoImp implements PublisherDao {
         return rowUpdated;
     }
 
+    // Xoá phần tử với ID tương ứng của bảng Nhà xuất bản trong database
     @Override
     public boolean delete(String id) {
         boolean rowDeleted;
@@ -162,8 +165,9 @@ public class PublisherDaoImp implements PublisherDao {
 
         return rowDeleted;
     }
-    
-     @Override
+
+    // Xoá phần tử nhà xuất bản ra khỏi bảng trong database
+    @Override
     public boolean delete(Publisher t) throws SQLException {
         boolean rowDeleted;
         String sql = "DELETE FROM publishers "
@@ -176,7 +180,7 @@ public class PublisherDaoImp implements PublisherDao {
         return rowDeleted;
     }
 
-    // Delete Publisher object to SQL Database
+    // Chuyển một đối tượng nhà xuất bản vào thùng rác
     @Override
     public boolean moveToBin(String id) {
         boolean rowMovedToBin;
@@ -191,6 +195,7 @@ public class PublisherDaoImp implements PublisherDao {
         return rowMovedToBin;
     }
 
+    // Chuyển một đối tượng nhà xuất bản ra khỏi thùng rác
     @Override
     public boolean removeFromBin(String id) {
         boolean rowRemovedFromBin;
@@ -205,6 +210,7 @@ public class PublisherDaoImp implements PublisherDao {
         return rowRemovedFromBin;
     }
 
+    // Lấy thông tin cột dưới dạng Vector
     @Override
     public Vector getTitleColumn() {
         Vector vector = new Vector();
@@ -215,15 +221,7 @@ public class PublisherDaoImp implements PublisherDao {
         return vector;
     }
 
-    public String getIDByName(List<Publisher> t, String name) {
-        for (Publisher p : t) {
-            if (p.getPublisherName().contains(name)) {
-                return p.getPublisherID();
-            }
-        }
-        return GeneralStringConstant.GENERAL_EMPTY;
-    }
-
+    // Kiểm tra xem chuỗi S có tồn tại trong danh sách bảng nhà xuất bản trong databse
     @Override
     public boolean isExist(ArrayList<Publisher> t, String s) {
         for (Publisher publisher : t) {
@@ -234,6 +232,7 @@ public class PublisherDaoImp implements PublisherDao {
         return false;
     }
 
+    // Kiểm tra xem chuỗi s này có trùng với id trong danh sách ẩn 
     @Override
     public boolean isExistDeleteList(String s) {
         ArrayList<Publisher> deleteList = getDeleteList();
@@ -245,9 +244,10 @@ public class PublisherDaoImp implements PublisherDao {
         return false;
     }
 
+    // Kiểm tra chuỗi s có phải là chuỗi hợp lệ để thêm vào databse
     @Override
     public boolean validateString(String s) {
         return s.isBlank() || s.isEmpty();
-    }  
+    }
 
 }

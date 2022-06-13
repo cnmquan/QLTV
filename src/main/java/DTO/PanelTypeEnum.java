@@ -5,9 +5,10 @@
 package DTO;
 
 /**
- * BinTypeEnum dùng để phân biệt các loại trong lớp Bin
+ * PanelTypeEnum dùng để phân biệt các chức năng của Panel trong HomeForm
  */
-public enum BinTypeEnum {
-    Book,
-    Publisher
+public enum PanelTypeEnum {
+    Home,
+    Function,
+    Exit
 }

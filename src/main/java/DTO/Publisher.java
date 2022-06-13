@@ -9,16 +9,24 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 /**
- *
- * @author Admin
+ * Lớp Publisher dùng để chứa những thông tin liên quan tới Publisher
+ * Có những hàm để hỗ  trợ convert sang các kiểu dữ liệu cần thiết
  */
 public class Publisher {
 
+    // ID của Nhà xuất bản
     private String publisherID;
+    
+    // Tên của Nhà xuất bản
     private String publisherName;
+    
+    // Số điện thoại của Nhà xuất bản
     private String publisherPhoneNumber;
+    
+    // Địa chỉ của Nhà xuất bản
     private String publisherAddress;
 
+    // Constructor Đầy đủ tham số
     public Publisher(String publisherID, String publisherName, String publisherPhoneNumber, String publisherAddress) {
         this.publisherID = publisherID;
         this.publisherName = publisherName;
@@ -26,9 +34,13 @@ public class Publisher {
         this.publisherAddress = publisherAddress;
     }
 
+    // Default Constructors
     public Publisher() {
     }
 
+    /**
+     * Các hàm Get/Set cho các thuộc tính của Nhà xuất bản
+     */
     public String getPublisherID() {
         return publisherID;
     }
@@ -61,6 +73,7 @@ public class Publisher {
         this.publisherAddress = publisherAddress;
     }
 
+    // Convert to Vector
     public Vector convertToVector() {
         Vector vector = new Vector();
         vector.add(this.publisherID);
@@ -70,6 +83,7 @@ public class Publisher {
         return vector;
     }
 
+    // Convert From ResultSet
     public static Publisher convertFromResultSet(ResultSet rs) throws SQLException {
         Publisher publisher = new Publisher();
 

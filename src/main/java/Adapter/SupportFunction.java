@@ -9,11 +9,11 @@ import constant.TitleStringConstant;
 import DTO.BinTypeEnum;
 
 /**
- *
- * @author Admin
+ * Lớp này dùng để xử lý một số chức năng trong chương trình
  */
 public class SupportFunction {
 
+    // Dùng để kiểm tra giá trị nhập vào có phải số không
     public static boolean checkNumber(String s) {
         if (s == null) {
             // checks if the String is null 
@@ -31,6 +31,7 @@ public class SupportFunction {
         return num > 0;
     }
 
+    // Dùng để kiểm tra giá trị nhập vào có phải số tiền không
     public static boolean checkPriceNumber(String s) {
         if (s == null) {
             // checks if the String is null 
@@ -47,7 +48,8 @@ public class SupportFunction {
         Double numPrice = Double.valueOf(s);
         return numPrice > 0;
     }
-
+    
+    // Dùng để convert từ kiểu String sang kiểu BinTYpeEnum
     public static BinTypeEnum convertStringToBinType(String type) {
         switch (type) {
             case TitleStringConstant.BOOK -> {
@@ -62,13 +64,14 @@ public class SupportFunction {
         }
     }
 
+    // Dùng để convert từ kiểu BinTypeEnum sang kiểu String
     public static String convertBinTypeEnumToString(BinTypeEnum type) {
-        if (type == BinTypeEnum.Book) {
-            return TitleStringConstant.BOOK;
-        } else if (type == BinTypeEnum.Publisher) {
-            return TitleStringConstant.PUBLISHER;
-        } else {
+        if (null == type) {
             return GeneralStringConstant.GENERAL_EMPTY;
-        }
+        } else return switch (type) {
+            case Book -> TitleStringConstant.BOOK;
+            case Publisher -> TitleStringConstant.PUBLISHER;
+            default -> GeneralStringConstant.GENERAL_EMPTY;
+        };
     }
 }

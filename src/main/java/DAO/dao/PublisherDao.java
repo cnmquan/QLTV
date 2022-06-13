@@ -11,8 +11,7 @@ import Base.iValidation;
 import DTO.Publisher;
 
 /**
- *
- * @author Admin
+ * PublisherDao Dùng để xử lí các chức năng liên quan tới Publisher
  */
 public interface PublisherDao extends iCRUD<Publisher>, iGetTitle, iValidation<Publisher>, iDeleteHandler<Publisher> {
    

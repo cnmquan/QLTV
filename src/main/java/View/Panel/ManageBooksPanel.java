@@ -16,7 +16,6 @@ import java.awt.Font;
 import DTO.Book;
 import DTO.Publisher;
 import DTO.TypeFunctionEnum;
-import constant.DatabaseStringConstant;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -28,30 +27,47 @@ import javax.swing.JPanel;
 import javax.swing.table.TableRowSorter;
 
 /**
- *
- * @author Admin
+ * ManageBooksPanel dùng để hiện thị thông tin sách, cũng như các chức năng
+ * thêm, xoá, sửa sách
  */
 public class ManageBooksPanel extends JPanel {
 
-    /**
-     * Creates new form ManageBooksPanel
-     */
+    // bookDaoImp dùng để xử lý những chức năng có liên quan tới Book
     private final BookDaoImp bookDaoImp;
+
+    // publisherDaoImp dùng để xử lý những chức năng có liên quan tới Publisher
     private final PublisherDaoImp publisherDaoImp;
+
+    // publisherList là danh sách Publisher và được lấy từ trong database
     private ArrayList<Publisher> publisherList;
+
+    // listBook là danh sách Book và được lấy từ trong database
     private ArrayList<Book> listBook;
+
+    // vctHeader dùng để đặt Header trong JTableBook
     private Vector vctHeader;
+
+    // vctData dùng để đặt Row trong JTableBook
     private Vector vctData;
 
     public ManageBooksPanel() {
+        /**
+         * Khởi tạo giá trị cho bookDaoImp, publisherDaoImp thông qua
+         * DIContainer
+         *
+         */
         this.bookDaoImp = DIContainer.getBookDao();
         this.publisherDaoImp = DIContainer.getPublisherDao();
-        initComponents();        
+
+        initComponents();
+
+        // Bổ sung thêm cho initComponents
         myInitComponents();
 
         setBounds(0, 0, 1160, 740);
     }
 
+    // Dùng để khởi tạo các giá trị lấy từ Database cũng như đặt các giá trị final vào các Label
     public void myInitComponents() {
         setDefaultText();
         setDefaultTable();
@@ -61,6 +77,7 @@ public class ManageBooksPanel extends JPanel {
         clearInfo();
     }
 
+    // Dùng để gán các giá trị Book từ Database vào vctData thông qua bookDaoImp
     private void getVectorData() {
         this.listBook = bookDaoImp.getAll();
         this.vctData = new Vector();
@@ -70,6 +87,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }
 
+    // Dùng để setText các jLabel thông qua TitleStringConstant, BookStringConstant, GeneralStringConstant
     private void setDefaultText() {
         jLabelTitle.setText(TitleStringConstant.MANAGE_BOOK);
 
@@ -101,6 +119,7 @@ public class ManageBooksPanel extends JPanel {
         jButtonDelete.setText(GeneralStringConstant.GENERAL_DELETE);
     }
 
+    // Dùng để set những thông số mặc định của bảng
     private void setDefaultTable() {
         jTableBook.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
@@ -114,6 +133,7 @@ public class ManageBooksPanel extends JPanel {
         jTableBook.setFillsViewportHeight(true);
     }
 
+    // Hiển thị bảng jTableBook được gán vctData
     private void showTableData(Vector vctData) {
         this.vctHeader = this.bookDaoImp.getTitleColumn();
 
@@ -128,10 +148,11 @@ public class ManageBooksPanel extends JPanel {
         DefaultTableModel model = (DefaultTableModel) jTableBook.getModel();
         //Add sorter
         var sorter = new TableRowSorter<DefaultTableModel>(model);
-        jTableBook.setRowSorter(sorter);      
+        jTableBook.setRowSorter(sorter);
 
     }
 
+    // Gán danh sách Publisher lấy từ Database thông qua PublisherDaoImp vào PublisherComboBox
     private void getListPublisherName() {
         this.publisherList = publisherDaoImp.getAll();
         for (int i = 0; i < publisherList.size(); i++) {
@@ -139,6 +160,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }
 
+    // Hiển thị thông tin chi tiết của Book khi chọn 1 hàng trong jTableBook
     private void displayDetails(int selectedIndex) {
         Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
 
@@ -176,6 +198,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }
 
+    // Xoá những giá trị đã điền khỏi jTextField
     private void clearInfo() {
         jTableBook.clearSelection();
         jTextFieldAuthor.setText(BookStringConstant.BOOK_AUTHOR);
@@ -190,47 +213,64 @@ public class ManageBooksPanel extends JPanel {
         jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
     }
 
-    // Validate when insert/update/delete data
-    private boolean validateBookData(String id, String name, String category, String author, String quantity, String pageNumber, String price, String publisherName, String publishYear, TypeFunctionEnum typeFunction) {
+    // Kiểm tra khi nhấn vào nút Insert/Update/Delete
+    private boolean validateBookData(String id, String name, String category,
+            String author, String quantity, String pageNumber, String price,
+            String publisherName, String publishYear, TypeFunctionEnum typeFunction) {
+
+        // Khởi tạo chuỗi errorList
         String errorList = GeneralStringConstant.GENERAL_EMPTY;
+
+        // Kiểm tra ID nhập vào có trống không
         if (id.isBlank() || id.isEmpty() || id.equals(BookStringConstant.BOOK_ID)) {
             errorList = errorList + BookStringConstant.BOOK_ID_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        } else if (bookDaoImp.isExist(this.listBook, id) && typeFunction == TypeFunctionEnum.Insert) {
+        } // Kiểm tra ID nhập vào có trùng với ID đã có trong danh sách khi Insert không 
+        else if (bookDaoImp.isExist(this.listBook, id) && typeFunction == TypeFunctionEnum.Insert) {
             errorList = errorList + BookStringConstant.BOOK_ID_INSERT_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        } else if (bookDaoImp.isExistDeleteList(id) && typeFunction == TypeFunctionEnum.Insert) {
+        } // Kiểm tra ID nhập vào có trùng với ID đã có trong danh sách thùng rác khi Insert không 
+        else if (bookDaoImp.isExistDeleteList(id) && typeFunction == TypeFunctionEnum.Insert) {
             errorList = errorList + BookStringConstant.BOOK_ID_DELETED_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
-        } else if (!bookDaoImp.isExist(this.listBook, id) && (typeFunction == TypeFunctionEnum.Update || typeFunction == TypeFunctionEnum.Delete)) {
+        } // Kiểm tra ID có khác với ID đã có trong danh sách khi Update/Delete không
+        else if (!bookDaoImp.isExist(this.listBook, id) && (typeFunction == TypeFunctionEnum.Update || typeFunction == TypeFunctionEnum.Delete)) {
             errorList = errorList + BookStringConstant.BOOK_ID_UPDATE_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra Tên nhập vào có trống không
         if (name.isBlank() || name.isEmpty()) {
             errorList = errorList + BookStringConstant.BOOK_TITLE_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra Thể loại nhập vào có trống không
         if (category.isBlank() || category.isEmpty()) {
             errorList = errorList + BookStringConstant.BOOK_CATEGORY_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra Tác giả nhập vào có trống không
         if (author.isBlank() || author.isEmpty()) {
             errorList = errorList + BookStringConstant.BOOK_AUTHOR_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra Nhà xuất bản đã được chọn chưa
         if (publisherName.equals(BookStringConstant.BOOK_PUBLISHER)) {
             errorList = errorList + BookStringConstant.BOOK_PUBLISHER_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra số lượng nhập vào có hợp lệ không (> 0)
         if ((quantity.equals(GeneralStringConstant.GENERAL_ZERO)) || quantity.isEmpty() || !SupportFunction.checkNumber(quantity)) {
             errorList = errorList + BookStringConstant.BOOK_QUANTITY_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra số trang nhập vào có hợp lê không (>0)
         if (pageNumber.equals(GeneralStringConstant.GENERAL_ZERO) || quantity.isEmpty() || !SupportFunction.checkNumber(quantity)) {
             errorList = errorList + BookStringConstant.BOOK_PAGE_NUMBER_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra giá tiền nhập vào có hợp lệ không (>0)
         if (price.equals(GeneralStringConstant.GENERAL_ZERO) || quantity.isEmpty() || !SupportFunction.checkPriceNumber(quantity)) {
             errorList = errorList + BookStringConstant.BOOK_PRICE + GeneralStringConstant.GENERAL_NEW_LINE;
         }
 
+        // Kiểm tra năm nhập vào có hợp lệ không (>0)
         if (publishYear.equals(GeneralStringConstant.GENERAL_ZERO) || publishYear.isEmpty() || !SupportFunction.checkNumber(quantity)) {
             errorList = errorList + BookStringConstant.BOOK_PUBLISH_YEAR_EMPTY_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
@@ -243,6 +283,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }
 
+    // Dùng để search Table khi nhập trong Tìm kiếm
     private void setTableBySearch(String text) {
         this.vctData.clear();
         for (Book book : this.listBook) {
@@ -758,6 +799,8 @@ public class ManageBooksPanel extends JPanel {
         add(jScrollPaneMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 1130, 320));
     }// </editor-fold>//GEN-END:initComponents
 
+    // Xử lý sự kiện khi released KeyBoard
+    // Kiểm tra dòng hiện tại của Table và hiển thị thông tin của cột lên Panel Detail
     private void jTableBookKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableBookKeyReleased
         // TODO add your handling code here:
 //        int selectedRow = jTableBook.getSelectedRow();
@@ -769,17 +812,21 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTableBookKeyReleased
 
+    // Xử lý sự kiện khi press Chuột
+    // Hiển thị thông tin của cột đã được nhấn lên Panel Detail
     private void jTableBookMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableBookMousePressed
         // TODO add your handling code here:
         int selectedRow = jTableBook.getSelectedRow();
         displayDetails(selectedRow);
     }//GEN-LAST:event_jTableBookMousePressed
 
+    // Xử lý sự kiện khi nhấn vào Button Clear
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         // TODO add your handling code here:
         myInitComponents();
     }//GEN-LAST:event_jButtonClearActionPerformed
 
+    // Xử lý sự kiện khi nhấn vào Button Insert
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -810,6 +857,7 @@ public class ManageBooksPanel extends JPanel {
 
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
+    // Xử lý sự kiện nhấn phím vào Text Field Năm xuất bản
     private void jTextFieldPublishYearKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPublishYearKeyPressed
         // TODO add your handling code here:
         //Action when key press       
@@ -825,6 +873,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPublishYearKeyPressed
 
+    // Xử lý sự kiện nhấn phím vào Text Field Số trang
     private void jTextFieldPageNumKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPageNumKeyPressed
         // TODO add your handling code here:
         //Action when key press
@@ -840,6 +889,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPageNumKeyPressed
 
+    // Xử lý sự kiện nhấn phím vào Text Field Số lượng
     private void jTextFieldQuantityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldQuantityKeyPressed
         // TODO add your handling code here:
         //Action when key press
@@ -855,6 +905,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldQuantityKeyPressed
 
+    // Xử lý sự kiện nhấn phím vào Text Field Giá tiền
     private void jTextFieldPriceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPriceKeyPressed
         // TODO add your handling code here:
         //Action when key press
@@ -879,6 +930,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPriceKeyPressed
 
+    // Xử lý sự kiện khi press Chuột Năm xuất bản
     private void jTextFieldPublishYearMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldPublishYearMousePressed
         // TODO add your handling code here:
         String year = jTextFieldPublishYear.getText();
@@ -887,6 +939,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPublishYearMousePressed
 
+    // Xử lý sự kiện khi press Chuột Số trang
     private void jTextFieldPageNumMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldPageNumMousePressed
         // TODO add your handling code here:
         String pageNum = jTextFieldPageNum.getText();
@@ -895,6 +948,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPageNumMousePressed
 
+    // Xử lý sự kiện khi press Chuột Số lượng
     private void jTextFieldQuantityMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldQuantityMousePressed
         // TODO add your handling code here:
         String quantity = jTextFieldQuantity.getText();
@@ -903,6 +957,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldQuantityMousePressed
 
+    // Xử lý sự kiện khi press Chuột Giá tiền
     private void jTextFieldPriceMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldPriceMousePressed
         // TODO add your handling code here:
         String price = jTextFieldPrice.getText();
@@ -911,6 +966,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPriceMousePressed
 
+    // Xử lý sự kiện khi released KeyBoard Năm xuất bản
     private void jTextFieldPublishYearKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPublishYearKeyReleased
         // TODO add your handling code here:
         String sYear = jTextFieldPublishYear.getText();
@@ -921,6 +977,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPublishYearKeyReleased
 
+    // Xử lý sự kiện khi nhấn vào Button Update
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -949,6 +1006,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
+    // Xử lý sự kiện khi nhấn vào Button Delete
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -988,6 +1046,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
+    // Xử lý sự kiện khi released KeyBoard
     private void jTextFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchKeyReleased
         // TODO add your handling code here:
         String text = jTextFieldSearch.getText();
@@ -995,6 +1054,7 @@ public class ManageBooksPanel extends JPanel {
 
     }//GEN-LAST:event_jTextFieldSearchKeyReleased
 
+    // Xử lý sự kiện khi press Chuột Tìm kiếm
     private void jTextFieldSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldSearchMousePressed
         // TODO add your handling code here:
         String search = jTextFieldSearch.getText();
@@ -1003,6 +1063,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchMousePressed
 
+    // Xử lý sự kiện khi press Chuột ID Sách
     private void jTextFieldIDMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldIDMousePressed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -1011,6 +1072,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldIDMousePressed
 
+    // Xử lý sự kiện khi press Chuột Thể loại
     private void jTextFieldCategoryMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldCategoryMousePressed
         // TODO add your handling code here:
         String category = jTextFieldCategory.getText();
@@ -1019,6 +1081,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldCategoryMousePressed
 
+    // Xử lý sự kiện khi press Chuột Tên sách
     private void jTextFieldNameMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldNameMousePressed
         // TODO add your handling code here:
         String name = jTextFieldName.getText();
@@ -1027,6 +1090,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldNameMousePressed
 
+    // Xử lý sự kiện khi press Chuột Tác giả
     private void jTextFieldAuthorMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldAuthorMousePressed
         // TODO add your handling code here:
         String author = jTextFieldAuthor.getText();
@@ -1035,6 +1099,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldAuthorMousePressed
 
+    // Xử lý sự kiện Focus Gain của Text Field ID Sách
     private void jTextFieldIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDFocusGained
         // TODO add your handling code here:
         String text = jTextFieldID.getText();
@@ -1043,6 +1108,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldIDFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field ID
     private void jTextFieldIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldIDFocusLost
         // TODO add your handling code here:
         String text = jTextFieldID.getText();
@@ -1051,6 +1117,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldIDFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Năm xuất bản
     private void jTextFieldPublishYearFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPublishYearFocusGained
         // TODO add your handling code here:
         String text = jTextFieldPublishYear.getText();
@@ -1059,6 +1126,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPublishYearFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Năm xuất bản
     private void jTextFieldPublishYearFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPublishYearFocusLost
         // TODO add your handling code here:
         String text = jTextFieldPublishYear.getText();
@@ -1067,6 +1135,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPublishYearFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Thể loại
     private void jTextFieldCategoryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldCategoryFocusGained
         // TODO add your handling code here:
         String text = jTextFieldCategory.getText();
@@ -1075,6 +1144,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldCategoryFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Thể loại
     private void jTextFieldCategoryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldCategoryFocusLost
         // TODO add your handling code here:
         String text = jTextFieldCategory.getText();
@@ -1083,6 +1153,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldCategoryFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Tác giả
     private void jTextFieldAuthorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAuthorFocusGained
         // TODO add your handling code here:
         String text = jTextFieldAuthor.getText();
@@ -1091,6 +1162,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldAuthorFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Tác giả
     private void jTextFieldAuthorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAuthorFocusLost
         // TODO add your handling code here:
         String text = jTextFieldAuthor.getText();
@@ -1099,6 +1171,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldAuthorFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Số trang
     private void jTextFieldPageNumFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPageNumFocusGained
         // TODO add your handling code here:
         String text = jTextFieldPageNum.getText();
@@ -1107,6 +1180,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPageNumFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Số trang
     private void jTextFieldPageNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPageNumFocusLost
         // TODO add your handling code here:
         String text = jTextFieldPageNum.getText();
@@ -1115,6 +1189,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPageNumFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Số lượng
     private void jTextFieldQuantityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldQuantityFocusGained
         // TODO add your handling code here:
         String text = jTextFieldQuantity.getText();
@@ -1123,6 +1198,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldQuantityFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Số lượng
     private void jTextFieldQuantityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldQuantityFocusLost
         // TODO add your handling code here:
         String text = jTextFieldQuantity.getText();
@@ -1131,6 +1207,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldQuantityFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Giá tiền
     private void jTextFieldPriceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPriceFocusGained
         // TODO add your handling code here:
         String text = jTextFieldPrice.getText();
@@ -1139,6 +1216,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPriceFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Giá tiền
     private void jTextFieldPriceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPriceFocusLost
         // TODO add your handling code here:
         String text = jTextFieldPrice.getText();
@@ -1147,6 +1225,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldPriceFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Tên sách
     private void jTextFieldNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNameFocusGained
         // TODO add your handling code here:
         String text = jTextFieldName.getText();
@@ -1155,6 +1234,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldNameFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Tên sách
     private void jTextFieldNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNameFocusLost
         // TODO add your handling code here:
         String text = jTextFieldName.getText();
@@ -1163,6 +1243,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldNameFocusLost
 
+    // Xử lý sự kiện Focus Gain của Text Field Tìm kiếm
     private void jTextFieldSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusGained
         // TODO add your handling code here:
         String text = jTextFieldSearch.getText();
@@ -1171,6 +1252,7 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchFocusGained
 
+    // Xử lý sự kiện Focus Lost của Text Field Tìm kiếm
     private void jTextFieldSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusLost
         // TODO add your handling code here:
         String text = jTextFieldSearch.getText();

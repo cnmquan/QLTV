@@ -17,13 +17,15 @@ import java.util.Vector;
 import DTO.Book;
 
 /**
- * @author Admin
+ * BookDaoImp Dùng để thực thi hàm được implements từ BookDao
  */
 public class BookDaoImp implements BookDao {
 
+    // Default Constructor
     public BookDaoImp() {
     }
 
+    // Lấy toàn bộ danh sách từ database của bảng Sách
     @Override
     public ArrayList<Book> getAll() {
         ArrayList<Book> list = new ArrayList<>();
@@ -56,6 +58,7 @@ public class BookDaoImp implements BookDao {
         return list;
     }
 
+    // Lấy Sách từ giá trị a của thuộc tính attribute đã chọn
     @Override
     public Book getAttribute(String attribute, String a) {
         Book book = new Book();
@@ -88,6 +91,7 @@ public class BookDaoImp implements BookDao {
         return book;
     }
 
+    // Lấy danh sách các đối tượng Sách đã bị ẩn trong database
     @Override
     public ArrayList<Book> getDeleteList() {
         ArrayList<Book> list = new ArrayList<>();
@@ -119,6 +123,7 @@ public class BookDaoImp implements BookDao {
         return list;
     }
 
+    // Dùng để lấy 5 quyển sách mới được thêm và cập nhật
     @Override
     public ArrayList<Book> getNewestFiveBook() {
         ArrayList<Book> list = new ArrayList<>();
@@ -151,6 +156,7 @@ public class BookDaoImp implements BookDao {
         return list;
     }
 
+    // Dùng để lấy tổng số sách
     @Override
     public int getSumBook() {
         int quantity = 0;
@@ -164,6 +170,7 @@ public class BookDaoImp implements BookDao {
         return quantity;
     }
 
+    // Dùng để xác nhận giá trị có số lượng chữ cái nhiều nhất trong 1 thuộc tính
     @Override
     public String getLongestString(String attribute) {
         String longestString = "";
@@ -179,11 +186,11 @@ public class BookDaoImp implements BookDao {
                 + "LIMIT 1";
 
         longestString = DataProvider.ExecuteScalar(sql, null);
-        System.out.println(longestString);
 
         return longestString;
     }
 
+    // Chèn phần từ sách vào bảng trong database
     @Override
     public boolean insert(Book t) {
         LocalDate localDate = LocalDate.now();
@@ -229,6 +236,7 @@ public class BookDaoImp implements BookDao {
         return rowInserted;
     }
 
+    // Cập nhật phần tử sách của bảng trong database
     @Override
     public boolean update(Book t) {
         LocalDate localDate = LocalDate.now();
@@ -261,6 +269,7 @@ public class BookDaoImp implements BookDao {
         return rowUpdated;
     }
 
+    // Xoá phần tử với ID tương ứng của bảng sách trong database
     @Override
     public boolean delete(String id) {
         boolean rowDeleted;
@@ -274,6 +283,7 @@ public class BookDaoImp implements BookDao {
         return rowDeleted;
     }
 
+    // Xoá phần tử Sách ra khỏi bảng trong database
     @Override
     public boolean delete(Book t) throws SQLException {
         boolean rowDeleted;
@@ -287,6 +297,7 @@ public class BookDaoImp implements BookDao {
         return rowDeleted;
     }
 
+    // Chuyển một đối tượng sách vào thùng rác
     @Override
     public boolean moveToBin(String id) {
         boolean rowMovedToBin;
@@ -301,6 +312,7 @@ public class BookDaoImp implements BookDao {
         return rowMovedToBin;
     }
 
+    // Chuyển một đối tượng sách ra khỏi thùng rác
     @Override
     public boolean removeFromBin(String id) {
         LocalDate localDate = LocalDate.now();
@@ -318,6 +330,7 @@ public class BookDaoImp implements BookDao {
         return rowRemovedFromBin;
     }
 
+    // Lấy thông tin cột dưới dạng Vector
     @Override
     public Vector getTitleColumn() {
         Vector vector = new Vector();
@@ -333,6 +346,7 @@ public class BookDaoImp implements BookDao {
         return vector;
     }
 
+    // Kiểm tra xem chuỗi S có tồn tại trong danh sách bảng sách trong databse
     @Override
     public boolean isExist(ArrayList<Book> t, String s) {
         for (Book book : t) {
@@ -343,11 +357,14 @@ public class BookDaoImp implements BookDao {
         return false;
     }
 
+    // Kiểm tra chuỗi s có phải là chuỗi hợp lệ để thêm vào databse
     @Override
     public boolean validateString(String s) {
         return s.isBlank() || s.isEmpty();
     }
 
+    
+    // Kiểm tra xem chuỗi s này có trùng với id trong danh sách ẩn 
     @Override
     public boolean isExistDeleteList(String s) {
         ArrayList<Book> deleteList = getDeleteList();

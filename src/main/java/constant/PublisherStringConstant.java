@@ -7,7 +7,6 @@ package constant;
 /**
  * Mục đích của lớp [PublisherStringConstant] là để tạo những static final 
  * gán cho những String text của Component UI cũng như các thông báo của UI
- * @author Admin
  */
 public class PublisherStringConstant {
 

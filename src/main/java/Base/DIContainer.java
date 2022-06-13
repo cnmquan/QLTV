@@ -19,14 +19,17 @@ public class DIContainer {
         return new AccountDAOImpl();
     }
 
+    // Dùng để khởi tạo 1 BookDaoImp duy nhất
     public static BookDaoImp getBookDao() {
         return new BookDaoImp();
     }
 
+    // Dùng để khởi tạo 1 PublisherDaoImp duy nhất
     public static PublisherDaoImp getPublisherDao() {
         return new PublisherDaoImp();
     }
 
+    // Dùng để khởi tạo 1 BinDaoImp duy nhất
     public static BinDaoImp getBinDao() {
         return new BinDaoImp();
     }

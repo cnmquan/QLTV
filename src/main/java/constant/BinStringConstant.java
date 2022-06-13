@@ -5,8 +5,8 @@
 package constant;
 
 /**
- *
- * @author Admin
+ * Mục đích của lớp [BinStringConstant] là để tạo những static final gán
+ * cho những String text của Component UI cũng như các thông báo của UI
  */
 public class BinStringConstant {
     // Giá trị trong thùng rác

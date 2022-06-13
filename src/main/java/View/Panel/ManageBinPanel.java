@@ -23,37 +23,50 @@ import DTO.Bin;
 import javax.swing.table.TableRowSorter;
 
 /**
- *
- * @author Admin
+ * ManageBinPanel dùng hiển thị danh sách quyển sách, nhà xuất bản tạm xoá, 
+ * có thể khôi phục lại,
+ * cũng như xoá hoàn toàn khỏi database
  */
 public class ManageBinPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form ManageBinPanel
-     */
     public ManageBinPanel() {
+        /**
+         * Khởi tạo giá trị cho 
+         * binDaoImp
+         * thông qua DIContainer   
+         **/
         this.binDaoImp = DIContainer.getBinDao();
+        
         initComponents();
+        
+        // Bổ sung thêm cho initComponents
         myInitComponents();
         
         setBounds(0, 0, 1160, 740);
     }
 
+    // binDaoImp dùng để xử lý những chức năng có liên quan tới Bin
     private final BinDaoImp binDaoImp;
+    
+    // binList là danh sách Bin(Book, Publisher) và được lấy từ trong database
     private ArrayList<Bin> binList;
+    
+    // vctHeader dùng để đặt Header trong JTableBin
     private Vector vctHeader;
+    
+    // vctData dùng để đặt Row trong JTableBin
     private Vector vctData;
 
+    // Dùng để khởi tạo các giá trị lấy từ Database cũng như đặt các giá trị final vào các Label
     public void myInitComponents() {
         setDefaultText();
         setDefaultTable();
-
         getVectorData();
         showTableData(this.vctData);
-
         clearInfo();
     }
 
+     // Dùng để setText các jLabel thông qua TitleStringConstant, BinStringConstant, GeneralStringConstant
     private void setDefaultText() {
         jLabelTitle.setText(TitleStringConstant.MANAGE_BIN);
 
@@ -71,6 +84,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jButtonDelete.setText(GeneralStringConstant.GENERAL_DELETE);
     }
 
+    // Dùng để set những thông số mặc định của bảng
     private void setDefaultTable() {
         jTableDelete.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 18));
         jScrollPanelTable.setHorizontalScrollBarPolicy(
@@ -84,6 +98,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jTableDelete.setFillsViewportHeight(true);
     }
 
+    // Hiển thị bảng jTableDelete được gán vctData
     private void showTableData(Vector vctData) {
 
         this.vctHeader = this.binDaoImp.getTitleColumn();
@@ -102,6 +117,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jTableDelete.setRowSorter(sorter); 
     }
 
+    // Hiển thị thông tin chi tiết của Bin khi chọn 1 hàng trong jTableDelete
     private void displayDetails(int selectedIndex) {
         if(vctData.isEmpty()){
             return;
@@ -117,6 +133,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jTextFieldType.setText(type);
     }
 
+    // Dùng để gán các giá trị Bin từ Database vào vctData thông qua binDaoImp
     private void getVectorData() {
         this.binList = binDaoImp.getBinList();
         this.vctData = new Vector();
@@ -126,6 +143,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         }
     }
 
+    // Xoá những giá trị đã điền khỏi jTextField
     private void clearInfo() {
         jTableDelete.clearSelection();
         jTextFieldID.setText(BinStringConstant.BIN_ID);
@@ -134,6 +152,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
     }
     
+    // Dùng để search Table khi nhập trong Tìm kiếm
     private void setTableBySearch(String text) {
         this.vctData.clear();
         for (Bin bin : this.binList) {
@@ -344,6 +363,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1170, 260));
     }// </editor-fold>//GEN-END:initComponents
 
+    // Xử lý sự kiện khi nhấn vào Button Khôi phục
     private void jButtonRecoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRecoverActionPerformed
         // TODO add your handling code here:
         
@@ -371,10 +391,9 @@ public class ManageBinPanel extends javax.swing.JPanel {
         } else {
 
         }
-
-
     }//GEN-LAST:event_jButtonRecoverActionPerformed
 
+    // Xử lý sự kiện khi nhấn vào Button Huỷ
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
         
@@ -404,6 +423,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         }        
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
+    // Xử lý sự kiện Focus Gained Text Field Tìm kiếm
     private void jTextFieldSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusGained
         // TODO add your handling code here:
         String search = jTextFieldSearch.getText();
@@ -412,6 +432,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchFocusGained
 
+    // Xử lý sự kiện Focus Lost Text Field Tìm kiếm
     private void jTextFieldSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchFocusLost
         // TODO add your handling code here:
         String search = jTextFieldSearch.getText();
@@ -420,6 +441,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchFocusLost
 
+    // Xử lý sự kiện Pressed Mouse Text Field Tìm kiếm
     private void jTextFieldSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldSearchMousePressed
         // TODO add your handling code here:
         String search = jTextFieldSearch.getText();
@@ -428,18 +450,21 @@ public class ManageBinPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchMousePressed
 
+    // Xử lý sự kiện Key Released Text Field Tìm kiếm
     private void jTextFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchKeyReleased
         // TODO add your handling code here:
         String text = jTextFieldSearch.getText();
         setTableBySearch(text);
     }//GEN-LAST:event_jTextFieldSearchKeyReleased
 
+    // Xử lý sự kiện Mouse Press của jTableDelete
     private void jTableDeleteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDeleteMousePressed
         // TODO add your handling code here:
         int selectedRow = jTableDelete.getSelectedRow();
         displayDetails(selectedRow);
     }//GEN-LAST:event_jTableDeleteMousePressed
 
+    // Xử lý sự kiện Key Realeased của jTableDelete
     private void jTableDeleteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableDeleteKeyReleased
         // TODO add your handling code here:
         //        int selectedRow = jTableBook.getSelectedRow();
