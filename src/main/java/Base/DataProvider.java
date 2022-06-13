@@ -14,15 +14,20 @@ import java.sql.SQLException;
 /**
  * This class give method to connect to the database
  *
- * @author Asus
+ * @author Nguyễn Duy Phúc
  */
 public class DataProvider {
 
+    //String connection
     private static final String URL = "jdbc:postgresql://localhost:5432/QLTV";
     private static final String USERNAMEDB = "postgres";
     private static final String PASSDB = "admin";
 
     private static DataProvider instance;
+
+    /**
+     * Empty constructor
+     */
     private DataProvider() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -31,20 +36,29 @@ public class DataProvider {
         }
     }
 
-    // Get Connection to Database
+    /**
+     * Get Connection to Database
+     *
+     * @return Connection to database
+     */
     private static Connection getConnection() {
         if (instance == null) {
             instance = new DataProvider();
         }
+        //Get connection
         try {
             return DriverManager.getConnection(URL, USERNAMEDB, PASSDB);
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
             return null;
-        }        
+        }
     }
 
-    // Close Connection from Database
+    /**
+     * Close Connection from Database
+     *
+     * @param connection Connection want to close
+     */
     private static void closeConnection(Connection connection) {
         try {
             if (connection != null) {
@@ -63,14 +77,16 @@ public class DataProvider {
      * @return list of row
      */
     public static ResultSet ExecuteQuery(String query, Object[] parameter) {
+        //Declare variables
         ResultSet result = null;
         Connection connection;
-        
+
         connection = getConnection();
-        if(connection == null){
+        if (connection == null) {
             return result;
         }
-        
+
+        //Execute Query
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             int index = 1;
@@ -83,26 +99,29 @@ public class DataProvider {
             result = pstmt.executeQuery();
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
-        }  finally {
+        } finally {
             closeConnection(connection);
         }
         return result;
     }
 
     /**
-     * Get the number of row.Often use for (insert,update,delete) query
+     * Get the number of row. Often use for (insert, update, delete,...) query
      *
      * @param query String query
      * @param parameter list parameter
      * @return Number of row
      */
     public static boolean ExecuteNonQuery(String query, Object[] parameter) {
+        //Declare variables
         boolean result = false;
         Connection connection;
         connection = getConnection();
-        if(connection == null){
+        if (connection == null) {
             return result;
         }
+
+        //Execute Query
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             int index = 1;
@@ -131,12 +150,15 @@ public class DataProvider {
      * @return first data
      */
     public static String ExecuteScalar(String query, Object[] parameter) {
+        //Declare variables
         String result = null;
         Connection connection;
-       connection = getConnection();
-        if(connection == null){
+        connection = getConnection();
+        if (connection == null) {
             return result;
         }
+
+        //Execute Query
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             int index = 1;

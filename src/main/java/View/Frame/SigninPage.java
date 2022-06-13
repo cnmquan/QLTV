@@ -6,19 +6,17 @@ package View.Frame;
 
 import Base.DIContainer;
 import DTO.AccountDTO;
-import Validate.Validator;
 import constant.AccountStringConstant;
 import constant.AuthenStringConstant;
 import constant.GeneralStringConstant;
-import java.sql.SQLException;
-import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 
 /**
+ * This class is used for render Sign in Page
  *
- * @author Asus
+ * @author Nguyễn Duy Phúc
  */
 public class SigninPage extends javax.swing.JFrame {
 
@@ -30,20 +28,28 @@ public class SigninPage extends javax.swing.JFrame {
         initUI();
     }
 
+    /**
+     * Add some first UI
+     */
     private void initUI() {
+        //Place hoder for input field
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         txtPassword.setEchoChar('*');
 
+        //Content of label
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblPassword.setText(AccountStringConstant.ACCOUNT_PWD);
         lblSignIn.setText(AuthenStringConstant.SIGN_IN);
 
+        //content of button
         btnSignIn.setText(AuthenStringConstant.SIGN_IN);
         btnSignUp.setText(AuthenStringConstant.SIGN_UP);
 
+        //State of eye
         btnShowPass.setVisible(false);
         btnHidePass.setVisible(true);
 
+        //Set default button (Sign in button)
         JRootPane rootPane = SwingUtilities.getRootPane(btnSignIn);
         rootPane.setDefaultButton(btnSignIn);
     }
@@ -54,9 +60,11 @@ public class SigninPage extends javax.swing.JFrame {
      * @return resutlt of validate
      */
     public boolean validateInput() {
+        //Get string from UI
         String username = txtUsername.getText();
         String pwd = new String(txtPassword.getPassword());
 
+        //Validate input
         if (username.equals("")) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_USERNAME);
             return false;
@@ -68,10 +76,15 @@ public class SigninPage extends javax.swing.JFrame {
         return true;
     }
 
+    /**
+     * Login with username and password
+     */
     public void login() {
+        //Get string from UI
         String username = txtUsername.getText();
         String pwd = new String(txtPassword.getPassword());
 
+        //Get account and move to Home page
         AccountDTO account = DIContainer.getAccountDAO().login(username, pwd);
         if (account != null) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.SIGN_IN_SUCCESS);

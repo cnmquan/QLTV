@@ -16,8 +16,9 @@ import javax.swing.JOptionPane;
 import javax.swing.text.PlainDocument;
 
 /**
+ * This class is used for render Sign up Page
  *
- * @author Asus
+ * @author Nguyễn Duy Phúc
  */
 public class SignupPage extends javax.swing.JFrame {
 
@@ -29,12 +30,19 @@ public class SignupPage extends javax.swing.JFrame {
         initUI();
     }
 
+    /**
+     * Add some first UI
+     */
     private void initUI() {
+        //Place hoder for input field
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
         txtName.setText(AccountStringConstant.ACCOUNT_INPUT_NAME);
         txtAnswer.setText(AccountStringConstant.ACCOUNT_INPUT_ANSWER);
+        txtPassword.setEchoChar('*');
+        txtRePassword.setEchoChar('*');
 
+        //Content of label
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblPassword.setText(AccountStringConstant.ACCOUNT_PWD);
         lblRePassword.setText(AccountStringConstant.ACCOUNT_RE_PWD);
@@ -45,16 +53,15 @@ public class SignupPage extends javax.swing.JFrame {
         lblAnswer.setText(AccountStringConstant.ACCOUNT_ANSWER);
         lblSignUp.setText(AuthenStringConstant.SIGN_UP);
 
+        //content of button
         btnSignIn.setText(AuthenStringConstant.SIGN_IN);
         btnSignUp.setText(AuthenStringConstant.SIGN_UP);
 
+        //State of eye
         btnShowPass.setVisible(false);
         btnHidePass.setVisible(true);
         btnShowRePass.setVisible(false);
         btnHideRePass.setVisible(true);
-
-        txtPassword.setEchoChar('*');
-        txtRePassword.setEchoChar('*');
 
         PlainDocument doc = (PlainDocument) txtContact.getDocument();
         doc.setDocumentFilter(new OnlyNum());
@@ -65,6 +72,7 @@ public class SignupPage extends javax.swing.JFrame {
      * method to insert values into account table
      */
     public void signUp() {
+        //Get string from UI
         String name = txtName.getText();
         String username = txtUsername.getText();
         String pwd = new String(txtPassword.getPassword());
@@ -73,6 +81,7 @@ public class SignupPage extends javax.swing.JFrame {
         String question = (String) cmbQuestion.getSelectedItem();
         String answer = txtAnswer.getText();
 
+        //Get account and move to Sign in page
         AccountDTO account = new AccountDTO(name, username, pwd, email, contact, question, answer);
         boolean result = DIContainer.getAccountDAO().insert(account);
         if (result) {
@@ -91,6 +100,7 @@ public class SignupPage extends javax.swing.JFrame {
      * @return resutlt of validate
      */
     public boolean validateInput() {
+        //Get string from UI
         String name = txtName.getText();
         String username = txtUsername.getText();
         String pwd = new String(txtPassword.getPassword());
@@ -100,6 +110,7 @@ public class SignupPage extends javax.swing.JFrame {
         String answer = txtAnswer.getText();
         int idxQuestion = cmbQuestion.getSelectedIndex();
 
+        //Validate input
         if (Validator.inputString("[a-zA-Z]+([ '-][a-zA-Z]+)*", name) || name.equals(AccountStringConstant.ACCOUNT_INPUT_NAME)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_NAME);
             return false;
@@ -135,10 +146,16 @@ public class SignupPage extends javax.swing.JFrame {
         return true;
     }
 
+    /**
+     * Check this username is exist or not
+     *
+     * @return Result of validate
+     */
     public boolean checkExistUsername() {
         String username = txtUsername.getText();
         boolean isExist;
 
+        //Validate usename
         if (!username.equals("") && DIContainer.getAccountDAO().isExistUsername(username)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_USERNAME);
             isExist = true;
@@ -566,7 +583,7 @@ public class SignupPage extends javax.swing.JFrame {
 
     private void btnSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignUpMouseClicked
         // TODO add your handling code here:
-        if (validateInput() && !checkExistUsername() )
+        if (validateInput() && !checkExistUsername())
             signUp();
     }//GEN-LAST:event_btnSignUpMouseClicked
 

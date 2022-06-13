@@ -8,11 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * This class is used to retrieve data from a database
  *
  * @author Nguyen Duy Phuc
  */
 public class AccountDTO {
 
+    //Variables of AccountDTO
     String name;
     String username;
     String password;
@@ -23,6 +25,7 @@ public class AccountDTO {
     String answer;
     String id;
 
+    //Getter & Setter
     public String getRole() {
         return role;
     }
@@ -124,7 +127,7 @@ public class AccountDTO {
      * @param question question security
      * @param answer answer for question security
      */
-    public AccountDTO(String name, String username, String password, String email, String contact,  String question, String answer) {
+    public AccountDTO(String name, String username, String password, String email, String contact, String question, String answer) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -147,7 +150,7 @@ public class AccountDTO {
      * @param answer answer for question security
      * @param id id of account
      */
-    public AccountDTO(String id,String name, String username, String password, String email, String contact,  String question, String answer,String role ) {
+    public AccountDTO(String id, String name, String username, String password, String email, String contact, String question, String answer, String role) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -158,5 +161,4 @@ public class AccountDTO {
         this.answer = answer;
         this.id = id;
     }
-
 }

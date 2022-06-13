@@ -17,11 +17,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
+ * This class to implement AccountDAO
  *
- * @author Asus
+ * @author Nguyễn Duy Phúc
  */
 public class AccountDAOImpl implements AccountDAO {
 
+    /**
+     * Insert new account to database
+     *
+     * @param account Account want to intsert
+     * @return result of insert query
+     */
     @Override
     public boolean insert(AccountDTO account) {
         //Declare query
@@ -36,6 +43,7 @@ public class AccountDAOImpl implements AccountDAO {
                 + "role) "
                 + "VALUES "
                 + "(?,?,?,?,?,?,?,?);";
+        //Hash password
         String hashPass = DIContainer.getAccountDAO().hashPassword(account.getPassword());
 
         //Call function to execute insert query
@@ -56,6 +64,11 @@ public class AccountDAOImpl implements AccountDAO {
         return result;
     }
 
+    /**
+     * Get all account in database
+     *
+     * @return List of AccountDTO
+     */
     @Override
     public ArrayList<AccountDTO> getAll() {
         //Declare variables
@@ -71,15 +84,22 @@ public class AccountDAOImpl implements AccountDAO {
                 lAccounts.add(acccount);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
         }
         return lAccounts;
     }
 
+    /**
+     * Find one Account with one atribute
+     *
+     * @param attribute name of attribute
+     * @param s String that want to check
+     * @return Suitable account
+     */
     @Override
-    public AccountDTO getAttribute(String atribute, String s ) {
+    public AccountDTO getAttribute(String attribute, String s) {
         // Declare variable
-        String query = "select * from \"public\".account where "+atribute+" = '" + s + "'";
+        String query = "select * from \"public\".account where " + attribute + " = '" + s + "'";
         AccountDTO account = null;
 
         //Call function to execute select query
@@ -89,11 +109,17 @@ public class AccountDAOImpl implements AccountDAO {
                 account = new AccountDTO(data);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
         }
         return account;
     }
 
+    /**
+     * Update account to database
+     *
+     * @param account Account want to update
+     * @return Result of update query
+     */
     @Override
     public boolean update(AccountDTO account) {
         //Declare query
@@ -107,6 +133,7 @@ public class AccountDAOImpl implements AccountDAO {
                 + "answer=?, "
                 + "role=? "
                 + "WHERE id = ?";
+        //Hash password
         String hashPass = DIContainer.getAccountDAO().hashPassword(account.getPassword());
 
         //Call function to execute update query
@@ -129,6 +156,12 @@ public class AccountDAOImpl implements AccountDAO {
         return result;
     }
 
+    /**
+     * Delete one account from database
+     *
+     * @param account Account want to delete
+     * @return result of delete query
+     */
     @Override
     public boolean delete(AccountDTO account) {
         //Declare query
@@ -144,6 +177,12 @@ public class AccountDAOImpl implements AccountDAO {
         return result;
     }
 
+    /**
+     * Check that there is any account with the same username
+     *
+     * @param username username want to check
+     * @return result of check exist
+     */
     @Override
     public boolean isExistUsername(String username) {
         // Declare variable
@@ -153,17 +192,20 @@ public class AccountDAOImpl implements AccountDAO {
         //Call function to execute select query
         try {
             ResultSet data = DataProvider.ExecuteQuery(query, null);
-            if (data.next()) {
-                isExist = true;
-            } else {
-                isExist = false;
-            }
+            isExist = data.next();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
         }
         return isExist;
     }
 
+    /**
+     * Verify account in database
+     *
+     * @param username username of account
+     * @param pwd password of account
+     * @return Account with that username and password
+     */
     @Override
     public AccountDTO login(String username, String pwd) {
         // Declare variable
@@ -178,11 +220,17 @@ public class AccountDAOImpl implements AccountDAO {
                 account = new AccountDTO(data);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error: " + ex.getMessage());
         }
         return account;
     }
 
+    /**
+     * Delete account by its ID
+     *
+     * @param id ID of account
+     * @return result of delete query
+     */
     @Override
     public boolean delete(String id) {
         //Declare query
@@ -198,6 +246,12 @@ public class AccountDAOImpl implements AccountDAO {
         return result;
     }
 
+    /**
+     * Recover password for one account
+     *
+     * @param id ID of account
+     * @return result of update query
+     */
     @Override
     public boolean recoverAccount(String id) {
         //Declare query
@@ -217,6 +271,12 @@ public class AccountDAOImpl implements AccountDAO {
         return result;
     }
 
+    /**
+     * Hash password
+     *
+     * @param pass Password want to hash
+     * @return String of hash password
+     */
     @Override
     public String hashPassword(String pass) {
         //Source: https://www.geeksforgeeks.org/md5-hash-in-java/
@@ -243,8 +303,15 @@ public class AccountDAOImpl implements AccountDAO {
         }
     }
 
+    /**
+     * Change password of account
+     *
+     * @param username username of account
+     * @param pwd password of account
+     * @return result of update query
+     */
     @Override
-    public boolean changePass(String username, String pwd)  {
+    public boolean changePass(String username, String pwd) {
         //Declare query
         String hashPass = DIContainer.getAccountDAO().hashPassword(pwd);
         String query = "UPDATE  \"public\".account SET "
@@ -261,6 +328,13 @@ public class AccountDAOImpl implements AccountDAO {
         return result;
     }
 
+    /**
+     * Validate when change password
+     *
+     * @param oldPwd old password
+     * @param newPwd new password
+     * @return Result of validate
+     */
     @Override
     public boolean validatePass(String oldPwd, String newPwd) {
         String hashNewPass = DIContainer.getAccountDAO().hashPassword(newPwd);

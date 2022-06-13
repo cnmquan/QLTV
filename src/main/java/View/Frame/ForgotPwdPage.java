@@ -13,8 +13,9 @@ import constant.GeneralStringConstant;
 import javax.swing.JOptionPane;
 
 /**
+ * This class is used for render Forgot Password Page
  *
- * @author Asus
+ * @author Nguyễn Duy Phúc
  */
 public class ForgotPwdPage extends javax.swing.JFrame {
 
@@ -28,10 +29,17 @@ public class ForgotPwdPage extends javax.swing.JFrame {
         initUI();
     }
 
+    /**
+     * Add some first UI
+     */
     private void initUI() {
+        //Place hoder for input field
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         txtAnswer.setText(AccountStringConstant.ACCOUNT_INPUT_ANSWER);
+        txtPassword.setEchoChar('*');
+        txtRePassword.setEchoChar('*');
 
+        //Content of label
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblPassword.setText(AccountStringConstant.ACCOUNT_NEW_PWD);
         lblRePassword.setText(AccountStringConstant.ACCOUNT_RE_NEW_PWD);
@@ -39,27 +47,27 @@ public class ForgotPwdPage extends javax.swing.JFrame {
         lblAnswer.setText(AccountStringConstant.ACCOUNT_ANSWER);
         lblRecover.setText(GeneralStringConstant.GENERAL_RECOVERY.toUpperCase());
 
+        //Content of button
         btnSignIn.setText(AuthenStringConstant.SIGN_IN);
         btnRecover.setText(GeneralStringConstant.GENERAL_RECOVERY.toUpperCase());
         btnSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
 
+        //State of eye
         btnShowPass.setVisible(false);
         btnHidePass.setVisible(true);
         btnShowRePass.setVisible(false);
         btnHideRePass.setVisible(true);
-
-        txtPassword.setEchoChar('*');
-        txtRePassword.setEchoChar('*');
     }
 
     /**
      * method to insert values into account table
      */
     public void changePwd() {
+        //Declare variables
         String username = txtUsername.getText();
         String pwd = new String(txtPassword.getPassword());
-        String answer = txtAnswer.getText();
 
+        //Update new password and move to page Sign in
         boolean result = DIContainer.getAccountDAO().changePass(username, pwd);
         if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_SUCCESS);
@@ -77,12 +85,15 @@ public class ForgotPwdPage extends javax.swing.JFrame {
      * @return resutlt of validate
      */
     public boolean validateInput() {
+        //Get string of UI
         String username = txtUsername.getText();
         String pwd = new String(txtPassword.getPassword());
         String repwd = new String(txtRePassword.getPassword());
         String answer = txtAnswer.getText();
 
-        if (Validator.inputString("[a-zA-Z0-9!@#$%^&*\\.<>?\\-_+/]+", username) || username.equals(AccountStringConstant.ACCOUNT_INPUT_USERNAME)) {
+        //Validate input
+        if (Validator.inputString("[a-zA-Z0-9!@#$%^&*\\.<>?\\-_+/]+", username)
+                || username.equals(AccountStringConstant.ACCOUNT_INPUT_USERNAME)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_USERNAME);
             return false;
         }
@@ -105,15 +116,23 @@ public class ForgotPwdPage extends javax.swing.JFrame {
         return true;
     }
 
+    /**
+     * Search account to change password
+     */
     private void searchAccount() {
+        //Get username from UI
         String username = txtUsername.getText();
-        if (Validator.inputString("[a-zA-Z0-9!@#$%^&*\\.]+", username) || username.equals(AccountStringConstant.ACCOUNT_INPUT_USERNAME)) {
+
+        //Validate inout
+        if (Validator.inputString("[a-zA-Z0-9!@#$%^&*\\.]+", username)
+                || username.equals(AccountStringConstant.ACCOUNT_INPUT_USERNAME)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_USERNAME);
             return;
         }
 
-        account = DIContainer.getAccountDAO().getAttribute("username",username);
-         if (account==null) {
+        //Get account
+        account = DIContainer.getAccountDAO().getAttribute("username", username);
+        if (account == null) {
             JOptionPane.showMessageDialog(this, AuthenStringConstant.ACCOUNT_NOT_FOUND);
             return;
         }

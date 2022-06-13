@@ -24,13 +24,15 @@ import javax.swing.table.TableModel;
 import javax.swing.text.PlainDocument;
 
 /**
+ * This class is used for render Manage Account Panel
  *
- * @email Asus
+ * @author Asus
  */
 public class ManageAccount extends javax.swing.JPanel {
 
     AccountDTO account = null;
 
+    //Declare role type (language)
     enum ROLE_TYPE {
         EN, VN
     };
@@ -39,6 +41,8 @@ public class ManageAccount extends javax.swing.JPanel {
      * Creates new form ManageAccount
      *
      * @param account Account of current user
+     * @param isShowMyInfo This parameter is used to check that user want to get
+     * his information in first render or not
      */
     public ManageAccount(AccountDTO account, boolean isShowMyInfo) {
         initComponents();
@@ -54,13 +58,18 @@ public class ManageAccount extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Add some first UI
+     */
     private void initUI() {
+        //Add place hoder in input fields
         txtUsername.setText(AccountStringConstant.ACCOUNT_INPUT_USERNAME);
         txtContact.setText(AccountStringConstant.ACCOUNT_INPUT_CONTACT);
         txtEmail.setText(AccountStringConstant.ACCOUNT_INPUT_EMAIL);
         txtName.setText(AccountStringConstant.ACCOUNT_INPUT_NAME);
         txtID.setText(AccountStringConstant.ACCOUNT_INPUT_ID);
 
+        //Content of label
         lblID.setText(AccountStringConstant.ACCOUNT_ID);
         lblUsername.setText(AccountStringConstant.ACCOUNT_USERNAME);
         lblName.setText(AccountStringConstant.ACCOUNT_NAME);
@@ -69,6 +78,7 @@ public class ManageAccount extends javax.swing.JPanel {
         lblQuestion.setText(AccountStringConstant.ACCOUNT_QUESTION);
         lblAnswer.setText(AccountStringConstant.ACCOUNT_ANSWER);
 
+        //Content of ComboBox
         cmbQuestion.setModel(new DefaultComboBoxModel(AuthenStringConstant.QUESTIONS));
         cmbRole.setModel(new DefaultComboBoxModel(AuthenStringConstant.ROLES_VS));
 
@@ -83,11 +93,13 @@ public class ManageAccount extends javax.swing.JPanel {
      * @return resutlt of validate
      */
     public boolean validateInput() {
+        //Get string from UI
         String name = txtName.getText();
         String username = txtUsername.getText();
         String email = txtEmail.getText();
         String contact = txtContact.getText();
 
+        //validate Input
         if (Validator.inputString("[a-zA-Z]+([ '-][a-zA-Z]+)*", name)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_NAME);
             return false;
@@ -107,24 +119,16 @@ public class ManageAccount extends javax.swing.JPanel {
         return true;
     }
 
-    public boolean checkExistUsername() {
-        String username = txtUsername.getText();
-        boolean isExist;
-
-        if (!username.equals("") && DIContainer.getAccountDAO().isExistUsername(username)) {
-            JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_EXIST_USERNAME);
-            isExist = true;
-        } else {
-            isExist = false;
-        }
-        return isExist;
-    }
-
+    /**
+     * Setting UI for table
+     */
     private void setDefaultTable() {
+        //Set header font
         tblAccountDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+        //Set Scroll panel
         jScrollPanelTable.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
         jScrollPanelTable.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -152,7 +156,9 @@ public class ManageAccount extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblAccountDetail.getModel();
         ArrayList<AccountDTO> lAccounts = new ArrayList<AccountDTO>();
 
+        //Clear table
         model.setRowCount(0);
+        //Get accounts
         lAccounts = DIContainer.getAccountDAO().getAll();
         lAccounts.forEach((AccountDTO account) -> {
             Object[] object = {account.getId(), account.getName(), account.getUsername(), account.getEmail(), account.getContact(), vietsubRole(account.getRole())};
@@ -160,9 +166,16 @@ public class ManageAccount extends javax.swing.JPanel {
         });
     }
 
+    /**
+     * Set data of account to infomation fields
+     *
+     * @param id
+     */
     private void setDataToField(String id) {
+        //Get Account with id
         AccountDTO currentAcc = DIContainer.getAccountDAO().getAttribute("id", id);
 
+        //Set data to text field
         txtID.setText(currentAcc.getId());
         txtName.setText(currentAcc.getName());
         txtUsername.setText(currentAcc.getUsername());
@@ -170,10 +183,16 @@ public class ManageAccount extends javax.swing.JPanel {
         txtContact.setText(currentAcc.getContact());
         txtAnswer.setText(currentAcc.getAnswer());
 
+        //Set data to combobox
         cmbRole.setSelectedItem(vietsubRole(currentAcc.getRole()));
         cmbQuestion.setSelectedItem(currentAcc.getQuestion());
     }
 
+    /**
+     * Show suitable fields
+     *
+     * @param id ID of account logging in this page
+     */
     private void showFunction(String id) {
         if (account.getRole().equals("ADMIN")) {
             if (account.getId().equals(id)) {
@@ -185,10 +204,12 @@ public class ManageAccount extends javax.swing.JPanel {
             }
         }
         if (!account.getRole().equals("ADMIN")) {
+            //Hide function
             jButtonDelete.setVisible(false);
             jButtonRecover.setVisible(false);
             jButtonUpdate.setVisible(false);
 
+            //Hide information
             lblQuestion.setVisible(false);
             lblAnswer.setVisible(false);
             cmbQuestion.setVisible(false);
@@ -206,7 +227,11 @@ public class ManageAccount extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * update Account
+     */
     private void updateAccount() {
+        //Get string from UI
         String id = txtID.getText();
         String name = txtName.getText();
         String username = txtUsername.getText();
@@ -216,6 +241,7 @@ public class ManageAccount extends javax.swing.JPanel {
         String answer = txtAnswer.getText();
         String role = (String) AuthenStringConstant.ROLES[cmbRole.getSelectedIndex()];
 
+        //update Account
         AccountDTO oldAccount = DIContainer.getAccountDAO().getAttribute("id", id);
         AccountDTO newAccount = new AccountDTO(id, name, username, oldAccount.getPassword(), email, contact, question, answer, role);
         boolean result = DIContainer.getAccountDAO().update(newAccount);
@@ -227,8 +253,12 @@ public class ManageAccount extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * delete Account
+     */
     private void deleteAccount() {
         String id = txtID.getText();
+        //delete Account
         boolean result = DIContainer.getAccountDAO().delete(id);
         if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_DELETE_SUCCESS);
@@ -238,6 +268,12 @@ public class ManageAccount extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Vietsub role of account
+     *
+     * @param role name of role
+     * @return Vietsub role
+     */
     private String vietsubRole(String role) {
         int idxRole = Arrays.asList(AuthenStringConstant.ROLES).indexOf(role);
         return AuthenStringConstant.ROLES_VS[idxRole];
@@ -562,6 +598,7 @@ public class ManageAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonRecoverActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+        //Show Confirm Dialog
         int answer = JOptionPane.showConfirmDialog(null,
                 AccountStringConstant.ACCOUNT_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
                 JOptionPane.YES_NO_OPTION);

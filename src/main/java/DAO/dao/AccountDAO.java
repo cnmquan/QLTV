@@ -9,14 +9,21 @@ import DTO.AccountDTO;
 import java.sql.SQLException;
 
 /**
+ * This interface is used to extends iCRUD and add more function
  *
- * @author Asus
+ * @author Nguyễn Duy Phúc
  */
 public interface AccountDAO extends iCRUD<AccountDTO> {
-    public boolean isExistUsername(String username)throws SQLException;
-    public AccountDTO login(String username, String pwd)throws SQLException;
-    public boolean recoverAccount(String id)throws SQLException;
+
+    public boolean isExistUsername(String username) throws SQLException;
+
+    public AccountDTO login(String username, String pwd) throws SQLException;
+
+    public boolean recoverAccount(String id) throws SQLException;
+
     public String hashPassword(String pass);
-    public boolean changePass(String username, String pwd)throws SQLException;
+
+    public boolean changePass(String username, String pwd) throws SQLException;
+
     public boolean validatePass(String oldPwd, String newPwd);
 }

@@ -25,8 +25,9 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.text.PlainDocument;
 
 /**
+ * This class is used for render Change password Panel
  *
- * @email Asus
+ * @author Nguyễn Duy Phúc
  */
 public class ChangePwdPanel extends javax.swing.JPanel {
 
@@ -45,6 +46,9 @@ public class ChangePwdPanel extends javax.swing.JPanel {
         initUI();
     }
 
+    /**
+     * Empty constructor
+     */
     public ChangePwdPanel() {
         initComponents();
 
@@ -52,7 +56,11 @@ public class ChangePwdPanel extends javax.swing.JPanel {
         initUI();
     }
 
+    /**
+     * Add some first UI
+     */
     private void initUI() {
+        //Add place hoder in input fields
         lblPassword.setText(AccountStringConstant.ACCOUNT_PWD);
         lblNewPassword.setText(AccountStringConstant.ACCOUNT_NEW_PWD);
         lblReNewPassword.setText(AccountStringConstant.ACCOUNT_RE_NEW_PWD);
@@ -66,15 +74,17 @@ public class ChangePwdPanel extends javax.swing.JPanel {
      * @return resutlt of validate
      */
     public boolean validateInput() {
+        //Get string from UI
         String pwd = new String(txtPassword.getPassword());
         String newPwd = new String(txtNewPassword.getPassword());
         String reNewPwd = new String(txtReNewPassword.getPassword());
-        
+
+        //Validate input
         if (Validator.inputString("[a-zA-Z0-9!@#$%^&*\\.<>?\\-_+/]+", pwd)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_PWD);
             return false;
         }
-        if(!DIContainer.getAccountDAO().validatePass(account.getPassword(), pwd)){
+        if (!DIContainer.getAccountDAO().validatePass(account.getPassword(), pwd)) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_ERROR_INCORRECT_PWD);
             return false;
         }
@@ -92,11 +102,14 @@ public class ChangePwdPanel extends javax.swing.JPanel {
         }
         return true;
     }
-    
+
+    /**
+     * Update account with new password
+     */
     private void updateAccount() {
         String newPwd = new String(txtNewPassword.getPassword());
-        
-        boolean result = DIContainer.getAccountDAO().changePass(account.getUsername(),newPwd);
+        //Update account
+        boolean result = DIContainer.getAccountDAO().changePass(account.getUsername(), newPwd);
         if (result) {
             JOptionPane.showMessageDialog(this, AccountStringConstant.ACCOUNT_UPDATE_SUCCESS);
         } else {
@@ -294,8 +307,8 @@ public class ChangePwdPanel extends javax.swing.JPanel {
 
     private void btnUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMouseClicked
         // TODO add your handling code here:
-        if (validateInput() )
-        updateAccount();
+        if (validateInput())
+            updateAccount();
     }//GEN-LAST:event_btnUpdateMouseClicked
 
 
