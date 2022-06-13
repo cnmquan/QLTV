@@ -168,8 +168,6 @@ public class ManageReaderPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPanelReader = new javax.swing.JScrollPane();
-        jTableReader = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jPanelReaderTitle = new javax.swing.JPanel();
         jReaderLabel = new javax.swing.JLabel();
@@ -179,7 +177,6 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         jButtonDelete = new javax.swing.JButton();
         jButtonUpdate = new javax.swing.JButton();
         jButtonClear = new javax.swing.JButton();
-        jSeparatorTitle1 = new javax.swing.JSeparator();
         jPanelTextField = new javax.swing.JPanel();
         jPanelPhoneNumber = new javax.swing.JPanel();
         jLabelPhoneNumber = new javax.swing.JLabel();
@@ -193,42 +190,14 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         jPanelSearch = new javax.swing.JPanel();
         jLabelSearch = new javax.swing.JLabel();
         jTextFieldSearch = new javax.swing.JTextField();
+        jSeparatorTitle = new javax.swing.JSeparator();
+        jScrollPanelReader = new javax.swing.JScrollPane();
+        jTableReader = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1170, 630));
         setPreferredSize(new java.awt.Dimension(1170, 630));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jScrollPanelReader.setBackground(new java.awt.Color(255, 255, 255));
-
-        jTableReader.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTableReader.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
-            }
-        ));
-        jTableReader.setMaximumSize(new java.awt.Dimension(2147483647, 120));
-        jTableReader.setMinimumSize(new java.awt.Dimension(60, 120));
-        jTableReader.setPreferredSize(new java.awt.Dimension(60, 120));
-        jTableReader.setRowHeight(40);
-        jTableReader.setShowGrid(true);
-        jTableReader.getTableHeader().setResizingAllowed(false);
-        jTableReader.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTableReaderMousePressed(evt);
-            }
-        });
-        jTableReader.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTableReaderKeyReleased(evt);
-            }
-        });
-        jScrollPanelReader.setViewportView(jTableReader);
-
-        add(jScrollPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 1200, 270));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setMinimumSize(new java.awt.Dimension(1170, 630));
@@ -239,12 +208,13 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         jPanelReaderTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jReaderLabel.setBackground(new java.awt.Color(255, 255, 255));
-        jReaderLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jReaderLabel.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         jReaderLabel.setForeground(new java.awt.Color(255, 0, 0));
         jReaderLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jReaderLabel.setText("Quản lý độc giả");
+        jReaderLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jReaderLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanelReaderTitle.add(jReaderLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 5, 1170, 40));
+        jPanelReaderTitle.add(jReaderLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 5, 1170, 50));
 
         jPanel3.add(jPanelReaderTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 50));
 
@@ -303,9 +273,6 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         jPanelButton.add(jButtonClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 150, 50));
 
         jPanelDetail.add(jPanelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 10, 180, 260));
-
-        jSeparatorTitle1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
-        jPanelDetail.add(jSeparatorTitle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 400, 4));
 
         jPanelTextField.setBackground(new java.awt.Color(255, 255, 255));
         jPanelTextField.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -408,7 +375,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
 
         jLabelSearch.setFont(new java.awt.Font("Segoe UI", 2, 16)); // NOI18N
         jLabelSearch.setText("Tìm kiếm");
-        jPanelSearch.add(jLabelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 50));
+        jPanelSearch.add(jLabelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 50));
 
         jTextFieldSearch.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTextFieldSearch.setText("Tìm kiếm");
@@ -435,9 +402,43 @@ public class ManageReaderPanel extends javax.swing.JPanel {
 
         jPanelTextField.add(jPanelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 840, 70));
 
-        jPanelDetail.add(jPanelTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 960, 330));
+        jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 4, true));
+        jPanelTextField.add(jSeparatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, -6, 360, 10));
 
-        jPanel3.add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1170, 360));
+        jPanelDetail.add(jPanelTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 960, 260));
+
+        jScrollPanelReader.setBackground(new java.awt.Color(255, 255, 255));
+
+        jTableReader.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jTableReader.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
+            }
+        ));
+        jTableReader.setMaximumSize(new java.awt.Dimension(2147483647, 120));
+        jTableReader.setMinimumSize(new java.awt.Dimension(60, 120));
+        jTableReader.setPreferredSize(new java.awt.Dimension(60, 120));
+        jTableReader.setRowHeight(40);
+        jTableReader.setShowGrid(true);
+        jTableReader.getTableHeader().setResizingAllowed(false);
+        jTableReader.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableReaderMousePressed(evt);
+            }
+        });
+        jTableReader.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTableReaderKeyReleased(evt);
+            }
+        });
+        jScrollPanelReader.setViewportView(jTableReader);
+
+        jPanelDetail.add(jScrollPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 1130, 310));
+
+        jPanel3.add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 1170, 580));
 
         add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
@@ -652,7 +653,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanelTextField;
     private javax.swing.JLabel jReaderLabel;
     private javax.swing.JScrollPane jScrollPanelReader;
-    private javax.swing.JSeparator jSeparatorTitle1;
+    private javax.swing.JSeparator jSeparatorTitle;
     private javax.swing.JTable jTableReader;
     private javax.swing.JTextField jTextFieldID;
     private javax.swing.JTextField jTextFieldName;
