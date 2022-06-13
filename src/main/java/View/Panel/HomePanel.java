@@ -9,6 +9,7 @@ import DAO.dao_impl.BookDaoImp;
 import DAO.dao_impl.BorrowDaoImp;
 import DAO.dao_impl.ReaderDaoImp;
 import DTO.Book;
+import DTO.Reader;
 import constant.DatabaseStringConstant;
 import constant.HomeStringConstant;
 
@@ -68,22 +69,33 @@ public class HomePanel extends javax.swing.JPanel {
     // listBook là danh sách Book và được lấy từ trong database
     private ArrayList<Book> listBook;
     
+    // listReader là danh sách Reader và được lấy từ trong database   
+    private ArrayList<Reader>listReader;
+    
     // vctBookHeader dùng để đặt Header trong JTableBook
     private Vector vctBookHeader;
     
     // vctBookData dùng để đặt Row trong JTableBook
     private Vector vctBookData;
+    
+     // vctReaderHeader dùng để đặt Header trong JTableReader
+    private Vector vctReaderHeader;
+    
+    // vctReaderData dùng để đặt Row trong JTableReader
+    private Vector vctReaderData;
    
     // Dùng để khởi tạo các giá trị lấy từ Database cũng như đặt các giá trị final vào các Label
-    public void myInitComponents() {        
+    public void myInitComponents() {
         setLableText();
         setBookValue();
         setReaderValue();
         setBorrowValue();
         setDefaultTable();
-        getVectorBookData();
+        getVectorReaderData();
+        getVectorBookData();        
         setPieChart();
         showTableBookData(this.vctBookData);
+        showTableReaderData(this.vctReaderData);
     }
 
     // Dùng để setText các jLabel thông qua HomeStringConstant
@@ -121,7 +133,7 @@ public class HomePanel extends javax.swing.JPanel {
     // Dùng để set những thông số mặc định của bảng
     private void setDefaultTable() {
         
-        // Bảng Reader
+        // Bảng Reader (set Header, set Scrollbar, set Background, ...)
         jTableReaderDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         jScrollPaneReaderDetail.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -134,7 +146,7 @@ public class HomePanel extends javax.swing.JPanel {
         jTableReaderDetail.setFillsViewportHeight(true);
 
         
-        // Bảng Book
+        // Bảng Book (set Header, set Scrollbar, set Background, ...)
         jTableBookDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         jScrollPaneBookDetail.setHorizontalScrollBarPolicy(
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -147,7 +159,7 @@ public class HomePanel extends javax.swing.JPanel {
         jTableBookDetail.setFillsViewportHeight(true);
     }
 
-    // Dùng để gán các giá trị của 
+    // Dùng để gán các giá trị Book từ Database vào vctBook thông qua bookDaoImp
     private void getVectorBookData() {
         this.listBook = bookDaoImp.getNewestFiveBook();
         this.vctBookData = new Vector();
@@ -156,8 +168,30 @@ public class HomePanel extends javax.swing.JPanel {
             vctBookData.add(vctRow);
         }
     }
-
-    public void showTableBookData(Vector vctData) {
+    
+    // Dùng để gán các giá trị Book từ Database vào vctReader thông qua ReaderImp
+    private void getVectorReaderData(){
+        this.listReader = readerDaoImp.getAll();
+        this.vctReaderData = new Vector();
+        for (int i = 0; i < this.listReader.size(); i++) {
+            Vector vctRow = this.listReader.get(i).convertToVector();
+            vctReaderData.add(vctRow);
+        }
+    }
+    
+    // Hiển thị bảng jTable Reader được gán vctReader
+    private void showTableReaderData(Vector vctData){
+        this.vctReaderHeader = readerDaoImp.getTitleColumn();
+        jTableReaderDetail.setModel(new DefaultTableModel(vctData,vctReaderHeader){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+    }
+    
+    // Hiển thị bảng jTable Book được gán vctBook
+    private void showTableBookData(Vector vctData) {
         this.vctBookHeader = this.bookDaoImp.getTitleColumn();
 
         jTableBookDetail.setModel(new DefaultTableModel(vctData, vctBookHeader) {
@@ -177,6 +211,7 @@ public class HomePanel extends javax.swing.JPanel {
         jTableBookDetail.getColumnModel().getColumn(8).setPreferredWidth(150);
     }
     
+    // Khởi tạo PieChart và gán PieChart vào Panel
     private void setPieChart(){
         JPanel pieChartPanel = PieChartPanel.showChart(numBook, numBorrow);
         jPanelPieChart.add(pieChartPanel);
@@ -234,7 +269,7 @@ public class HomePanel extends javax.swing.JPanel {
         jLabelNoOfBook.setFont(new java.awt.Font("Segoe Pro Black", 0, 50)); // NOI18N
         jLabelNoOfBook.setForeground(new java.awt.Color(102, 102, 102));
         jLabelNoOfBook.setText("10000");
-        jPanelNoOfBook.add(jLabelNoOfBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, 198, -1));
+        jPanelNoOfBook.add(jLabelNoOfBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 28, 150, -1));
 
         add(jPanelNoOfBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 210, 100));
 
@@ -311,6 +346,7 @@ public class HomePanel extends javax.swing.JPanel {
         jLabelReaderDetailsTitle.setText("Reader Details");
         jPanelReaderDetail.add(jLabelReaderDetailsTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 190, -1));
 
+        jTableReaderDetail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTableReaderDetail.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -322,6 +358,7 @@ public class HomePanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTableReaderDetail.setRowHeight(40);
         jScrollPaneReaderDetail.setViewportView(jTableReaderDetail);
 
         jPanelReaderDetail.add(jScrollPaneReaderDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 590, 220));

@@ -8,8 +8,8 @@ import Adapter.SupportFunction;
 import java.util.Vector;
 
 /**
- *
- * @author Admin
+ * Lớp Bin dùng để chứa những thông tin liên quan tới Bin Có những hàm để hỗ
+ * trợ convert sang các kiểu dữ liệu cần thiết
  */
 public class Bin {
     

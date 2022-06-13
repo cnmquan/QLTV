@@ -8,10 +8,12 @@ import java.util.ArrayList;
 
 
 /**
- *
- * @author Admin
+ * Dùng để xử lý những vấn đề liên quan tới validate trong database
  */
 public interface iValidation <T> {
-    boolean isExist(ArrayList<T> t, String s);    
-    boolean validateString(String s);    
+    // Kiểm tra xem chuỗi S có tồn tại trong danh sách bảng trong databse
+    public boolean isExist(ArrayList<T> t, String s);    
+    
+    // Kiểm tra chuỗi s có phải là chuỗi hợp lệ để thêm vào databse
+    public boolean validateString(String s);    
 }

@@ -375,14 +375,18 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jPanelButton.setBackground(new java.awt.Color(255, 255, 255));
         jPanelButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButtonInsert.setBackground(new java.awt.Color(102, 102, 255));
+        jButtonInsert.setBackground(new java.awt.Color(51, 153, 0));
         jButtonInsert.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jButtonInsert.setForeground(new java.awt.Color(255, 255, 255));
         jButtonInsert.setText("Thêm");
         jButtonInsert.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInsertActionPerformed(evt);
+                try {
+                    jButtonInsertActionPerformed(evt);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jPanelButton.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 150, 50));
@@ -394,19 +398,27 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jButtonDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonDeleteActionPerformed(evt);
+                try {
+                    jButtonDeleteActionPerformed(evt);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jPanelButton.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 150, 50));
 
-        jButtonUpdate.setBackground(new java.awt.Color(204, 204, 0));
+        jButtonUpdate.setBackground(new java.awt.Color(102, 102, 255));
         jButtonUpdate.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jButtonUpdate.setForeground(new java.awt.Color(255, 255, 255));
         jButtonUpdate.setText("Cập nhật");
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonUpdateActionPerformed(evt);
+                try {
+                    jButtonUpdateActionPerformed(evt);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jPanelButton.add(jButtonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 150, 50));

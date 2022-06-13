@@ -10,25 +10,48 @@ import java.time.LocalDate;
 import java.util.Vector;
 
 /**
- *
- * @author Admin
+ * Lớp Book dùng để chứa những thông tin liên quan tới Book Có những hàm để hỗ
+ * trợ convert sang các kiểu dữ liệu cần thiết
  */
 public class Book {
-        private String bookID;
-    private String bookName;
-    private String bookAuthor;
-    private String bookCategory;
-    private int bookQuantity;
-    private int bookPageNumber;
-    private int bookPublishedYear;
-    private double bookPrice;
-    private String publisherName;
-    private LocalDate bookUpdatedDate;   
 
+    // ID của Sách
+    private String bookID;
+    
+    // Tên của Sách
+    private String bookName;
+    
+    // Tác giả của Sách
+    private String bookAuthor;
+    
+    // Thể loại của Sách
+    private String bookCategory;
+    
+    // Số lượng của Sách
+    private int bookQuantity;
+    
+    // Số trang của Sách
+    private int bookPageNumber;
+    
+    // Năm xuất bản của Sách
+    private int bookPublishedYear;
+    
+    // Giá tiền của Sách
+    private double bookPrice;
+    
+    // Tên nhà xuât bản của Sách
+    private String publisherName;
+    
+    // Thời gian cập nhật thông tin của sách
+    private LocalDate bookUpdatedDate;
+
+    // Default Constructors
     public Book() {
     }
 
-    public Book(String bookID, String bookName, String bookAuthor, String bookCategory, int bookQuantity, int bookPageNumber, int bookPublishedYear, double bookPrice, String publisherName) {
+    // Constructor Đầy đủ tham số
+    public Book(String bookID, String bookName, String bookAuthor, String bookCategory, int bookQuantity, 
+            int bookPageNumber, int bookPublishedYear, double bookPrice, String publisherName) {
         this.bookID = bookID;
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;
@@ -39,7 +62,10 @@ public class Book {
         this.bookPrice = bookPrice;
         this.publisherName = publisherName;
     }
-
+    
+    /**
+     * Các hàm Get/Set cho các thuộc tính của Sách
+     */
     public String getBookID() {
         return bookID;
     }
@@ -111,7 +137,7 @@ public class Book {
     public void setPublisherName(String publisherName) {
         this.publisherName = publisherName;
     }
-    
+
     public LocalDate getBookUpdatedDate() {
         return bookUpdatedDate;
     }
@@ -119,8 +145,9 @@ public class Book {
     public void setBookUpdatedDate(LocalDate bookUpdatedDate) {
         this.bookUpdatedDate = bookUpdatedDate;
     }
-                    
-    public Vector convertToVector(){
+
+    // Convert to Vector
+    public Vector convertToVector() {
         Vector vector = new Vector();
         vector.add(this.bookID);
         vector.add(this.bookName);
@@ -133,8 +160,9 @@ public class Book {
         vector.add(this.bookPublishedYear);
         return vector;
     }
-    
-    public static Book covertFromResultSet(ResultSet rs) throws SQLException{
+
+    // Convert From ResultSet
+    public static Book covertFromResultSet(ResultSet rs) throws SQLException {
         Book book = new Book();
         book.setBookID(rs.getString("book_id"));
         book.setBookName(rs.getString("book_name"));
