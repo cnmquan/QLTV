@@ -30,7 +30,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
     public ManagePublisherPanel() {
         /**
-         * Khởi tạo giá trị cho publisherDaoImp thông qua DIContainer   
+         * Khởi tạo giá trị cho publisherDaoImp thông qua DIContainer
          *
          */
         this.publisherDaoImp = DIContainer.getPublisherDao();
@@ -532,7 +532,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         myInitComponents();
     }//GEN-LAST:event_jButtonClearActionPerformed
 
-     // Xử lý sự kiện Press của Button Update
+    // Xử lý sự kiện Press của Button Update
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -551,7 +551,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
-     // Xử lý sự kiện Press của Button Delete
+    // Xử lý sự kiện Press của Button Delete
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -579,7 +579,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
-     // Xử lý sự kiện Press của Button Insert
+    // Xử lý sự kiện Press của Button Insert
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
         // TODO add your handling code here:
         String id = jTextFieldID.getText();
@@ -599,7 +599,7 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
-     // Xử lý sự kiện Mouse Press của Text Field Địa chỉ
+    // Xử lý sự kiện Mouse Press của Text Field Địa chỉ
     private void jTextFieldAddressMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldAddressMousePressed
         // TODO add your handling code here:
         String author = jTextFieldAddress.getText();
@@ -758,7 +758,6 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_jTextFieldPhoneNumberKeyPressed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClear;

@@ -5,12 +5,12 @@
 package constant;
 
 /**
- * Mục đích của lớp [BookStringConstant] là để tạo những static final gán
- * cho những String text của Component UI cũng như các thông báo của UI
+ * Mục đích của lớp [BookStringConstant] là để tạo những static final gán cho
+ * những String text của Component UI cũng như các thông báo của UI
  */
 public class BookStringConstant {
 
-     // Tên các label và hint text trong Publisher UI
+    // Tên các label và hint text trong Publisher UI
     public static final String BOOK_ID = "ID sách";
     public static final String BOOK_TITLE = "Tiêu đề";
     public static final String BOOK_CATEGORY = "Thể loại";

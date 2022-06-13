@@ -24,66 +24,65 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * HomePanel hiển thị những thông tin bao gồm số lượng sách còn, số lượng độc giả, số lượng sách mượn
+ * HomePanel hiển thị những thông tin bao gồm số lượng sách còn, số lượng độc
+ * giả, số lượng sách mượn
  */
 public class HomePanel extends javax.swing.JPanel {
-
 
     /**
      * Creates new form HomePanel
      */
     public HomePanel() {
         /**
-         * Khởi tạo giá trị cho 
-         * bookDaoImp, readerDaoImp, borrowDaoImp
-         * thông qua DIContainer   
-         **/
+         * Khởi tạo giá trị cho bookDaoImp, readerDaoImp, borrowDaoImp thông qua
+         * DIContainer
+         *
+         */
         this.bookDaoImp = DIContainer.getBookDao();
         this.readerDaoImp = DIContainer.getReaderDao();
         this.borrowDaoImp = DIContainer.getBorrowDao();
-                
+
         initComponents();
-        
+
         // Bổ sung thêm cho initComponents
         myInitComponents();
-        
-        
+
         setBounds(0, 0, 1160, 740);
     }
 
     // bookDaoImp dùng để xử lý những chức năng có liên quan tới Book
-    private final BookDaoImp bookDaoImp; 
-    
+    private final BookDaoImp bookDaoImp;
+
     // readerDaoImp dùng để xử lý những chức năng có liên quan tới Reader
     private final ReaderDaoImp readerDaoImp;
-    
+
     // borrowDaoImp dùng để xử lý những chức năng có liên quan tới Borrow   
     private final BorrowDaoImp borrowDaoImp;
-    
+
     // numBook là số lượng sách còn lại (khởi tạo ban đầu = 0)
     private int numBook = 0;
-    
+
     // numBorrow là số lượng sách đã mượn (khởi tạo ban đầu = 0)
     private int numBorrow = 0;
-    
+
     // listBook là danh sách Book và được lấy từ trong database
     private ArrayList<Book> listBook;
-    
+
     // listReader là danh sách Reader và được lấy từ trong database   
-    private ArrayList<Reader>listReader;
-    
+    private ArrayList<Reader> listReader;
+
     // vctBookHeader dùng để đặt Header trong JTableBook
     private Vector vctBookHeader;
-    
+
     // vctBookData dùng để đặt Row trong JTableBook
     private Vector vctBookData;
-    
-     // vctReaderHeader dùng để đặt Header trong JTableReader
+
+    // vctReaderHeader dùng để đặt Header trong JTableReader
     private Vector vctReaderHeader;
-    
+
     // vctReaderData dùng để đặt Row trong JTableReader
     private Vector vctReaderData;
-   
+
     // Dùng để khởi tạo các giá trị lấy từ Database cũng như đặt các giá trị final vào các Label
     public void myInitComponents() {
         setLableText();
@@ -92,7 +91,7 @@ public class HomePanel extends javax.swing.JPanel {
         setBorrowValue();
         setDefaultTable();
         getVectorReaderData();
-        getVectorBookData();        
+        getVectorBookData();
         setPieChart();
         showTableBookData(this.vctBookData);
         showTableReaderData(this.vctReaderData);
@@ -132,7 +131,7 @@ public class HomePanel extends javax.swing.JPanel {
 
     // Dùng để set những thông số mặc định của bảng
     private void setDefaultTable() {
-        
+
         // Bảng Reader (set Header, set Scrollbar, set Background, ...)
         jTableReaderDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         jScrollPaneReaderDetail.setHorizontalScrollBarPolicy(
@@ -145,7 +144,6 @@ public class HomePanel extends javax.swing.JPanel {
         jTableReaderDetail.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableReaderDetail.setFillsViewportHeight(true);
 
-        
         // Bảng Book (set Header, set Scrollbar, set Background, ...)
         jTableBookDetail.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         jScrollPaneBookDetail.setHorizontalScrollBarPolicy(
@@ -168,9 +166,9 @@ public class HomePanel extends javax.swing.JPanel {
             vctBookData.add(vctRow);
         }
     }
-    
+
     // Dùng để gán các giá trị Book từ Database vào vctReader thông qua ReaderImp
-    private void getVectorReaderData(){
+    private void getVectorReaderData() {
         this.listReader = readerDaoImp.getAll();
         this.vctReaderData = new Vector();
         for (int i = 0; i < this.listReader.size(); i++) {
@@ -178,18 +176,18 @@ public class HomePanel extends javax.swing.JPanel {
             vctReaderData.add(vctRow);
         }
     }
-    
+
     // Hiển thị bảng jTable Reader được gán vctReader
-    private void showTableReaderData(Vector vctData){
+    private void showTableReaderData(Vector vctData) {
         this.vctReaderHeader = readerDaoImp.getTitleColumn();
-        jTableReaderDetail.setModel(new DefaultTableModel(vctData,vctReaderHeader){
+        jTableReaderDetail.setModel(new DefaultTableModel(vctData, vctReaderHeader) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         });
     }
-    
+
     // Hiển thị bảng jTable Book được gán vctBook
     private void showTableBookData(Vector vctData) {
         this.vctBookHeader = this.bookDaoImp.getTitleColumn();
@@ -210,9 +208,9 @@ public class HomePanel extends javax.swing.JPanel {
         jTableBookDetail.getColumnModel().getColumn(7).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.PUBLISHER_NAME).length() * 8);
         jTableBookDetail.getColumnModel().getColumn(8).setPreferredWidth(150);
     }
-    
+
     // Khởi tạo PieChart và gán PieChart vào Panel
-    private void setPieChart(){
+    private void setPieChart() {
         JPanel pieChartPanel = PieChartPanel.showChart(numBook, numBorrow);
         jPanelPieChart.add(pieChartPanel);
         pieChartPanel.setVisible(true);
@@ -365,7 +363,6 @@ public class HomePanel extends javax.swing.JPanel {
 
         add(jPanelReaderDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 610, 260));
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabelBookDetailsTitle;

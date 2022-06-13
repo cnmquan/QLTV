@@ -583,8 +583,9 @@ public class SignupPage extends javax.swing.JFrame {
 
     private void btnSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignUpMouseClicked
         // TODO add your handling code here:
-        if (validateInput() && !checkExistUsername())
+        if (validateInput() && !checkExistUsername()) {
             signUp();
+        }
     }//GEN-LAST:event_btnSignUpMouseClicked
 
     private void btnSignInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignInMouseClicked

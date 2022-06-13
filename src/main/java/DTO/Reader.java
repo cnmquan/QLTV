@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Vector;
 
 public class Reader {
+
     private String id;
     private String name;
     private String phoneNumber;

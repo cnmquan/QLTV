@@ -307,10 +307,10 @@ public class ChangePwdPanel extends javax.swing.JPanel {
 
     private void btnUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMouseClicked
         // TODO add your handling code here:
-        if (validateInput())
+        if (validateInput()) {
             updateAccount();
+        }
     }//GEN-LAST:event_btnUpdateMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnHideNewPass;

@@ -48,7 +48,7 @@ public class SupportFunction {
         Double numPrice = Double.valueOf(s);
         return numPrice > 0;
     }
-    
+
     // Dùng để convert từ kiểu String sang kiểu BinTYpeEnum
     public static BinTypeEnum convertStringToBinType(String type) {
         switch (type) {
@@ -68,10 +68,15 @@ public class SupportFunction {
     public static String convertBinTypeEnumToString(BinTypeEnum type) {
         if (null == type) {
             return GeneralStringConstant.GENERAL_EMPTY;
-        } else return switch (type) {
-            case Book -> TitleStringConstant.BOOK;
-            case Publisher -> TitleStringConstant.PUBLISHER;
-            default -> GeneralStringConstant.GENERAL_EMPTY;
-        };
+        } else {
+            return switch (type) {
+                case Book ->
+                    TitleStringConstant.BOOK;
+                case Publisher ->
+                    TitleStringConstant.PUBLISHER;
+                default ->
+                    GeneralStringConstant.GENERAL_EMPTY;
+            };
+        }
     }
 }

@@ -13,13 +13,14 @@ import java.util.List;
 import java.util.Vector;
 
 public class ReaderDaoImp implements ReaderDao {
+
     public ReaderDaoImp() {
 
     }
 
     /**
-     * Get all readers from database
-     * Print exception if there is an error getting readers
+     * Get all readers from database Print exception if there is an error
+     * getting readers
      *
      * @return All readers in the database
      */
@@ -39,7 +40,6 @@ public class ReaderDaoImp implements ReaderDao {
             System.out.println("Error: " + ex.getMessage());
         }
 
-
         return list;
     }
 
@@ -47,17 +47,17 @@ public class ReaderDaoImp implements ReaderDao {
      * Insert reader to database
      *
      * @param reader reader that you want to insert
-     * @return true if the reader is successfully inserted, false if the reader is failed to be inserted
+     * @return true if the reader is successfully inserted, false if the reader
+     * is failed to be inserted
      */
     @Override
     public boolean insert(Reader reader) {
         String sql = "INSERT INTO readers(reader_id,reader_name,reader_phone_number,reader_is_deleted) VALUES(?,?,?,false)";
         boolean rowInserted;
         rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                reader.getId(),
-                reader.getName(),
-                reader.getPhoneNumber(),
-        });
+            reader.getId(),
+            reader.getName(),
+            reader.getPhoneNumber(),});
 
         return rowInserted;
     }
@@ -66,7 +66,8 @@ public class ReaderDaoImp implements ReaderDao {
      * Update reader's information
      *
      * @param reader reader that you want to update
-     * @return true if the reader is successfully updated, false if the reader is failed to be updated
+     * @return true if the reader is successfully updated, false if the reader
+     * is failed to be updated
      */
     @Override
     public boolean update(Reader reader) {
@@ -75,10 +76,9 @@ public class ReaderDaoImp implements ReaderDao {
 
         boolean rowUpdated = false;
         rowUpdated = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                reader.getName(),
-                reader.getPhoneNumber(),
-
-                reader.getId()
+            reader.getName(),
+            reader.getPhoneNumber(),
+            reader.getId()
         });
 
         return rowUpdated;
@@ -88,7 +88,8 @@ public class ReaderDaoImp implements ReaderDao {
      * Delete reader's information
      *
      * @param id reader id that you want to delete
-     * @return true if the reader is successfully deleted, false if the reader is failed to be deleted
+     * @return true if the reader is successfully deleted, false if the reader
+     * is failed to be deleted
      */
     @Override
     public boolean delete(String id) {
@@ -96,7 +97,7 @@ public class ReaderDaoImp implements ReaderDao {
                 + " WHERE reader_id = ?";
         boolean rowDeleted;
         rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
         return rowDeleted;
     }
@@ -105,7 +106,8 @@ public class ReaderDaoImp implements ReaderDao {
      * Delete reader's information
      *
      * @param reader reader that you want to delete
-     * @return true if the reader is successfully deleted, false if the reader is failed to be deleted
+     * @return true if the reader is successfully deleted, false if the reader
+     * is failed to be deleted
      */
     @Override
     public boolean delete(Reader reader) throws SQLException {
@@ -114,7 +116,7 @@ public class ReaderDaoImp implements ReaderDao {
                 + "WHERE reader_id = ?";
 
         rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                reader.getId()
+            reader.getId()
         });
 
         return rowDeleted;
@@ -124,14 +126,15 @@ public class ReaderDaoImp implements ReaderDao {
      * Move reader to Bin
      *
      * @param id reader id that you want to move to bin
-     * @return true if the reader is successfully moved to bin, false if the reader is failed to be moved to bin
+     * @return true if the reader is successfully moved to bin, false if the
+     * reader is failed to be moved to bin
      */
     @Override
     public boolean moveToBin(String id) {
         String sql = "UPDATE readers SET reader_is_deleted = true ";
         sql += " WHERE reader_id = ?";
         boolean rowMovedToBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
 
         return rowMovedToBin;
@@ -141,7 +144,8 @@ public class ReaderDaoImp implements ReaderDao {
      * Delete reader from Bin
      *
      * @param id reader id that you want to remove from bin
-     * @return true if the reader is successfully removed from bin, false if the reader is failed to be removed to bin
+     * @return true if the reader is successfully removed from bin, false if the
+     * reader is failed to be removed to bin
      */
     @Override
     public boolean removeFromBin(String id) {
@@ -149,7 +153,7 @@ public class ReaderDaoImp implements ReaderDao {
                 + " WHERE reader_id = ?";
 
         boolean rowRemovedFromBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
         return rowRemovedFromBin;
     }
@@ -158,11 +162,11 @@ public class ReaderDaoImp implements ReaderDao {
      * Get Reader by attribute
      *
      * @param attribute attribute of the reader you want to get,
-     *                  <p>
-     *                  For the list of attribute, visit data table of Reader
-     * @param value     value of the attribute you want to get
-     *                  <p>
-     *                  Throw exception if the attribute provided is not included in Reader table
+     * <p>
+     * For the list of attribute, visit data table of Reader
+     * @param value value of the attribute you want to get
+     * <p>
+     * Throw exception if the attribute provided is not included in Reader table
      * @return Reader which has the @attribute match the value @s
      */
     @Override
@@ -175,13 +179,13 @@ public class ReaderDaoImp implements ReaderDao {
                 + "FROM readers "
                 + "WHERE " + attribute + " = ?";
         ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
-                value
+            value
         });
         try {
             while (rs.next()) {
 
                 rs = DataProvider.ExecuteQuery(sql, new Object[]{
-                        value
+                    value
                 });
 
                 try {
@@ -217,7 +221,7 @@ public class ReaderDaoImp implements ReaderDao {
      * Get ID of reader by reader's name
      *
      * @param readers list of readers
-     * @param name    name of the reader you want to get
+     * @param name name of the reader you want to get
      * @return id of the reader
      */
     public String getIDByName(List<Reader> readers, String name) {
@@ -261,7 +265,8 @@ public class ReaderDaoImp implements ReaderDao {
      * Check if the reader is deleted
      *
      * @param id id of the reader you want to check
-     * @return true if the reader is deleted, false if the reader has not been deleted
+     * @return true if the reader is deleted, false if the reader has not been
+     * deleted
      */
     @Override
     public boolean isExistDeleteList(String id) {
@@ -277,9 +282,10 @@ public class ReaderDaoImp implements ReaderDao {
     /**
      * Check if the reader is existed in the provided list
      *
-     * @param readers       list of readers to be checked
+     * @param readers list of readers to be checked
      * @param idToBeChecked id of the reader to be checked
-     * @return true if the reader is existed in the provided list, false if the reader is not existed in the provided list
+     * @return true if the reader is existed in the provided list, false if the
+     * reader is not existed in the provided list
      */
     @Override
     public boolean isExist(ArrayList<Reader> readers, String idToBeChecked) {
@@ -295,7 +301,8 @@ public class ReaderDaoImp implements ReaderDao {
      * Validate String
      *
      * @param s value to that need to be validated
-     * @return true if the value meet the requirement, false if the value do not meet the requirement
+     * @return true if the value meet the requirement, false if the value do not
+     * meet the requirement
      */
     @Override
     public boolean validateString(String s) {
@@ -304,6 +311,7 @@ public class ReaderDaoImp implements ReaderDao {
 
     //Create Singleton class for ReaderDAO
     private static class SingletonHelper {
+
         private static final ReaderDaoImp INSTANCE = new ReaderDaoImp();
     }
 

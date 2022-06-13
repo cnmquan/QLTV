@@ -630,7 +630,6 @@ public class ManageAccount extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAnswerFocusLost
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbQuestion;
     private javax.swing.JComboBox<String> cmbRole;

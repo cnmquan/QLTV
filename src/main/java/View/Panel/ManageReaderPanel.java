@@ -69,7 +69,6 @@ public class ManageReaderPanel extends javax.swing.JPanel {
 
     private void setDefaultText() {
 
-
         jTextFieldID.setText(ReaderStringConstant.READER_ID);
         jTextFieldName.setText(ReaderStringConstant.READER_NAME);
         jTextFieldPhoneNumber.setText(ReaderStringConstant.READER_PHONE_NUMBER);
@@ -100,8 +99,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         for (Reader reader : this.readersList) {
             if (reader.getId().toLowerCase().contains(text.toLowerCase())
                     || reader.getName().toLowerCase().contains(text.toLowerCase())
-                    || reader.getPhoneNumber().toLowerCase().contains(text.toLowerCase())
-            ) {
+                    || reader.getPhoneNumber().toLowerCase().contains(text.toLowerCase())) {
                 Vector vctRow = reader.convertToVector();
                 this.vctData.add(vctRow);
             }
@@ -144,12 +142,10 @@ public class ManageReaderPanel extends javax.swing.JPanel {
                 break;
             }
 
-
         }
         if (phoneNumber.trim().isEmpty() || phoneNumber.isEmpty()) {
             errorList = errorList + ReaderStringConstant.READER_PHONE_NUMBER_ERROR + GeneralStringConstant.GENERAL_NEW_LINE;
         }
-
 
         if (!errorList.equals(GeneralStringConstant.GENERAL_EMPTY)) {
             JOptionPane.showMessageDialog(null, errorList);
@@ -596,8 +592,8 @@ public class ManageReaderPanel extends javax.swing.JPanel {
             Reader reader = new Reader(id, name, phoneNumber);
 
             int answer = JOptionPane.showConfirmDialog(null,
-                ReaderStringConstant.READER_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
-                JOptionPane.YES_NO_OPTION);
+                    ReaderStringConstant.READER_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 boolean deleteCheck = readerDaoImp.moveToBin(reader.getId());
                 if (deleteCheck) {
@@ -630,8 +626,6 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_jButtonInsertActionPerformed
-
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClear;

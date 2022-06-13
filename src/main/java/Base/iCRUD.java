@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Dùng để xử lý các chức năng liên quan tới database
+ *
  * @param <T>
  */
 public interface iCRUD<T> {
@@ -24,10 +25,10 @@ public interface iCRUD<T> {
 
     // Xoá phần tử với ID tương ứng của bảng T trong database
     public boolean delete(String id) throws SQLException;
-    
+
     // Xoá phần tử T ra khỏi bảng trong database
     public boolean delete(T t) throws SQLException;
-    
+
     // Lấy T từ giá trị đã chọn
     public T getAttribute(String atribute, String s);
 }

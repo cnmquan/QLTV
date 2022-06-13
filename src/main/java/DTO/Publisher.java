@@ -9,20 +9,20 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 /**
- * Lớp Publisher dùng để chứa những thông tin liên quan tới Publisher
- * Có những hàm để hỗ  trợ convert sang các kiểu dữ liệu cần thiết
+ * Lớp Publisher dùng để chứa những thông tin liên quan tới Publisher Có những
+ * hàm để hỗ trợ convert sang các kiểu dữ liệu cần thiết
  */
 public class Publisher {
 
     // ID của Nhà xuất bản
     private String publisherID;
-    
+
     // Tên của Nhà xuất bản
     private String publisherName;
-    
+
     // Số điện thoại của Nhà xuất bản
     private String publisherPhoneNumber;
-    
+
     // Địa chỉ của Nhà xuất bản
     private String publisherAddress;
 

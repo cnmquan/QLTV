@@ -22,11 +22,12 @@ import java.util.Locale;
 import java.util.Vector;
 
 public class BorrowDaoImp implements BorrowDao {
+
     private BookDaoImp bookDaoImp = new BookDaoImp();
 
     /**
-     * Get all borrows from database
-     * Print exception if there is an error getting borrows
+     * Get all borrows from database Print exception if there is an error
+     * getting borrows
      *
      * @return All borrows in the database
      */
@@ -62,11 +63,11 @@ public class BorrowDaoImp implements BorrowDao {
      * Get Borrow by attribute
      *
      * @param attribute attribute of the borrow you want to get,
-     *                  <p>
-     *                  For the list of attribute, visit data table of Borrow
-     * @param value     value of the attribute you want to get
-     *                  <p>
-     *                  Throw exception if the attribute provided is not included in Borrow table
+     * <p>
+     * For the list of attribute, visit data table of Borrow
+     * @param value value of the attribute you want to get
+     * <p>
+     * Throw exception if the attribute provided is not included in Borrow table
      * @return Borrow which has the @attribute match the value @value
      */
     @Override
@@ -83,7 +84,7 @@ public class BorrowDaoImp implements BorrowDao {
                 + "WHERE " + attribute + " = ?";
 
         ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
-                value
+            value
         });
 
         try {
@@ -134,7 +135,8 @@ public class BorrowDaoImp implements BorrowDao {
      * Insert borrow to database
      *
      * @param borrow borrow that you want to insert
-     * @return true if the borrow is successfully inserted, false if the borrow is failed to be inserted
+     * @return true if the borrow is successfully inserted, false if the borrow
+     * is failed to be inserted
      */
     @Override
     public boolean insert(Borrow borrow) throws SQLException {
@@ -163,12 +165,12 @@ public class BorrowDaoImp implements BorrowDao {
             returnDate = null;
         }
         rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                borrow.getBorrowId(),
-                borrow.getReaderId(),
-                borrow.getBookId(),
-                borrow.getQuantity(),
-                borrowDate,
-                returnDate
+            borrow.getBorrowId(),
+            borrow.getReaderId(),
+            borrow.getBookId(),
+            borrow.getQuantity(),
+            borrowDate,
+            returnDate
         });
         Book book = bookDaoImp.getAttribute("book_id", borrow.getBookId());
         book.setBookQuantity(book.getBookQuantity() - borrow.getQuantity());
@@ -181,9 +183,11 @@ public class BorrowDaoImp implements BorrowDao {
      * Update borrow's information
      *
      * @param borrow borrow that you want to update
-     *               <p>
-     *               Calling this function will call BookDao to update the quantity of borrowed book
-     * @return true if the borrow is successfully updated, false if the borrow is failed to be updated
+     * <p>
+     * Calling this function will call BookDao to update the quantity of
+     * borrowed book
+     * @return true if the borrow is successfully updated, false if the borrow
+     * is failed to be updated
      */
     @Override
     public boolean update(Borrow borrow) throws SQLException {
@@ -208,26 +212,27 @@ public class BorrowDaoImp implements BorrowDao {
         bookDaoImp.update(book);
 
         rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                borrow.getReaderId(),
-                borrow.getBookId(),
-                borrow.getQuantity(),
-                borrowDate,
-                returnDate,
-                borrow.getBorrowId(),
-        });
+            borrow.getReaderId(),
+            borrow.getBookId(),
+            borrow.getQuantity(),
+            borrowDate,
+            returnDate,
+            borrow.getBorrowId(),});
 
         return rowInserted;
     }
 
     /**
-     * Update borrow's information
-     * Use this update function when you want to update the quantity of the book
-     * In short, this function is used when there was an error inserting new Borrow
+     * Update borrow's information Use this update function when you want to
+     * update the quantity of the book In short, this function is used when
+     * there was an error inserting new Borrow
      *
      * @param borrow borrow that you want to update
-     *               <p>
-     *               Calling this function will call BookDao to update the quantity of borrowed book
-     * @return true if the borrow is successfully updated, false if the borrow is failed to be updated
+     * <p>
+     * Calling this function will call BookDao to update the quantity of
+     * borrowed book
+     * @return true if the borrow is successfully updated, false if the borrow
+     * is failed to be updated
      */
     ///Use this update function when you want to update the quantity of the book
     ///In short, this function is used when there was an error inserting new Borrow
@@ -248,23 +253,24 @@ public class BorrowDaoImp implements BorrowDao {
             returnDate = null;
         }
         rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                borrow.getReaderId(),
-                borrow.getBookId(),
-                borrow.getQuantity(),
-                borrowDate,
-                returnDate,
-                borrow.getBorrowId(),
-        });
+            borrow.getReaderId(),
+            borrow.getBookId(),
+            borrow.getQuantity(),
+            borrowDate,
+            returnDate,
+            borrow.getBorrowId(),});
         return rowInserted;
     }
 
     /**
      * Delete borrows information
      * <p>
-     * Call this function will also call BookDao.setBookQuantity() to update the quantity of book
+     * Call this function will also call BookDao.setBookQuantity() to update the
+     * quantity of book
      *
      * @param id borrow id that you want to delete
-     * @return true if the borrow is successfully deleted, false if the borrow is failed to be deleted
+     * @return true if the borrow is successfully deleted, false if the borrow
+     * is failed to be deleted
      */
     @Override
     public boolean delete(String id) throws SQLException {
@@ -275,7 +281,7 @@ public class BorrowDaoImp implements BorrowDao {
                 + "WHERE borrow_id = ?";
 
         rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
         if (rowDeleted) {
             book.setBookQuantity(book.getBookQuantity() + borrow.getQuantity());
@@ -287,10 +293,12 @@ public class BorrowDaoImp implements BorrowDao {
     /**
      * Delete borrows information
      * <p>
-     * Call this function will also call BookDao.setBookQuantity() to update the quantity of book
+     * Call this function will also call BookDao.setBookQuantity() to update the
+     * quantity of book
      *
-     * @param borrow borrow  that you want to delete
-     * @return true if the borrow is successfully deleted, false if the borrow is failed to be deleted
+     * @param borrow borrow that you want to delete
+     * @return true if the borrow is successfully deleted, false if the borrow
+     * is failed to be deleted
      */
     @Override
     public boolean delete(Borrow borrow) throws SQLException {
@@ -300,7 +308,7 @@ public class BorrowDaoImp implements BorrowDao {
                 + "WHERE borrow_id = ?";
 
         rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                borrow.getBorrowId()
+            borrow.getBorrowId()
         });
         if (rowDeleted) {
             book.setBookQuantity(book.getBookQuantity() + borrow.getQuantity());
@@ -313,7 +321,8 @@ public class BorrowDaoImp implements BorrowDao {
      * Move borrow to Bin
      *
      * @param id borrow id that you want to move to bin
-     * @return true if the borrow is successfully moved to bin, false if the borrow is failed to be moved to bin
+     * @return true if the borrow is successfully moved to bin, false if the
+     * borrow is failed to be moved to bin
      */
     @Override
     public boolean moveToBin(String id) {
@@ -323,7 +332,7 @@ public class BorrowDaoImp implements BorrowDao {
                 + "WHERE borrow_id = ?";
 
         rowMovedToBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
 
         return rowMovedToBin;
@@ -333,7 +342,8 @@ public class BorrowDaoImp implements BorrowDao {
      * Remove borrow from Bin
      *
      * @param id borrow id that you want to remove from bin
-     * @return true if the borrow is successfully removed from bin, false if the borrow is failed to be removed from bin
+     * @return true if the borrow is successfully removed from bin, false if the
+     * borrow is failed to be removed from bin
      */
     @Override
     public boolean removeFromBin(String id) {
@@ -343,7 +353,7 @@ public class BorrowDaoImp implements BorrowDao {
                 + "WHERE borrow_id = ?";
 
         rowRemovedFromBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
 
         return rowRemovedFromBin;
@@ -369,9 +379,10 @@ public class BorrowDaoImp implements BorrowDao {
     /**
      * Check if the borrow is existed in the provided list
      *
-     * @param borrows       list of borrows to be checked
+     * @param borrows list of borrows to be checked
      * @param idToBeChecked id of the borrow to be checked
-     * @return true if the borrow is existed in the provided list, false if the borrow is not existed in the provided list
+     * @return true if the borrow is existed in the provided list, false if the
+     * borrow is not existed in the provided list
      */
     @Override
     public boolean isExist(ArrayList<Borrow> borrows, String idToBeChecked) {
@@ -387,7 +398,8 @@ public class BorrowDaoImp implements BorrowDao {
      * Check if the borrow is deleted
      *
      * @param id id of the borrow you want to check
-     * @return true if the borrow is deleted, false if the borrow has not been deleted
+     * @return true if the borrow is deleted, false if the borrow has not been
+     * deleted
      */
     @Override
     public boolean isExistDeleteList(String id) {
@@ -404,7 +416,8 @@ public class BorrowDaoImp implements BorrowDao {
      * Validate String
      *
      * @param s value to that need to be validated
-     * @return true if the value meet the requirement, false if the value do not meet the requirement
+     * @return true if the value meet the requirement, false if the value do not
+     * meet the requirement
      */
     @Override
     public boolean validateString(String s) {

@@ -5,16 +5,17 @@
 package constant;
 
 /**
- * Mục đích của lớp [TitleStringConstant] là để tạo những static final title chung
- * gán cho những Component UI và các ký tự thường được sử dụng
+ * Mục đích của lớp [TitleStringConstant] là để tạo những static final title
+ * chung gán cho những Component UI và các ký tự thường được sử dụng
+ *
  * @author Admin
  */
 public class TitleStringConstant {
-    
+
     // Tên của title Project
     public static final String PROJECT_NAME = "PHẦN MỀM QUẢN LÝ THƯ VIỆN";
     // Tên của title LMS DashBoard
-    public static final String LMS_DASHBOARD = "Dashboard";
+    public static final String LMS_DASHBOARD = "Trang chủ";
     // Tên của title Book UI
     public static final String MANAGE_BOOK = "Quản lý sách";
     // Tên của title Publisher UI
@@ -36,7 +37,7 @@ public class TitleStringConstant {
     public static final String INFORMATION = "Thông tin cá nhân";
     public static final String CHANGE_PWD = "Đổi mật khẩu";
     public static final String LOG_OUT = "Đăng xuất";
-    
+
     // Title Pie Chart
     public static final String PIE_CHART_TITLE = "Biểu đồ số lượng sách";
     public static final String PIE_CHART_BORROWED = "Đã mượn";

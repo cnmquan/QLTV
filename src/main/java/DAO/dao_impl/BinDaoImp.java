@@ -25,7 +25,7 @@ public class BinDaoImp implements BinDao {
 
     // Gọi PublishDaoImp để thực thi các hàm liên quan tới nhà xuất bản
     private final PublisherDaoImp publishDaoImp = DIContainer.getPublisherDao();
-    
+
     // Gọi BookDaoImp để thực thi các hàm liên quan tới sách
     private final BookDaoImp bookDaoImp = DIContainer.getBookDao();
 
@@ -33,10 +33,10 @@ public class BinDaoImp implements BinDao {
     @Override
     public ArrayList<Bin> getBinList() {
         ArrayList<Bin> binList = new ArrayList<>();
-        
+
         // Lấy danh sách ẩn trong danh sách nhà xuất bản
         ArrayList<Publisher> publisherDeleteList = publishDaoImp.getDeleteList();
-        
+
         // Lấy danh sách ẩn trong danh sách sách
         ArrayList<Book> bookDeleteList = bookDaoImp.getDeleteList();
 
@@ -45,7 +45,7 @@ public class BinDaoImp implements BinDao {
             Bin bin = new Bin(publisher.getPublisherID(), publisher.getPublisherName(), BinTypeEnum.Publisher);
             binList.add(bin);
         }
-        
+
         // Thêm danh sách sách vào danh sách thùng rác
         for (Book book : bookDeleteList) {
             Bin bin = new Bin(book.getBookID(), book.getBookName(), BinTypeEnum.Book);

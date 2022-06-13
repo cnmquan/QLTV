@@ -467,8 +467,9 @@ public class ForgotPwdPage extends javax.swing.JFrame {
 
     private void btnRecoverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRecoverMouseClicked
         // TODO add your handling code here:
-        if (validateInput())
+        if (validateInput()) {
             changePwd();
+        }
     }//GEN-LAST:event_btnRecoverMouseClicked
 
     private void btnSignInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSignInMouseClicked

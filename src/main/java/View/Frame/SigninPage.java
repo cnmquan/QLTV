@@ -315,8 +315,9 @@ public class SigninPage extends javax.swing.JFrame {
 
     private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
         // TODO add your handling code here:
-        if (validateInput())
+        if (validateInput()) {
             login();
+        }
     }//GEN-LAST:event_btnSignInActionPerformed
 
     /**

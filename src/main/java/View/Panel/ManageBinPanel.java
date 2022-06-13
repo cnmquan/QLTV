@@ -23,37 +23,35 @@ import DTO.Bin;
 import javax.swing.table.TableRowSorter;
 
 /**
- * ManageBinPanel dùng hiển thị danh sách quyển sách, nhà xuất bản tạm xoá, 
- * có thể khôi phục lại,
- * cũng như xoá hoàn toàn khỏi database
+ * ManageBinPanel dùng hiển thị danh sách quyển sách, nhà xuất bản tạm xoá, có
+ * thể khôi phục lại, cũng như xoá hoàn toàn khỏi database
  */
 public class ManageBinPanel extends javax.swing.JPanel {
 
     public ManageBinPanel() {
         /**
-         * Khởi tạo giá trị cho 
-         * binDaoImp
-         * thông qua DIContainer   
-         **/
+         * Khởi tạo giá trị cho binDaoImp thông qua DIContainer
+         *
+         */
         this.binDaoImp = DIContainer.getBinDao();
-        
+
         initComponents();
-        
+
         // Bổ sung thêm cho initComponents
         myInitComponents();
-        
+
         setBounds(0, 0, 1160, 740);
     }
 
     // binDaoImp dùng để xử lý những chức năng có liên quan tới Bin
     private final BinDaoImp binDaoImp;
-    
+
     // binList là danh sách Bin(Book, Publisher) và được lấy từ trong database
     private ArrayList<Bin> binList;
-    
+
     // vctHeader dùng để đặt Header trong JTableBin
     private Vector vctHeader;
-    
+
     // vctData dùng để đặt Row trong JTableBin
     private Vector vctData;
 
@@ -66,7 +64,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         clearInfo();
     }
 
-     // Dùng để setText các jLabel thông qua TitleStringConstant, BinStringConstant, GeneralStringConstant
+    // Dùng để setText các jLabel thông qua TitleStringConstant, BinStringConstant, GeneralStringConstant
     private void setDefaultText() {
         jLabelTitle.setText(TitleStringConstant.MANAGE_BIN);
 
@@ -110,16 +108,16 @@ public class ManageBinPanel extends javax.swing.JPanel {
                 return false;
             }
         });
-        
+
         DefaultTableModel model = (DefaultTableModel) jTableDelete.getModel();
         //Add sorter
         var sorter = new TableRowSorter<DefaultTableModel>(model);
-        jTableDelete.setRowSorter(sorter); 
+        jTableDelete.setRowSorter(sorter);
     }
 
     // Hiển thị thông tin chi tiết của Bin khi chọn 1 hàng trong jTableDelete
     private void displayDetails(int selectedIndex) {
-        if(vctData.isEmpty()){
+        if (vctData.isEmpty()) {
             return;
         }
         Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
@@ -151,12 +149,12 @@ public class ManageBinPanel extends javax.swing.JPanel {
         jTextFieldType.setText(BinStringConstant.BIN_TYPE);
         jTextFieldSearch.setText(GeneralStringConstant.GENERAL_SEARCH);
     }
-    
+
     // Dùng để search Table khi nhập trong Tìm kiếm
     private void setTableBySearch(String text) {
         this.vctData.clear();
         for (Bin bin : this.binList) {
-            if ( bin.getId().toLowerCase().contains(text.toLowerCase())
+            if (bin.getId().toLowerCase().contains(text.toLowerCase())
                     || bin.getName().toLowerCase().contains(text.toLowerCase())) {
                 Vector vctRow = bin.convertToVector();
                 this.vctData.add(vctRow);
@@ -366,12 +364,12 @@ public class ManageBinPanel extends javax.swing.JPanel {
     // Xử lý sự kiện khi nhấn vào Button Khôi phục
     private void jButtonRecoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRecoverActionPerformed
         // TODO add your handling code here:
-        
+
         //Check Data in Table 
-        if(vctData.isEmpty()){
+        if (vctData.isEmpty()) {
             return;
         }
-        
+
         String id = jTextFieldID.getText();
         String name = jTextFieldName.getText();
         String type = jTextFieldType.getText();
@@ -396,13 +394,12 @@ public class ManageBinPanel extends javax.swing.JPanel {
     // Xử lý sự kiện khi nhấn vào Button Huỷ
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
-        
+
         //Check Data in Table 
-        if(vctData.isEmpty()){
+        if (vctData.isEmpty()) {
             return;
         }
-        
-        
+
         String id = jTextFieldID.getText();
         String name = jTextFieldName.getText();
         String type = jTextFieldType.getText();
@@ -420,7 +417,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
             }
         } else {
 
-        }        
+        }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     // Xử lý sự kiện Focus Gained Text Field Tìm kiếm
@@ -475,7 +472,6 @@ public class ManageBinPanel extends javax.swing.JPanel {
             displayDetails(selectedRow);
         }
     }//GEN-LAST:event_jTableDeleteKeyReleased
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDelete;

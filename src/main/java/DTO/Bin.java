@@ -8,13 +8,13 @@ import Adapter.SupportFunction;
 import java.util.Vector;
 
 /**
- * Lớp Bin dùng để chứa những thông tin liên quan tới Bin Có những hàm để hỗ
- * trợ convert sang các kiểu dữ liệu cần thiết
+ * Lớp Bin dùng để chứa những thông tin liên quan tới Bin Có những hàm để hỗ trợ
+ * convert sang các kiểu dữ liệu cần thiết
  */
 public class Bin {
-    
-    public Bin(){
-        
+
+    public Bin() {
+
     }
 
     public Bin(String id, String name, BinTypeEnum type) {
@@ -22,7 +22,7 @@ public class Bin {
         this.name = name;
         this.type = type;
     }
-    
+
     private String id;
     private String name;
     private BinTypeEnum type;
@@ -50,13 +50,13 @@ public class Bin {
     public void setName(String name) {
         this.name = name;
     }
-    
-    public Vector convertToVector(){
+
+    public Vector convertToVector() {
         Vector vector = new Vector();
         vector.add(this.id);
         vector.add(this.name);
         vector.add(SupportFunction.convertBinTypeEnumToString(this.type));
         return vector;
     }
-    
+
 }

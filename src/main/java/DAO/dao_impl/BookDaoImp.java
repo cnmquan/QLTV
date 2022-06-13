@@ -77,7 +77,7 @@ public class BookDaoImp implements BookDao {
                 + "WHERE " + attribute + " = ?";
 
         ResultSet rs = DataProvider.ExecuteQuery(sql, new Object[]{
-                a
+            a
         });
 
         try {
@@ -221,16 +221,16 @@ public class BookDaoImp implements BookDao {
                 + "false)";
 
         rowInserted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                t.getBookID(),
-                t.getBookName(),
-                t.getBookCategory(),
-                t.getBookAuthor(),
-                t.getBookQuantity(),
-                t.getBookPageNumber(),
-                t.getBookPrice(),
-                t.getPublisherName(),
-                t.getBookPublishedYear(),
-                localDate
+            t.getBookID(),
+            t.getBookName(),
+            t.getBookCategory(),
+            t.getBookAuthor(),
+            t.getBookQuantity(),
+            t.getBookPageNumber(),
+            t.getBookPrice(),
+            t.getPublisherName(),
+            t.getBookPublishedYear(),
+            localDate
         });
 
         return rowInserted;
@@ -254,16 +254,16 @@ public class BookDaoImp implements BookDao {
                 + "WHERE book_id = ?";
 
         rowUpdated = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                t.getBookName(),
-                t.getBookCategory(),
-                t.getBookAuthor(),
-                t.getBookQuantity(),
-                t.getBookPageNumber(),
-                t.getBookPrice(),
-                t.getPublisherName(),
-                t.getBookPublishedYear(),
-                localDate,
-                t.getBookID()
+            t.getBookName(),
+            t.getBookCategory(),
+            t.getBookAuthor(),
+            t.getBookQuantity(),
+            t.getBookPageNumber(),
+            t.getBookPrice(),
+            t.getPublisherName(),
+            t.getBookPublishedYear(),
+            localDate,
+            t.getBookID()
         });
 
         return rowUpdated;
@@ -277,7 +277,7 @@ public class BookDaoImp implements BookDao {
                 + "WHERE book_id = ?";
 
         rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
 
         return rowDeleted;
@@ -291,7 +291,7 @@ public class BookDaoImp implements BookDao {
                 + "WHERE book_id = ?";
 
         rowDeleted = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                t.getBookID()
+            t.getBookID()
         });
 
         return rowDeleted;
@@ -306,7 +306,7 @@ public class BookDaoImp implements BookDao {
                 + "WHERE book_id = ?";
 
         rowMovedToBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                id
+            id
         });
 
         return rowMovedToBin;
@@ -323,8 +323,8 @@ public class BookDaoImp implements BookDao {
                 + "WHERE book_id = ?";
 
         rowRemovedFromBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
-                localDate,
-                id
+            localDate,
+            id
         });
 
         return rowRemovedFromBin;
@@ -363,7 +363,6 @@ public class BookDaoImp implements BookDao {
         return s.isBlank() || s.isEmpty();
     }
 
-    
     // Kiểm tra xem chuỗi s này có trùng với id trong danh sách ẩn 
     @Override
     public boolean isExistDeleteList(String s) {

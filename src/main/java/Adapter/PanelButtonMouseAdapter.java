@@ -17,11 +17,11 @@ public class PanelButtonMouseAdapter extends MouseAdapter {
 
     // Panel cần thực hiện chức năng của Mouse
     JPanel jPanel;
-    
+
     // PanelTypeEnum dùng để phân loại Panel 
     PanelTypeEnum type;
-        
-    Color mouseEnterColor = new Color(0, 0, 0);  
+
+    Color mouseEnterColor = new Color(0, 0, 0);
     Color mouseExitColor = new Color(51, 51, 51);
     Color mouseExitHomeColor = new Color(255, 51, 51);
     Color mouseExitWidnowColor = new Color(102, 102, 255);
@@ -40,9 +40,12 @@ public class PanelButtonMouseAdapter extends MouseAdapter {
     @Override
     public void mouseExited(MouseEvent e) {
         switch (type) {
-            case Exit -> jPanel.setBackground(mouseExitWidnowColor);
-            case Home -> jPanel.setBackground(mouseExitHomeColor);
-            default -> jPanel.setBackground(mouseExitColor);
+            case Exit ->
+                jPanel.setBackground(mouseExitWidnowColor);
+            case Home ->
+                jPanel.setBackground(mouseExitHomeColor);
+            default ->
+                jPanel.setBackground(mouseExitColor);
         }
     }
 

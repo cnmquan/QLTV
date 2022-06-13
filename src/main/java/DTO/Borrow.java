@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Vector;
 
 public class Borrow {
+
     private String borrowId;
     private String readerId;
     private String bookId;

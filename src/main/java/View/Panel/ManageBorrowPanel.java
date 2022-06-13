@@ -149,9 +149,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
                     || borrow.getBorrowDate().toString().contains(text.toLowerCase())
                     || borrow.getReturnDate().toString().contains(text.toLowerCase())
                     || borrowedBook.getBookName().toLowerCase().contains(text.toLowerCase())
-                    || reader.getName().toLowerCase().contains(text.toLowerCase())
-
-            ) {
+                    || reader.getName().toLowerCase().contains(text.toLowerCase())) {
                 Vector vctRow = borrow.convertToVector();
                 this.vctData.add(vctRow);
             }
@@ -785,7 +783,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
             }
         }
 
-
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) throws ParseException {//GEN-FIRST:event_jButtonUpdateActionPerformed
@@ -912,7 +909,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         //        int selectedRow = jTableBook.getSelectedRow();
         //        displayDetails(selectedRow);
 
-
     }//GEN-LAST:event_jTableBorrowKeyReleased
 
     private void jTextFieldReturnDateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldReturnDateFocusGained
@@ -1018,7 +1014,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
     private void jTextFieldIDBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDBookActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldIDBookActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClear;

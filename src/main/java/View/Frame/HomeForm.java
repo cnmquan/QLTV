@@ -180,7 +180,7 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelLMSDashBoard.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelLMSDashBoard.setBackground(new java.awt.Color(153, 153, 255));
-        jLabelLMSDashBoard.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
+        jLabelLMSDashBoard.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
         jLabelLMSDashBoard.setForeground(new java.awt.Color(255, 255, 255));
         jLabelLMSDashBoard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Home_26px_2.png"))); // NOI18N
         jLabelLMSDashBoard.setText("   LMS Dashboard");
@@ -308,12 +308,12 @@ public class HomeForm extends javax.swing.JFrame {
     private void jLabelMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuMouseClicked
         // TODO add your handling code here:
 //        System.out.println(jLabelGreeting.getX()-2*jLabelGreeting.getWidth());
-        jPopupMenu.show(jLabelMenu, evt.getX(),                 evt.getY());
+        jPopupMenu.show(jLabelMenu, evt.getX(), evt.getY());
         jPopupMenu.setLocation(
-         jLabelMenu.getX() +jLabelMenu.getWidth()- jPopupMenu.getWidth(),
-                jLabelMenu.getY()+jPopupMenu.getHeight()
-//        jLabelMenu.getY()-0*jLabelGreeting.getHeight()
-      );
+                jLabelMenu.getX() + jLabelMenu.getWidth() - jPopupMenu.getWidth(),
+                jLabelMenu.getY() + jPopupMenu.getHeight()
+        //        jLabelMenu.getY()-0*jLabelGreeting.getHeight()
+        );
     }//GEN-LAST:event_jLabelMenuMouseClicked
 
     /**
@@ -407,7 +407,7 @@ public class HomeForm extends javax.swing.JFrame {
                 clickedMenu(panelManageReader);
             }
         });
-        
+
         // Xử lí sự kiện click chuột của Panel Manage Account
         jPanelManageAccount.addMouseListener(new PanelButtonMouseAdapter(jPanelManageAccount, PanelTypeEnum.Function) {
             @Override
@@ -424,7 +424,7 @@ public class HomeForm extends javax.swing.JFrame {
                 clickedMenu(panelManagePublishers);
             }
         });
-        
+
         // Xử lí sự kiện click chuột của Panel Return book
         jPanelReturnBook.addMouseListener(new PanelButtonMouseAdapter(jPanelReturnBook, PanelTypeEnum.Function) {
             @Override
@@ -432,7 +432,7 @@ public class HomeForm extends javax.swing.JFrame {
                 clickedMenu(panelManageBorrow);
             }
         });
-        
+
         // Xử lí sự kiện click chuột của Panel Manage Bin
         jPanelBin.addMouseListener(new PanelButtonMouseAdapter(jPanelBin, PanelTypeEnum.Function) {
             @Override
@@ -516,25 +516,25 @@ public class HomeForm extends javax.swing.JFrame {
 
     // Home Panel
     private HomePanel panelHome;
-    
+
     // Manage Book Panel
     private ManageBooksPanel panelManageBooks;
-    
+
     // Manage Publisher Panel
     private ManagePublisherPanel panelManagePublishers;
-    
+
     // Manage Reader Panel
     private ManageReaderPanel panelManageReader;
-    
+
     // Manage Bin Panel
     private ManageBinPanel panelManageBin;
-    
+
     // Manage Account Panel
     private ManageAccount panelManageAccount;
-    
+
     // Manage Borrow Panel
     private ManageBorrowPanel panelManageBorrow;
-    
+
     // Change Password Panel
     private ChangePwdPanel panelChanegPwd;
 }

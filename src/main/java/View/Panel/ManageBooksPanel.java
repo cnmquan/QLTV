@@ -1261,7 +1261,6 @@ public class ManageBooksPanel extends JPanel {
         }
     }//GEN-LAST:event_jTextFieldSearchFocusLost
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClear;
     private javax.swing.JButton jButtonDelete;

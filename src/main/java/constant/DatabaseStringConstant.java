@@ -5,9 +5,11 @@
 package constant;
 
 /**
- * Mục đích của lớp [DatabaseStringConstant] là để tạo các giá trị tên cột trong bảng
+ * Mục đích của lớp [DatabaseStringConstant] là để tạo các giá trị tên cột trong
+ * bảng
  */
 public class DatabaseStringConstant {
+
     public static String BOOK_NAME = "book_name";
     public static String BOOK_CATEGORY = "book_category";
     public static String PUBLISHER_NAME = "publisher_name";

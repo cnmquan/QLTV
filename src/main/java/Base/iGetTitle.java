@@ -10,7 +10,7 @@ import java.util.Vector;
  * Dùng để lấy title column trong bảng của ứng dụng
  */
 public interface iGetTitle {
-    
+
     // Lấy thông tin cột dưới dạng Vector
-    public Vector getTitleColumn();   
+    public Vector getTitleColumn();
 }

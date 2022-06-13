@@ -17,6 +17,7 @@ import org.jfree.data.general.PieDataset;
 
 /**
  * PieChartPanel dùng để tạo ra PieChart với giá trị truyền vào là
+ *
  * @param totalBook số lượng sách còn lại
  * @param borrowBook số lượng sách mượn
  * @author Admin
@@ -33,7 +34,7 @@ public class PieChartPanel {
         dataset.setValue(TitleStringConstant.PIE_CHART_REST, totalBook);
         return dataset;
     }
-    
+
     // Khởi tạo PieChart
     private static JFreeChart createChart(PieDataset dataset) {
         JFreeChart chart = ChartFactory.createPieChart(
@@ -42,12 +43,12 @@ public class PieChartPanel {
                 true, // include legend   
                 true,
                 false);
-        
+
         PiePlot piePlot = (PiePlot) chart.getPlot();
-        
+
         // Thay đổi màu của Pie Chart Plot
-        piePlot.setSectionPaint(TitleStringConstant.PIE_CHART_BORROWED,new Color(255,51,51));
-        piePlot.setSectionPaint(TitleStringConstant.PIE_CHART_REST,new Color(102,102,255));
+        piePlot.setSectionPaint(TitleStringConstant.PIE_CHART_BORROWED, new Color(255, 51, 51));
+        piePlot.setSectionPaint(TitleStringConstant.PIE_CHART_REST, new Color(102, 102, 255));
         piePlot.setBackgroundPaint(Color.white);
 
         return chart;

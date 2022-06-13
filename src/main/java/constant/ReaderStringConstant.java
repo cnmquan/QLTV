@@ -1,6 +1,7 @@
 package constant;
 
 public class ReaderStringConstant {
+
     // Tên các label và hint text trong Reader UI
     public static final String READER_ID = "ID độc giả";
     public static final String READER_NAME = "Tên độc giả";

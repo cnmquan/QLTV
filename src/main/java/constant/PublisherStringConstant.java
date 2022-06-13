@@ -5,38 +5,38 @@
 package constant;
 
 /**
- * Mục đích của lớp [PublisherStringConstant] là để tạo những static final 
- * gán cho những String text của Component UI cũng như các thông báo của UI
+ * Mục đích của lớp [PublisherStringConstant] là để tạo những static final gán
+ * cho những String text của Component UI cũng như các thông báo của UI
  */
 public class PublisherStringConstant {
 
-   // Tên các labe và hint text trong Publisher UI
+    // Tên các labe và hint text trong Publisher UI
     public static final String PUBLISHER_ID = "ID nhà xuất bản";
     public static final String PUBLISHER_NAME = "Tên nhà xuất bản";
     public static final String PUBLISHER_PHONE_NUMBER = "Số điện thoại";
-    public static final String PUBLISHER_ADDRESS = "Địa chỉ";       
-        
+    public static final String PUBLISHER_ADDRESS = "Địa chỉ";
+
     // Thông báo lỗi khi kiểm tra
     public static final String PUBLISHER_ID_ERROR = "ID không hợp lệ";
     public static final String PUBLISHER_ID_INSERT_ERROR = "ID đã tồn tại";
     public static final String PUBLISHER_ID_UPDATE_ERROR = "ID không tồn tại";
     public static final String PUBLISHER_ID_DELETED_ERROR = "ID đã tồn tại trong danh sách xoá. Vui lòng kiểm tra lại";
-    public static final String PUBLISHER_NAME_ERROR ="Tên không hợp lệ";
+    public static final String PUBLISHER_NAME_ERROR = "Tên không hợp lệ";
     public static final String PUBLISHER_PHONE_NUMBER_ERROR = "Số điện thoai không hợp lệ";
     public static final String PUBLISHER_ADDRESS_ERROR = "Địa chỉ không hợp lệ";
-    
+
     // Thông báo sau khi thực hiện chức năng thêm
     public static final String PUBLISHER_INSERT_SUCCESS = "Thêm thông tin nhà xuất bản thành công!";
-    public static final String PUBLISHER_INSERT_ERROR ="Thêm thông tin nhà xuất bản thất bại! Vui lòng thử lại!";
+    public static final String PUBLISHER_INSERT_ERROR = "Thêm thông tin nhà xuất bản thất bại! Vui lòng thử lại!";
 
     // Thông báo sau khi thực hiện chức năng cập nhật
     public static final String PUBLISHER_UPDATE_SUCCESS = "Cập nhật thông tin nhà xuất bản thành công!";
-    public static final String PUBLISHER_UPDATE_ERROR ="Cập nhật thông tin nhà xuất bản thất bại! Vui lòng thử lại!";
-    
+    public static final String PUBLISHER_UPDATE_ERROR = "Cập nhật thông tin nhà xuất bản thất bại! Vui lòng thử lại!";
+
     // Tiêu đề của Dialog Xoá
     public static final String PUBLISHER_DELETE_TITLE = "Bạn có muốn chuyển thông tin nhà xuất bản này vào thùng rác không?";
-     // Thông báo sau khi thực hiện chức năng xoá
+    // Thông báo sau khi thực hiện chức năng xoá
     public static final String PUBLISHER_DELETE_SUCCESS = "Chuyển thông tin nhà xuất bản vào thùng rác thành công!";
-    public static final String PUBLISHER_DELETE_ERROR ="Chuyển thông tin nhà xuất bản vào thùng rác thất bại! Vui lòng thử lại!";
-    
+    public static final String PUBLISHER_DELETE_ERROR = "Chuyển thông tin nhà xuất bản vào thùng rác thất bại! Vui lòng thử lại!";
+
 }

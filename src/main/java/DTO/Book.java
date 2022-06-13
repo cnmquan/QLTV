@@ -17,31 +17,31 @@ public class Book {
 
     // ID của Sách
     private String bookID;
-    
+
     // Tên của Sách
     private String bookName;
-    
+
     // Tác giả của Sách
     private String bookAuthor;
-    
+
     // Thể loại của Sách
     private String bookCategory;
-    
+
     // Số lượng của Sách
     private int bookQuantity;
-    
+
     // Số trang của Sách
     private int bookPageNumber;
-    
+
     // Năm xuất bản của Sách
     private int bookPublishedYear;
-    
+
     // Giá tiền của Sách
     private double bookPrice;
-    
+
     // Tên nhà xuât bản của Sách
     private String publisherName;
-    
+
     // Thời gian cập nhật thông tin của sách
     private LocalDate bookUpdatedDate;
 
@@ -50,7 +50,7 @@ public class Book {
     }
 
     // Constructor Đầy đủ tham số
-    public Book(String bookID, String bookName, String bookAuthor, String bookCategory, int bookQuantity, 
+    public Book(String bookID, String bookName, String bookAuthor, String bookCategory, int bookQuantity,
             int bookPageNumber, int bookPublishedYear, double bookPrice, String publisherName) {
         this.bookID = bookID;
         this.bookName = bookName;
@@ -62,7 +62,7 @@ public class Book {
         this.bookPrice = bookPrice;
         this.publisherName = publisherName;
     }
-    
+
     /**
      * Các hàm Get/Set cho các thuộc tính của Sách
      */
