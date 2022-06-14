@@ -644,6 +644,7 @@ public class ManageAccount extends javax.swing.JPanel {
 
             setDataToField(id);
             showFunction(id);
+        }
     }//GEN-LAST:event_tblAccountDetailKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
