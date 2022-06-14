@@ -313,7 +313,6 @@ public class ManageAccount extends javax.swing.JPanel {
         jButtonRecover = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jScrollPanelTable = new javax.swing.JScrollPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
         tblAccountDetail = new javax.swing.JTable();
 
         setBorder(new javax.swing.border.MatteBorder(null));
@@ -518,9 +517,7 @@ public class ManageAccount extends javax.swing.JPanel {
                 tblAccountDetailMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tblAccountDetail);
-
-        jScrollPanelTable.setViewportView(jScrollPane2);
+        jScrollPanelTable.setViewportView(tblAccountDetail);
 
         jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 1120, 290));
 
@@ -615,8 +612,9 @@ public class ManageAccount extends javax.swing.JPanel {
     private void tblAccountDetailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountDetailMouseClicked
         // TODO add your handling code here:
         int rowNo = tblAccountDetail.getSelectedRow();
+        int row = tblAccountDetail.convertRowIndexToModel(rowNo);
         TableModel model = tblAccountDetail.getModel();
-        String id = model.getValueAt(rowNo, 0).toString();
+        String id = model.getValueAt(row, 0).toString();
 
         setDataToField(id);
         showFunction(id);

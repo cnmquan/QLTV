@@ -188,6 +188,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         jTextFieldSearch = new javax.swing.JTextField();
         jSeparatorTitle = new javax.swing.JSeparator();
         jScrollPanelReader = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jTableReader = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -411,7 +412,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
+
             }
         ));
         jTableReader.setMaximumSize(new java.awt.Dimension(2147483647, 120));
@@ -420,6 +421,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         jTableReader.setRowHeight(40);
         jTableReader.setShowGrid(true);
         jTableReader.getTableHeader().setResizingAllowed(false);
+        jTableReader.getTableHeader().setReorderingAllowed(false);
         jTableReader.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTableReaderMousePressed(evt);
@@ -430,9 +432,11 @@ public class ManageReaderPanel extends javax.swing.JPanel {
                 jTableReaderKeyReleased(evt);
             }
         });
-        jScrollPanelReader.setViewportView(jTableReader);
+        jScrollPane1.setViewportView(jTableReader);
 
-        jPanelDetail.add(jScrollPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 1130, 310));
+        jScrollPanelReader.setViewportView(jScrollPane1);
+
+        jPanelDetail.add(jScrollPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 1120, 210));
 
         jPanel3.add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 1170, 580));
 
@@ -646,6 +650,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanelSearch;
     private javax.swing.JPanel jPanelTextField;
     private javax.swing.JLabel jReaderLabel;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPanelReader;
     private javax.swing.JSeparator jSeparatorTitle;
     private javax.swing.JTable jTableReader;

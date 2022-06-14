@@ -380,11 +380,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jButtonInsert.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jButtonInsertActionPerformed(evt);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                jButtonInsertActionPerformed(evt);
             }
         });
         jPanelButton.add(jButtonInsert, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 150, 50));
@@ -396,11 +392,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jButtonDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jButtonDeleteActionPerformed(evt);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                jButtonDeleteActionPerformed(evt);
             }
         });
         jPanelButton.add(jButtonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 150, 50));
@@ -412,11 +404,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         jButtonUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jButtonUpdateActionPerformed(evt);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                jButtonUpdateActionPerformed(evt);
             }
         });
         jPanelButton.add(jButtonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 150, 50));
@@ -628,7 +616,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         });
         jScrollPanelTable.setViewportView(jTableBorrow);
 
-        jPanel1.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 1120, 310));
+        jPanel1.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 1090, 290));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -711,121 +699,6 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         String id = jTextFieldReaderName.getText();
 
     }//GEN-LAST:event_jTextFieldReaderNameMousePressed
-
-    private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) throws ParseException {//GEN-FIRST:event_jButtonInsertActionPerformed
-        // TODO add your handling code here:
-        BookDaoImp bookDaoImp = new BookDaoImp();
-        String borrowId = jTextFieldIDBorrow.getText();
-        String readerId = jTextFieldIDReader.getText();
-        String bookId = jTextFieldIDBook.getText();
-        int quantity = Integer.parseInt(jTextFieldQuantity.getText());
-        Book book = bookDaoImp.getAttribute("book_id", bookId);
-        String borrowDateStr = jTextFieldBorrowDate.getText();
-        String returnDateStr = jTextFieldReturnDate.getText();
-        String readerName = jTextFieldReaderName.getText();
-        String bookTitle = jTextFieldBookTitle.getText();
-        Date borrowDate = new SimpleDateFormat("dd/MM/yyyy").parse(borrowDateStr);
-        Date returnDate = (returnDateStr.trim().isBlank() || returnDateStr.equals(BorrowStringConstant.RETURN_DATE))
-                ? null
-                : new SimpleDateFormat("dd/MM/yyyy").parse(returnDateStr);
-        Borrow borrow = new Borrow(borrowId, readerId, bookId, quantity, borrowDate, returnDate);
-        try {
-            if (validateBorrowData(borrowId, readerName, bookTitle, quantity, book.getBookQuantity(), borrowDate, returnDate, TypeFunctionEnum.Insert)) {
-
-                boolean insertCheck = borrowDaoImp.insert(borrow);
-                if (insertCheck) {
-                    JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_INSERT_SUCCESS);
-                    myInitComponents();
-                } else {
-                    JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_INSERT_ERROR);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }//GEN-LAST:event_jButtonInsertActionPerformed
-
-    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) throws ParseException {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        // TODO add your handling code here:
-        // TODO add your handling code here:
-        BookDaoImp bookDaoImp = new BookDaoImp();
-        String borrowId = jTextFieldIDBorrow.getText();
-        String readerId = jTextFieldIDReader.getText();
-        String bookId = jTextFieldIDBook.getText();
-        int quantity = Integer.parseInt(jTextFieldQuantity.getText());
-        Book book = bookDaoImp.getAttribute("book_id", bookId);
-        String borrowDateStr = jTextFieldBorrowDate.getText();
-        String returnDateStr = jTextFieldReturnDate.getText();
-        String readerName = jTextFieldReaderName.getText();
-        String bookTitle = jTextFieldBookTitle.getText();
-        Date borrowDate = new SimpleDateFormat("dd/MM/yyyy").parse(borrowDateStr);
-        Date returnDate = (returnDateStr.trim().isBlank() || returnDateStr.equals(BorrowStringConstant.RETURN_DATE))
-                ? null
-                : new SimpleDateFormat("dd/MM/yyyy").parse(returnDateStr);
-        Borrow borrow = new Borrow(borrowId, readerId, bookId, quantity, borrowDate, returnDate);
-        if (validateBorrowData(borrowId, readerName, bookTitle, quantity, book.getBookQuantity(), borrowDate, returnDate, TypeFunctionEnum.Delete)) {
-            try {
-                int answer = JOptionPane.showConfirmDialog(null,
-                        BorrowStringConstant.BORROW_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
-                        JOptionPane.YES_NO_OPTION);
-                if (answer == JOptionPane.YES_OPTION) {
-                    boolean deleteCheck = borrowDaoImp.delete(borrow.getBorrowId());
-                    if (deleteCheck) {
-                        JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_DELETE_SUCCESS);
-                        myInitComponents();
-                    } else {
-                        JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_DELETE_ERROR);
-                    }
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }//GEN-LAST:event_jButtonDeleteActionPerformed
-
-    private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) throws ParseException {//GEN-FIRST:event_jButtonUpdateActionPerformed
-        // TODO add your handling code here:
-        BookDaoImp bookDaoImp = new BookDaoImp();
-        String borrowId = jTextFieldIDBorrow.getText();
-        String readerId = jTextFieldIDReader.getText();
-        String bookId = jTextFieldIDBook.getText();
-        int quantity = Integer.parseInt(jTextFieldQuantity.getText());
-        Book book = bookDaoImp.getAttribute("book_id", bookId);
-        String borrowDateStr = jTextFieldBorrowDate.getText();
-        String returnDateStr = jTextFieldReturnDate.getText();
-        String readerName = jTextFieldReaderName.getText();
-        String bookTitle = jTextFieldBookTitle.getText();
-        Date borrowDate = new SimpleDateFormat("dd/MM/yyyy").parse(borrowDateStr);
-        Date returnDate = (returnDateStr.trim().isBlank() || returnDateStr.equals(BorrowStringConstant.RETURN_DATE))
-                ? null
-                : new SimpleDateFormat("dd/MM/yyyy").parse(returnDateStr);
-        Borrow borrow = new Borrow(borrowId, readerId, bookId, quantity, borrowDate, returnDate);
-        try {
-            if (validateBorrowData(borrowId, readerName, bookTitle, quantity, book.getBookQuantity(), borrowDate, returnDate, TypeFunctionEnum.Update)) {
-                boolean updateCheck;
-                if (returnDate == null) {
-                    updateCheck = borrowDaoImp.update(borrow);
-                } else {
-                    updateCheck = borrowDaoImp.updateNoIncreaseBookQuantity(borrow);
-                }
-                if (updateCheck) {
-                    JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_UPDATE_SUCCESS);
-                } else {
-                    JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_UPDATE_ERROR);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            myInitComponents();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }//GEN-LAST:event_jButtonUpdateActionPerformed
 
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         // TODO add your handling code here:
@@ -1014,6 +887,129 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
     private void jTextFieldIDBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDBookActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldIDBookActionPerformed
+
+    private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
+        try {                                              
+            // TODO add your handling code here:
+            BookDaoImp bookDaoImp = new BookDaoImp();
+            String borrowId = jTextFieldIDBorrow.getText();
+            String readerId = jTextFieldIDReader.getText();
+            String bookId = jTextFieldIDBook.getText();
+            int quantity = Integer.parseInt(jTextFieldQuantity.getText());
+            Book book = bookDaoImp.getAttribute("book_id", bookId);
+            String borrowDateStr = jTextFieldBorrowDate.getText();
+            String returnDateStr = jTextFieldReturnDate.getText();
+            String readerName = jTextFieldReaderName.getText();
+            String bookTitle = jTextFieldBookTitle.getText();
+            Date borrowDate = new SimpleDateFormat("dd/MM/yyyy").parse(borrowDateStr);
+            Date returnDate = (returnDateStr.trim().isBlank() || returnDateStr.equals(BorrowStringConstant.RETURN_DATE))
+                    ? null
+                    : new SimpleDateFormat("dd/MM/yyyy").parse(returnDateStr);
+            Borrow borrow = new Borrow(borrowId, readerId, bookId, quantity, borrowDate, returnDate);
+            try {
+                if (validateBorrowData(borrowId, readerName, bookTitle, quantity, book.getBookQuantity(), borrowDate, returnDate, TypeFunctionEnum.Insert)) {
+                    
+                    boolean insertCheck = borrowDaoImp.insert(borrow);
+                    if (insertCheck) {
+                        JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_INSERT_SUCCESS);
+                        myInitComponents();
+                    } else {
+                        JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_INSERT_ERROR);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(ManageBorrowPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonInsertActionPerformed
+
+    private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
+        try {                                              
+            // TODO add your handling code here:
+            BookDaoImp bookDaoImp = new BookDaoImp();
+            String borrowId = jTextFieldIDBorrow.getText();
+            String readerId = jTextFieldIDReader.getText();
+            String bookId = jTextFieldIDBook.getText();
+            int quantity = Integer.parseInt(jTextFieldQuantity.getText());
+            Book book = bookDaoImp.getAttribute("book_id", bookId);
+            String borrowDateStr = jTextFieldBorrowDate.getText();
+            String returnDateStr = jTextFieldReturnDate.getText();
+            String readerName = jTextFieldReaderName.getText();
+            String bookTitle = jTextFieldBookTitle.getText();
+            Date borrowDate = new SimpleDateFormat("dd/MM/yyyy").parse(borrowDateStr);
+            Date returnDate = (returnDateStr.trim().isBlank() || returnDateStr.equals(BorrowStringConstant.RETURN_DATE))
+                    ? null
+                    : new SimpleDateFormat("dd/MM/yyyy").parse(returnDateStr);
+            Borrow borrow = new Borrow(borrowId, readerId, bookId, quantity, borrowDate, returnDate);
+            try {
+                if (validateBorrowData(borrowId, readerName, bookTitle, quantity, book.getBookQuantity(), borrowDate, returnDate, TypeFunctionEnum.Update)) {
+                    boolean updateCheck;
+                    if (returnDate == null) {
+                        updateCheck = borrowDaoImp.update(borrow);
+                    } else {
+                        updateCheck = borrowDaoImp.updateNoIncreaseBookQuantity(borrow);
+                    }
+                    if (updateCheck) {
+                        JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_UPDATE_SUCCESS);
+                    } else {
+                        JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_UPDATE_ERROR);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                myInitComponents();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(ManageBorrowPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonUpdateActionPerformed
+
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+        try {
+            // TODO add your handling code here:
+            BookDaoImp bookDaoImp = new BookDaoImp();
+            String borrowId = jTextFieldIDBorrow.getText();
+            String readerId = jTextFieldIDReader.getText();
+            String bookId = jTextFieldIDBook.getText();
+            int quantity = Integer.parseInt(jTextFieldQuantity.getText());
+            Book book = bookDaoImp.getAttribute("book_id", bookId);
+            String borrowDateStr = jTextFieldBorrowDate.getText();
+            String returnDateStr = jTextFieldReturnDate.getText();
+            String readerName = jTextFieldReaderName.getText();
+            String bookTitle = jTextFieldBookTitle.getText();
+            Date borrowDate = new SimpleDateFormat("dd/MM/yyyy").parse(borrowDateStr);
+            Date returnDate = (returnDateStr.trim().isBlank() || returnDateStr.equals(BorrowStringConstant.RETURN_DATE))
+                    ? null
+                    : new SimpleDateFormat("dd/MM/yyyy").parse(returnDateStr);
+            Borrow borrow = new Borrow(borrowId, readerId, bookId, quantity, borrowDate, returnDate);
+            if (validateBorrowData(borrowId, readerName, bookTitle, quantity, book.getBookQuantity(), borrowDate, returnDate, TypeFunctionEnum.Delete)) {
+                try {
+                    int answer = JOptionPane.showConfirmDialog(null,
+                            BorrowStringConstant.BORROW_DELETE_TITLE, GeneralStringConstant.GENERAL_DELETE,
+                            JOptionPane.YES_NO_OPTION);
+                    if (answer == JOptionPane.YES_OPTION) {
+                        boolean deleteCheck = borrowDaoImp.delete(borrow.getBorrowId());
+                        if (deleteCheck) {
+                            JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_DELETE_SUCCESS);
+                            myInitComponents();
+                        } else {
+                            JOptionPane.showMessageDialog(null, BorrowStringConstant.BORROW_DELETE_ERROR);
+                        }
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(ManageBorrowPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClear;
