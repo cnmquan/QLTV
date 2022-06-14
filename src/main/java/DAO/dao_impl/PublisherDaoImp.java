@@ -186,7 +186,7 @@ public class PublisherDaoImp implements PublisherDao {
         boolean rowMovedToBin;
         String sql = "UPDATE publishers "
                 + "SET publisher_is_deleted = true "
-                + "FWHERE publisher_id = ?";
+                + "WHERE publisher_id = ?";
 
         rowMovedToBin = DataProvider.ExecuteNonQuery(sql, new Object[]{
             id

@@ -129,6 +129,7 @@ public class HomeForm extends javax.swing.JFrame {
         jPopupMenu.add(btnLogOut);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1520, 830));
         setResizable(false);
@@ -173,7 +174,7 @@ public class HomeForm extends javax.swing.JFrame {
 
         jPanelTitle.add(jPanelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 0, 40, 60));
 
-        getContentPane().add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1500, 60));
+        getContentPane().add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1510, 60));
 
         jPanelMenuBar.setBackground(new java.awt.Color(51, 51, 51));
         jPanelMenuBar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -270,14 +271,14 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelMainContent.setLayout(jPanelMainContentLayout);
         jPanelMainContentLayout.setHorizontalGroup(
             jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1160, Short.MAX_VALUE)
+            .addGap(0, 1170, Short.MAX_VALUE)
         );
         jPanelMainContentLayout.setVerticalGroup(
             jPanelMainContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 740, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanelMainContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 58, 1160, 740));
+        getContentPane().add(jPanelMainContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 58, 1170, 740));
 
         setSize(new java.awt.Dimension(1504, 800));
         setLocationRelativeTo(null);
@@ -390,6 +391,7 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelLMSDashBoard.addMouseListener(new PanelButtonMouseAdapter(jPanelLMSDashBoard, PanelTypeEnum.Home) {
             @Override
             public void mouseClicked(MouseEvent e) {
+                panelHome.myInitComponents();
                 clickedMenu(panelHome);
             }
         });
