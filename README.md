@@ -20,7 +20,7 @@ Chạy file database.sql
 
 Cài đặt [Netbeans](https://netbeans.apache.org/download/index.html)
 
-Xem chi tiết hơn tại [đây](https://netbeans.apache.org/download/index.html)
+Xem chi tiết hơn tại [đây](https://www.youtube.com/watch?v=2ViI3ZItYAw)
 
 <a name="chucnang"></a>
 ## Chức năng của phần mềm
