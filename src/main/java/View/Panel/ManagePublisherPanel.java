@@ -131,7 +131,8 @@ public class ManagePublisherPanel extends javax.swing.JPanel {
 
     // Hiển thị thông tin chi tiết của Publisher khi chọn 1 hàng trong jTablePublisher
     private void displayDetails(int selectedIndex) {
-        Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
+        int row = jTablePublisher.convertRowIndexToModel(selectedIndex);
+        Vector vctSelectedRow = (Vector) this.vctData.get(row);
 
         String id = (String) vctSelectedRow.get(0);
         String name = (String) vctSelectedRow.get(1);

@@ -35,7 +35,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         this.readerDaoImp = ReaderDaoImp.getInstance();
 
         resetData();
-        setBounds(0, 0, 1170, 630);
+        setBounds(0, 0, 1170, 740);
     }
 
     void resetData() {
@@ -108,7 +108,8 @@ public class ManageReaderPanel extends javax.swing.JPanel {
     }
 
     private void displayDetails(int selectedIndex) {
-        Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
+        int row = jTableReader.convertRowIndexToModel(selectedIndex);
+        Vector vctSelectedRow = (Vector) this.vctData.get(row);
 
         String id = (String) vctSelectedRow.get(0);
         String name = (String) vctSelectedRow.get(1);
@@ -188,7 +189,6 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         jTextFieldSearch = new javax.swing.JTextField();
         jSeparatorTitle = new javax.swing.JSeparator();
         jScrollPanelReader = new javax.swing.JScrollPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
         jTableReader = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -280,7 +280,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
 
         jLabelPhoneNumber.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
         jLabelPhoneNumber.setText("Số điện thoại");
-        jPanelPhoneNumber.add(jLabelPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, 40));
+        jPanelPhoneNumber.add(jLabelPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, -1, 40));
 
         jTextFieldPhoneNumber.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldPhoneNumber.setText("Số điện thoại");
@@ -305,7 +305,7 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         });
         jPanelPhoneNumber.add(jTextFieldPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 190, 40));
 
-        jPanelTextField.add(jPanelPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 50, 310, 60));
+        jPanelTextField.add(jPanelPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 40, 310, 60));
 
         jPanelReader.setBackground(new java.awt.Color(255, 255, 255));
         jPanelReader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -336,16 +336,16 @@ public class ManageReaderPanel extends javax.swing.JPanel {
 
         jLabelReader.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
         jLabelReader.setText("Tên");
-        jPanelReader.add(jLabelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 40, 40));
+        jPanelReader.add(jLabelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 40, 40));
 
-        jPanelTextField.add(jPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 790, 60));
+        jPanelTextField.add(jPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 700, 60));
 
         jPanelID.setBackground(new java.awt.Color(255, 255, 255));
         jPanelID.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelID.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
         jLabelID.setText("ID");
-        jPanelID.add(jLabelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, 40));
+        jPanelID.add(jLabelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, 40));
 
         jTextFieldID.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         jTextFieldID.setText("ID");
@@ -365,14 +365,14 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         });
         jPanelID.add(jTextFieldID, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 190, 40));
 
-        jPanelTextField.add(jPanelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 330, 60));
+        jPanelTextField.add(jPanelID, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 40, 330, 60));
 
         jPanelSearch.setBackground(new java.awt.Color(255, 255, 255));
         jPanelSearch.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelSearch.setFont(new java.awt.Font("Segoe UI", 2, 16)); // NOI18N
         jLabelSearch.setText("Tìm kiếm");
-        jPanelSearch.add(jLabelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 50));
+        jPanelSearch.add(jLabelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, -1, 50));
 
         jTextFieldSearch.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jTextFieldSearch.setText("Tìm kiếm");
@@ -397,14 +397,12 @@ public class ManageReaderPanel extends javax.swing.JPanel {
         });
         jPanelSearch.add(jTextFieldSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 570, 40));
 
-        jPanelTextField.add(jPanelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 840, 70));
+        jPanelTextField.add(jPanelSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 660, 70));
 
         jSeparatorTitle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 4, true));
         jPanelTextField.add(jSeparatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, -6, 360, 10));
 
         jPanelDetail.add(jPanelTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 960, 260));
-
-        jScrollPanelReader.setBackground(new java.awt.Color(255, 255, 255));
 
         jTableReader.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTableReader.setModel(new javax.swing.table.DefaultTableModel(
@@ -432,37 +430,18 @@ public class ManageReaderPanel extends javax.swing.JPanel {
                 jTableReaderKeyReleased(evt);
             }
         });
-        jScrollPane1.setViewportView(jTableReader);
+        jScrollPanelReader.setViewportView(jTableReader);
 
-        jScrollPanelReader.setViewportView(jScrollPane1);
+        jPanelDetail.add(jScrollPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 1120, 390));
 
-        jPanelDetail.add(jScrollPanelReader, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 1120, 210));
+        jPanel3.add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 1170, 690));
 
-        jPanel3.add(jPanelDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 1170, 580));
-
-        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 740));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTableReaderKeyPressed(KeyEvent evt) {
 
     }
-
-    private void jTableReaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableReaderMousePressed
-        // TODO add your handling code here:
-        int selectedRow = jTableReader.getSelectedRow();
-        displayDetails(selectedRow);
-    }//GEN-LAST:event_jTableReaderMousePressed
-
-    private void jTableReaderKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableReaderKeyReleased
-        // TODO add your handling code here:
-        //        int selectedRow = jTableBook.getSelectedRow();
-        //        displayDetails(selectedRow);
-
-        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
-            int selectedRow = jTableReader.getSelectedRow();
-            displayDetails(selectedRow);
-        }
-    }//GEN-LAST:event_jTableReaderKeyReleased
 
     private void jTextFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchKeyReleased
         // TODO add your handling code here:
@@ -631,6 +610,23 @@ public class ManageReaderPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
+    private void jTableReaderKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableReaderKeyReleased
+        // TODO add your handling code here:
+        //        int selectedRow = jTableBook.getSelectedRow();
+        //        displayDetails(selectedRow);
+
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            int selectedRow = jTableReader.getSelectedRow();
+            displayDetails(selectedRow);
+        }
+    }//GEN-LAST:event_jTableReaderKeyReleased
+
+    private void jTableReaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableReaderMousePressed
+        // TODO add your handling code here:
+        int selectedRow = jTableReader.getSelectedRow();
+        displayDetails(selectedRow);
+    }//GEN-LAST:event_jTableReaderMousePressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClear;
     private javax.swing.JButton jButtonDelete;
@@ -650,7 +646,6 @@ public class ManageReaderPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanelSearch;
     private javax.swing.JPanel jPanelTextField;
     private javax.swing.JLabel jReaderLabel;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPanelReader;
     private javax.swing.JSeparator jSeparatorTitle;
     private javax.swing.JTable jTableReader;

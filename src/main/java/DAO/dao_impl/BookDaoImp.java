@@ -172,15 +172,16 @@ public class BookDaoImp implements BookDao {
 
     // Dùng để xác nhận giá trị có số lượng chữ cái nhiều nhất trong 1 thuộc tính
     @Override
-    public String getLongestString(String attribute) {
+    public String getLongestString(String attribute, int number) {
         String longestString = "";
+        String limitString = number > 0 ? "LIMIT " + number + " " : "";
         String sql = "SELECT " + attribute + " "
                 + "FROM ("
                 + "SELECT * "
                 + "FROM books "
                 + "WHERE book_is_deleted = false "
                 + "ORDER BY book_updated_time DESC "
-                + "LIMIT 5 "
+                + limitString
                 + ") AS booklists "
                 + "ORDER BY LENGTH(" + attribute + ") DESC "
                 + "LIMIT 1";

@@ -14,6 +14,7 @@ import constant.GeneralStringConstant;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -517,6 +518,11 @@ public class ManageAccount extends javax.swing.JPanel {
                 tblAccountDetailMouseClicked(evt);
             }
         });
+        tblAccountDetail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblAccountDetailKeyReleased(evt);
+            }
+        });
         jScrollPanelTable.setViewportView(tblAccountDetail);
 
         jPanel2.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 1120, 290));
@@ -628,6 +634,18 @@ public class ManageAccount extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAnswerFocusLost
 
+    private void tblAccountDetailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblAccountDetailKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            int rowNo = tblAccountDetail.getSelectedRow();
+            int row = tblAccountDetail.convertRowIndexToModel(rowNo);
+            TableModel model = tblAccountDetail.getModel();
+            String id = model.getValueAt(row, 0).toString();
+
+            setDataToField(id);
+            showFunction(id);
+    }//GEN-LAST:event_tblAccountDetailKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbQuestion;
     private javax.swing.JComboBox<String> cmbRole;
@@ -639,7 +657,6 @@ public class ManageAccount extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPanelTable;
     private javax.swing.JLabel lblAnswer;
     private javax.swing.JLabel lblContact;

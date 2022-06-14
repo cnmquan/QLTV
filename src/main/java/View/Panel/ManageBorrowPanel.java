@@ -110,7 +110,8 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
     }
 
     void displayDetail(int selectedIndex) {
-        Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
+         int row = jTableBorrow.convertRowIndexToModel(selectedIndex);
+        Vector vctSelectedRow = (Vector) this.vctData.get(row);
 
         String idBorrow = (String) vctSelectedRow.get(0);
         String idReader = (String) vctSelectedRow.get(1);
@@ -616,7 +617,7 @@ public class ManageBorrowPanel extends javax.swing.JPanel {
         });
         jScrollPanelTable.setViewportView(jTableBorrow);
 
-        jPanel1.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 1090, 290));
+        jPanel1.add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 1120, 290));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

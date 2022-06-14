@@ -23,5 +23,5 @@ public interface BookDao extends iCRUD<Book>, iGetTitle, iValidation<Book>, iDel
     int getSumBook();
 
     // Dùng để xác nhận giá trị có số lượng chữ cái nhiều nhất trong 1 thuộc tính
-    String getLongestString(String attribute);
+    String getLongestString(String attribute, int number);
 }

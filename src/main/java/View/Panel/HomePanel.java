@@ -202,10 +202,10 @@ public class HomePanel extends javax.swing.JPanel {
         });
 
         // Permanent Column
-        jTableBookDetail.getColumnModel().getColumn(1).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_NAME).length() * 8);
-        jTableBookDetail.getColumnModel().getColumn(2).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_CATEGORY).length() * 8);
-        jTableBookDetail.getColumnModel().getColumn(3).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_AUTHOR).length() * 8);
-        jTableBookDetail.getColumnModel().getColumn(7).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.PUBLISHER_NAME).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(1).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_NAME,5).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(2).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_CATEGORY, 5).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(3).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_AUTHOR,5).length() * 8);
+        jTableBookDetail.getColumnModel().getColumn(7).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.PUBLISHER_NAME, 5).length() * 8);
         jTableBookDetail.getColumnModel().getColumn(8).setPreferredWidth(150);
     }
 

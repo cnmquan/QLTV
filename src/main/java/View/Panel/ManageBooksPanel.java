@@ -16,6 +16,7 @@ import java.awt.Font;
 import DTO.Book;
 import DTO.Publisher;
 import DTO.TypeFunctionEnum;
+import constant.DatabaseStringConstant;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -129,7 +130,7 @@ public class ManageBooksPanel extends JPanel {
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         jTableBook.setBackground(Color.WHITE);
-        jTableBook.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTableBook.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTableBook.setFillsViewportHeight(true);
     }
 
@@ -145,11 +146,27 @@ public class ManageBooksPanel extends JPanel {
             }
         });
 
+        // Permanent Column
+        for (int i = 0; i < bookDaoImp.getTitleColumn().size(); i++) {
+            switch (i) {
+                case 1 ->
+                    jTableBook.getColumnModel().getColumn(i).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_NAME, 0).length() * 8);
+                case 2 ->
+                    jTableBook.getColumnModel().getColumn(i).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_CATEGORY, 0).length() * 12);
+                case 3 ->
+                    jTableBook.getColumnModel().getColumn(i).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.BOOK_AUTHOR, 0).length() * 8);
+                case 7 ->
+                    jTableBook.getColumnModel().getColumn(i).setPreferredWidth(bookDaoImp.getLongestString(DatabaseStringConstant.PUBLISHER_NAME, 0).length() * 12);
+                default ->
+                    jTableBook.getColumnModel().getColumn(i).setPreferredWidth(150);
+
+            }
+        }
+
         DefaultTableModel model = (DefaultTableModel) jTableBook.getModel();
         //Add sorter
         var sorter = new TableRowSorter<DefaultTableModel>(model);
         jTableBook.setRowSorter(sorter);
-
     }
 
     // Gán danh sách Publisher lấy từ Database thông qua PublisherDaoImp vào PublisherComboBox
@@ -162,8 +179,9 @@ public class ManageBooksPanel extends JPanel {
 
     // Hiển thị thông tin chi tiết của Book khi chọn 1 hàng trong jTableBook
     private void displayDetails(int selectedIndex) {
-        Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
-
+        int row = jTableBook.convertRowIndexToModel(selectedIndex);
+        Vector vctSelectedRow = (Vector) this.vctData.get(row);
+        
         String id = (String) vctSelectedRow.get(0);
         String name = (String) vctSelectedRow.get(1);
         String category = (String) vctSelectedRow.get(2);
@@ -349,7 +367,6 @@ public class ManageBooksPanel extends JPanel {
         jTextFieldCategory = new javax.swing.JTextField();
         jPanelTitle = new javax.swing.JPanel();
         jLabelTitle = new javax.swing.JLabel();
-        jScrollPaneMain = new javax.swing.JScrollPane();
         jScrollPanelTable = new javax.swing.JScrollPane();
         jTableBook = new javax.swing.JTable();
 
@@ -760,9 +777,9 @@ public class ManageBooksPanel extends JPanel {
 
         add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1170, 40));
 
-        jScrollPanelTable.setBorder(null);
         jScrollPanelTable.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPanelTable.setAutoscrolls(true);
+        jScrollPanelTable.setWheelScrollingEnabled(false);
 
         jTableBook.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTableBook.setModel(new javax.swing.table.DefaultTableModel(
@@ -770,12 +787,12 @@ public class ManageBooksPanel extends JPanel {
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
+
             }
         ));
-        jTableBook.setMaximumSize(new java.awt.Dimension(2147483647, 120));
-        jTableBook.setMinimumSize(new java.awt.Dimension(60, 120));
-        jTableBook.setPreferredSize(new java.awt.Dimension(60, 120));
+        jTableBook.setMaximumSize(null);
+        jTableBook.setMinimumSize(null);
+        jTableBook.setPreferredSize(null);
         jTableBook.setRowHeight(40);
         jTableBook.setShowGrid(true);
         jTableBook.getTableHeader().setResizingAllowed(false);
@@ -790,13 +807,8 @@ public class ManageBooksPanel extends JPanel {
             }
         });
         jScrollPanelTable.setViewportView(jTableBook);
-        if (jTableBook.getColumnModel().getColumnCount() > 0) {
-            jTableBook.getColumnModel().getColumn(0).setResizable(false);
-        }
 
-        jScrollPaneMain.setViewportView(jScrollPanelTable);
-
-        add(jScrollPaneMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 1130, 320));
+        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 1120, 330));
     }// </editor-fold>//GEN-END:initComponents
 
     // Xử lý sự kiện khi released KeyBoard
@@ -1292,7 +1304,6 @@ public class ManageBooksPanel extends JPanel {
     private javax.swing.JPanel jPanelQuantity;
     private javax.swing.JPanel jPanelSearch;
     private javax.swing.JPanel jPanelTitle;
-    private javax.swing.JScrollPane jScrollPaneMain;
     private javax.swing.JScrollPane jScrollPaneTextFieldName;
     private javax.swing.JScrollPane jScrollPanelTable;
     private javax.swing.JSeparator jSeparatorTitle;

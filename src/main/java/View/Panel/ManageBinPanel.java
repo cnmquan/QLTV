@@ -120,7 +120,8 @@ public class ManageBinPanel extends javax.swing.JPanel {
         if (vctData.isEmpty()) {
             return;
         }
-        Vector vctSelectedRow = (Vector) this.vctData.get(selectedIndex);
+        int row = jTableDelete.convertRowIndexToModel(selectedIndex);
+        Vector vctSelectedRow = (Vector) this.vctData.get(row);
 
         String id = (String) vctSelectedRow.get(0);
         String name = (String) vctSelectedRow.get(1);
@@ -236,7 +237,7 @@ public class ManageBinPanel extends javax.swing.JPanel {
         });
         jScrollPanelTable.setViewportView(jTableDelete);
 
-        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 1130, 380));
+        add(jScrollPanelTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 1120, 380));
 
         jPanelDetail.setBackground(new java.awt.Color(255, 255, 255));
         jPanelDetail.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());

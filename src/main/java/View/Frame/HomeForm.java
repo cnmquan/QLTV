@@ -74,11 +74,12 @@ public class HomeForm extends javax.swing.JFrame {
         jSeparator = new javax.swing.JPopupMenu.Separator();
         btnLogOut = new javax.swing.JMenuItem();
         jPanelTitle = new javax.swing.JPanel();
-        jLabelMenu = new javax.swing.JLabel();
         jLabelProjectName = new javax.swing.JLabel();
         jLabelGreeting = new javax.swing.JLabel();
         jPanelExit = new javax.swing.JPanel();
         jLabelExit = new javax.swing.JLabel();
+        jPanelMenu = new javax.swing.JPanel();
+        jLabelMenu = new javax.swing.JLabel();
         jPanelMenuBar = new javax.swing.JPanel();
         jPanelLMSDashBoard = new javax.swing.JPanel();
         jLabelLMSDashBoard = new javax.swing.JLabel();
@@ -137,14 +138,6 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelTitle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 20)); // NOI18N
         jPanelTitle.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/down_arrow.png"))); // NOI18N
-        jLabelMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabelMenuMouseClicked(evt);
-            }
-        });
-        jPanelTitle.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 0, 50, 60));
-
         jLabelProjectName.setBackground(new java.awt.Color(255, 255, 255));
         jLabelProjectName.setFont(new java.awt.Font("Segoe UI", 0, 28)); // NOI18N
         jLabelProjectName.setForeground(new java.awt.Color(255, 255, 255));
@@ -170,6 +163,15 @@ public class HomeForm extends javax.swing.JFrame {
         jPanelExit.add(jLabelExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 60));
 
         jPanelTitle.add(jPanelExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1450, 0, 50, 60));
+
+        jPanelMenu.setBackground(new java.awt.Color(102, 102, 255));
+        jPanelMenu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/down_arrow.png"))); // NOI18N
+        jPanelMenu.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 40, 60));
+
+        jPanelTitle.add(jPanelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 0, 40, 60));
 
         getContentPane().add(jPanelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1500, 60));
 
@@ -304,18 +306,6 @@ public class HomeForm extends javax.swing.JFrame {
         clickedMenu(panelChanegPwd);
     }//GEN-LAST:event_btnChangePwdActionPerformed
 
-    // Xử lý sự kiện khi nhấn chuột vào label Menu
-    private void jLabelMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenuMouseClicked
-        // TODO add your handling code here:
-//        System.out.println(jLabelGreeting.getX()-2*jLabelGreeting.getWidth());
-        jPopupMenu.show(jLabelMenu, evt.getX(), evt.getY());
-        jPopupMenu.setLocation(
-                jLabelMenu.getX() + jLabelMenu.getWidth() - jPopupMenu.getWidth(),
-                jLabelMenu.getY() + jPopupMenu.getHeight()
-        //        jLabelMenu.getY()-0*jLabelGreeting.getHeight()
-        );
-    }//GEN-LAST:event_jLabelMenuMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -372,6 +362,19 @@ public class HomeForm extends javax.swing.JFrame {
     // Khởi tạo các giá trị bổ sung cho initComponent()
     private void myInitComponents() {
         setNavigationTitle();
+
+        // Xử lí sự kiện click chuột của Panel Menu
+        jPanelMenu.addMouseListener(new PanelButtonMouseAdapter(jPanelMenu, PanelTypeEnum.Exit) {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                jPopupMenu.show(jPanelMenu, e.getX(), e.getY());
+                jPopupMenu.setLocation(
+                        jPanelMenu.getX() + jPanelMenu.getHeight()- jPopupMenu.getWidth(),
+                        jPanelMenu.getY() + jPanelMenu.getHeight()
+                //        jLabelMenu.getY()-0*jLabelGreeting.getHeight()
+                );
+            }
+        });
 
         // Xử lí sự kiện click chuột của Panel Exit
         jPanelExit.addMouseListener(new PanelButtonMouseAdapter(jPanelExit, PanelTypeEnum.Exit) {
@@ -506,6 +509,7 @@ public class HomeForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelManageAccount;
     private javax.swing.JPanel jPanelManageBook;
     private javax.swing.JPanel jPanelManageReader;
+    private javax.swing.JPanel jPanelMenu;
     private javax.swing.JPanel jPanelMenuBar;
     private javax.swing.JPanel jPanelPublisherList;
     private javax.swing.JPanel jPanelReturnBook;
