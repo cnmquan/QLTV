@@ -275,7 +275,7 @@ public class ForgotPwdPage extends javax.swing.JFrame {
                 btnHidePassMouseClicked(evt);
             }
         });
-        jPanel2.add(btnHidePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 270, -1, -1));
+        jPanel2.add(btnHidePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 240, -1, -1));
 
         btnShowPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-eye-32.png"))); // NOI18N
         btnShowPass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -293,7 +293,7 @@ public class ForgotPwdPage extends javax.swing.JFrame {
                 btnShowRePassMouseClicked(evt);
             }
         });
-        jPanel2.add(btnShowRePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 390, -1, -1));
+        jPanel2.add(btnShowRePass, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 350, -1, -1));
 
         btnHideRePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-closed-eye-32.png"))); // NOI18N
         btnHideRePass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
